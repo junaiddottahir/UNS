@@ -75,7 +75,10 @@ void main() {
 
     await tester.pumpWidget(
       ProviderScope(
-        overrides: [settingsStoreProvider.overrideWithValue(store)],
+        overrides: [
+          appDatabaseProvider.overrideWithValue(db),
+          settingsStoreProvider.overrideWithValue(store),
+        ],
         child: const UnsApp(),
       ),
     );

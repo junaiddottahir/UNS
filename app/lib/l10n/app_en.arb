@@ -310,5 +310,40 @@
   },
   "compassNeedsLocation": "Allow location access so the compass can find true north.",
   "allowLocation": "Allow location",
-  "kaaba": "Kaaba"
+  "kaaba": "Kaaba",
+  "history": "History",
+  "today": "Today",
+  "afterPrayer": "After prayer",
+  "dhikrSubhanAllah": "SubhanAllah",
+  "dhikrAlhamdulillah": "Alhamdulillah",
+  "dhikrAllahuAkbar": "Allahu Akbar",
+  "customDhikr": "Custom dhikr",
+  "premium": "Premium",
+  "streaksPremium": "Streaks · Premium",
+  "unsPremium": "Uns Premium",
+  "singleDhikr": "Single dhikr",
+  "ofTarget": "of {target}",
+  "@ofTarget": {
+    "placeholders": {
+      "target": {
+        "type": "int"
+      }
+    }
+  },
+  "tapAnywhere": "Tap anywhere",
+  "complete": "Complete",
+  "dhikrComplete": "Dhikr complete",
+  "startOver": "Start over",
+  "startAfterPrayer": "Start after-prayer dhikr",
+  "tasbihCount": "{count} of {target}, tap to count",
+  "@tasbihCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "target": {
+        "type": "int"
+      }
+    }
+  }
 }

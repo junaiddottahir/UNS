@@ -480,4 +480,62 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get kaaba => 'Kaaba';
+
+  @override
+  String get history => 'History';
+
+  @override
+  String get today => 'Today';
+
+  @override
+  String get afterPrayer => 'After prayer';
+
+  @override
+  String get dhikrSubhanAllah => 'SubhanAllah';
+
+  @override
+  String get dhikrAlhamdulillah => 'Alhamdulillah';
+
+  @override
+  String get dhikrAllahuAkbar => 'Allahu Akbar';
+
+  @override
+  String get customDhikr => 'Custom dhikr';
+
+  @override
+  String get premium => 'Premium';
+
+  @override
+  String get streaksPremium => 'Streaks · Premium';
+
+  @override
+  String get unsPremium => 'Uns Premium';
+
+  @override
+  String get singleDhikr => 'Single dhikr';
+
+  @override
+  String ofTarget(int target) {
+    return 'of $target';
+  }
+
+  @override
+  String get tapAnywhere => 'Tap anywhere';
+
+  @override
+  String get complete => 'Complete';
+
+  @override
+  String get dhikrComplete => 'Dhikr complete';
+
+  @override
+  String get startOver => 'Start over';
+
+  @override
+  String get startAfterPrayer => 'Start after-prayer dhikr';
+
+  @override
+  String tasbihCount(int count, int target) {
+    return '$count of $target, tap to count';
+  }
 }

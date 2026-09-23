@@ -151,7 +151,7 @@ void main() {
 
     await tester.tap(find.text('TASBIH'));
     await tester.pumpAndSettle();
-    expect(find.text('Coming in a later update.'), findsOneWidget);
+    expect(find.text('After prayer'), findsOneWidget);
 
     await tester.tap(find.bySemanticsLabel('Home'));
     await tester.pumpAndSettle();

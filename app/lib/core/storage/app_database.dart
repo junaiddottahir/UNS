@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:drift/drift.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:drift/native.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
@@ -19,14 +20,30 @@ class Settings extends Table {
   Set<Column> get primaryKey => {key};
 }
 
+/// Dhikr counted per day, keyed by the phone's local date `yyyy-MM-dd`.
+class TasbihDays extends Table {
+  TextColumn get day => text()();
+  IntColumn get count => integer()();
+
+  @override
+  Set<Column> get primaryKey => {day};
+}
+
 /// The encrypted on-device database. Holds every piece of user data; later
-/// units add journal, tasbih and session tables.
-@DriftDatabase(tables: [Settings])
+/// units add journal and session tables.
+@DriftDatabase(tables: [Settings, TasbihDays])
 class AppDatabase extends _$AppDatabase {
   AppDatabase(super.executor);
 
   @override
-  int get schemaVersion => 1;
+  int get schemaVersion => 2;
+
+  @override
+  MigrationStrategy get migration => MigrationStrategy(
+    onUpgrade: (m, from, to) async {
+      if (from < 2) await m.createTable(tasbihDays);
+    },
+  );
 
   static const fileName = 'uns.db';
   static final _hexKey = RegExp(r'^[0-9a-f]{64}$');
@@ -85,3 +102,9 @@ class AppDatabase extends _$AppDatabase {
     }
   }
 }
+
+/// Opened in `main` before the app starts, then provided through an
+/// override.
+final appDatabaseProvider = Provider<AppDatabase>(
+  (ref) => throw UnimplementedError('appDatabaseProvider not overridden'),
+);

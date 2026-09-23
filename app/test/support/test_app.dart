@@ -126,6 +126,7 @@ Future<ProviderContainer> pumpApp(
   NotificationPermission? notifications,
   AlertScheduler? scheduler,
   CompassSource? compass,
+  AppDatabase? database,
 }) async {
   // Reduced motion, so the pulsing mood button lets frames settle.
   tester.platformDispatcher.accessibilityFeaturesTestValue =
@@ -136,8 +137,11 @@ Future<ProviderContainer> pumpApp(
   addTearDown(tester.view.reset);
 
   final store = settings ?? await tester.runAsync(memoryStore);
+  final db = database ?? AppDatabase(NativeDatabase.memory());
+  if (database == null) addTearDown(db.close);
   final container = ProviderContainer(
     overrides: [
+      appDatabaseProvider.overrideWithValue(db),
       settingsStoreProvider.overrideWithValue(store!),
       deviceLocatorProvider.overrideWithValue(
         locator ?? FakeLocator(const DeviceLocationFailed()),

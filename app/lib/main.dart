@@ -17,7 +17,10 @@ Future<void> main() async {
   final settings = await SettingsStore.load(db);
   runApp(
     ProviderScope(
-      overrides: [settingsStoreProvider.overrideWithValue(settings)],
+      overrides: [
+        appDatabaseProvider.overrideWithValue(db),
+        settingsStoreProvider.overrideWithValue(settings),
+      ],
       child: const UnsApp(),
     ),
   );

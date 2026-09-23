@@ -78,6 +78,14 @@ abstract final class AppText {
     letterSpacing: -1.12,
     color: AppColors.textPrimary,
   );
+  static const counter = TextStyle(
+    fontSize: 96,
+    height: 1,
+    fontWeight: FontWeight.w300,
+    letterSpacing: -3.84,
+    color: AppColors.textPrimary,
+    fontFeatures: [FontFeature.tabularFigures()],
+  );
   static const row = TextStyle(fontSize: 16, color: AppColors.textPrimary);
   static const rowValue = TextStyle(fontSize: 14, color: Color(0x8CF3EDE8));
   static const pill = TextStyle(

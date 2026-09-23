@@ -49,6 +49,7 @@ void main() {
       ProviderScope(
         overrides: [
           _noPrompt,
+          appDatabaseProvider.overrideWithValue(db),
           settingsStoreProvider.overrideWithValue(await SettingsStore.load(db)),
         ],
         child: const UnsApp(),

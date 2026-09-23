@@ -933,6 +933,114 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Kaaba'**
   String get kaaba;
+
+  /// No description provided for @history.
+  ///
+  /// In en, this message translates to:
+  /// **'History'**
+  String get history;
+
+  /// No description provided for @today.
+  ///
+  /// In en, this message translates to:
+  /// **'Today'**
+  String get today;
+
+  /// No description provided for @afterPrayer.
+  ///
+  /// In en, this message translates to:
+  /// **'After prayer'**
+  String get afterPrayer;
+
+  /// No description provided for @dhikrSubhanAllah.
+  ///
+  /// In en, this message translates to:
+  /// **'SubhanAllah'**
+  String get dhikrSubhanAllah;
+
+  /// No description provided for @dhikrAlhamdulillah.
+  ///
+  /// In en, this message translates to:
+  /// **'Alhamdulillah'**
+  String get dhikrAlhamdulillah;
+
+  /// No description provided for @dhikrAllahuAkbar.
+  ///
+  /// In en, this message translates to:
+  /// **'Allahu Akbar'**
+  String get dhikrAllahuAkbar;
+
+  /// No description provided for @customDhikr.
+  ///
+  /// In en, this message translates to:
+  /// **'Custom dhikr'**
+  String get customDhikr;
+
+  /// No description provided for @premium.
+  ///
+  /// In en, this message translates to:
+  /// **'Premium'**
+  String get premium;
+
+  /// No description provided for @streaksPremium.
+  ///
+  /// In en, this message translates to:
+  /// **'Streaks · Premium'**
+  String get streaksPremium;
+
+  /// No description provided for @unsPremium.
+  ///
+  /// In en, this message translates to:
+  /// **'Uns Premium'**
+  String get unsPremium;
+
+  /// No description provided for @singleDhikr.
+  ///
+  /// In en, this message translates to:
+  /// **'Single dhikr'**
+  String get singleDhikr;
+
+  /// No description provided for @ofTarget.
+  ///
+  /// In en, this message translates to:
+  /// **'of {target}'**
+  String ofTarget(int target);
+
+  /// No description provided for @tapAnywhere.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap anywhere'**
+  String get tapAnywhere;
+
+  /// No description provided for @complete.
+  ///
+  /// In en, this message translates to:
+  /// **'Complete'**
+  String get complete;
+
+  /// No description provided for @dhikrComplete.
+  ///
+  /// In en, this message translates to:
+  /// **'Dhikr complete'**
+  String get dhikrComplete;
+
+  /// No description provided for @startOver.
+  ///
+  /// In en, this message translates to:
+  /// **'Start over'**
+  String get startOver;
+
+  /// No description provided for @startAfterPrayer.
+  ///
+  /// In en, this message translates to:
+  /// **'Start after-prayer dhikr'**
+  String get startAfterPrayer;
+
+  /// No description provided for @tasbihCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} of {target}, tap to count'**
+  String tasbihCount(int count, int target);
 }
 
 class _AppLocalizationsDelegate

@@ -19,6 +19,9 @@ import '../../features/prayer/prayer_settings_screen.dart';
 import '../../features/prayer/prayer_times_screen.dart';
 import '../../features/qibla/calibration_screen.dart';
 import '../../features/qibla/qibla_screen.dart';
+import '../../features/tasbih/counter_screen.dart';
+import '../../features/tasbih/history_screen.dart';
+import '../../features/tasbih/tasbih_screen.dart';
 import '../../l10n/app_localizations.dart';
 import '../storage/settings_store.dart';
 import '../widgets/coming_soon_screen.dart';
@@ -63,11 +66,7 @@ final appRouterProvider = Provider<GoRouter>((ref) {
             (context) =>
                 ComingSoonScreen(title: AppLocalizations.of(context).tabShama),
           ),
-          _branch(
-            Routes.tasbih,
-            (context) =>
-                ComingSoonScreen(title: AppLocalizations.of(context).tabTasbih),
-          ),
+          _branch(Routes.tasbih, (_) => const TasbihScreen()),
           _branch(
             Routes.profile,
             (context) => ComingSoonScreen(
@@ -77,6 +76,23 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         ],
       ),
       GoRoute(path: Routes.qibla, builder: (_, _) => const QiblaScreen()),
+      GoRoute(
+        path: Routes.tasbihCounter,
+        builder: (_, _) => const CounterScreen(),
+      ),
+      GoRoute(
+        path: Routes.tasbihHistory,
+        builder: (_, state) => HistoryScreen(
+          justFinished: state.uri.queryParameters['done'] == '1',
+        ),
+      ),
+      GoRoute(
+        path: Routes.plans,
+        builder: (context, _) => ComingSoonScreen(
+          title: AppLocalizations.of(context).unsPremium,
+          back: true,
+        ),
+      ),
       GoRoute(
         path: Routes.qiblaCalibrate,
         builder: (_, _) => const CalibrationScreen(),

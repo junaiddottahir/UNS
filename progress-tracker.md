@@ -9,7 +9,8 @@ change.
 
 ## Current Goal
 
-- Unit 6: tasbih counter + daily history.
+- Unit 7: backend `GET /v1/library` serving the approved verse library
+  (placeholder library until the scholar delivers).
 
 ## Completed
 
@@ -139,6 +140,25 @@ change.
   - 76 unit/widget tests; simulator screenshots checked (real device
     compass untested: the simulator has none).
 
+- Unit 6 (2026-09-23): tasbih counter + daily history.
+  - Tasbih tab (prototype): today's total, "After prayer" set
+    (SubhanAllah 33 → Alhamdulillah 33 → Allahu Akbar 34, from the
+    scope), single dhikr rows, "Custom dhikr · Premium" (placeholder
+    Premium screen until unit 19).
+  - Counter: tap anywhere, progress ring, light haptic per tap and a
+    vibration at the target; pauses 0.7 s then moves to the next dhikr,
+    or to History with "Dhikr complete". Start over resets the current
+    count (today's total keeps it). The session survives leaving the
+    screen while the app runs.
+  - History: today plus earlier days (weekday within a week, then date);
+    "Streaks · Premium".
+  - Storage: `tasbih_days` table (day → total) in the encrypted database;
+    schema v2 with a migration from v1 (tested on a v1 file).
+  - Fixed on the way: totals written with a raw SQL statement didn't
+    refresh live screens; now a typed upsert.
+  - 87 unit/widget tests; simulator screenshots checked; persistence
+    integration test still passes.
+
 ## In Progress
 
 - None yet.
@@ -237,6 +257,8 @@ Each line is one unit; app and backend units are kept separate.
   north.", "Allow location access so the compass can find true north."
 - Qibla should be tried on a real iPhone and Android phone (heading,
   calibration, true-north correction) before release.
+- Dhikr names are English transliterations from the scope. Arabic-script
+  forms (for the Arabic app language) need the scholar.
 - Self-harm phrase list: who writes and reviews the English and Arabic
   phrases.
 - Scholar still to confirm the Arabic and English editions (from scope).

@@ -58,6 +58,7 @@ void main() {
       ProviderScope(
         overrides: [
           _noPrompt,
+          appDatabaseProvider.overrideWithValue(db),
           settingsStoreProvider.overrideWithValue(await SettingsStore.load(db)),
         ],
         child: const UnsApp(),
@@ -98,7 +99,11 @@ void main() {
     expect(store.readJson(SettingKeys.prayer)!['asr'], 'hanafi');
     await tester.pumpWidget(
       ProviderScope(
-        overrides: [_noPrompt, settingsStoreProvider.overrideWithValue(store)],
+        overrides: [
+          _noPrompt,
+          appDatabaseProvider.overrideWithValue(db),
+          settingsStoreProvider.overrideWithValue(store),
+        ],
         child: const UnsApp(),
       ),
     );
