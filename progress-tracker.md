@@ -9,7 +9,7 @@ change.
 
 ## Current Goal
 
-- Unit 11: backend `POST /v1/classify` (free text → category + risk).
+- Unit 12: app — free-text chat input wired to classify + safety flow.
 
 ## Completed
 
@@ -243,6 +243,27 @@ change.
     "killing me" not flagged); phrase list verified on the simulator;
     screenshots checked.
 
+- Unit 11 (2026-09-23): backend `POST /v1/classify`.
+  - `{"text"}` (1–1000 chars, trimmed; other fields ignored) →
+    `{"category": <one of the 9> | "unknown", "risk": bool}`.
+  - Claude via the Anthropic Python SDK (`anthropic` 1.8, async):
+    `claude-sonnet-5` (user's choice, 2026-09-23), effort `low`,
+    JSON-schema structured output restricted to the 9 categories +
+    unknown. A refusal → unknown (app falls back to chips). No
+    server-side fallbacks on Sonnet (that option targets Opus 5/Fable).
+    Output re-validated; anything unexpected → unknown, keeping a clear
+    risk flag. System prompt: classify only, never reply; risk = any
+    sign of self-harm or danger, erring towards true.
+  - Privacy: only the text is sent (no user ID, token or metadata); never
+    logged or stored; errors never echo it (tested with caplog).
+  - Rate limit: 20 requests/minute per client address, in memory only.
+  - Needs `ANTHROPIC_API_KEY` in `backend/.env` (git-ignored; template
+    `.env.example`); without it the endpoint answers 503 (not 500) and
+    the app keeps the chips.
+  - 34 pytest tests (fake Claude client: request shape, schema, refusal,
+    failures; route: validation, rate limit, 503, no logging). Not yet
+    run against the live API (no key on this Mac).
+
 ## In Progress
 
 - None yet.
@@ -306,9 +327,15 @@ Each line is one unit; app and backend units are kept separate.
 - GeoNames (CC BY 4.0) needs attribution — add to "Our sources" or an
   About/licences screen.
 - Error/success colors are not defined in the prototype.
-- Rate limiting for the public endpoints (architecture.md): the library
-  is a small cached file, so a CDN/host limit may be enough; `/classify`
-  (unit 11) needs a real limit. Decide with the hosting choice.
+- Rate limiting: `/classify` has an in-memory 20/min per-client limit
+  (single instance only; behind a proxy it needs the real client
+  address). Revisit with the hosting choice; the library relies on
+  caching.
+- DEFERRED TO THE END (user, 2026-09-23): Anthropic API key in
+  `backend/.env` and a live test of `/v1/classify`; confirm the org's
+  data-retention setting. Anthropic data retention settings for mood text
+  (scope says "no retention") — confirm the org's zero-data-retention
+  status.
 - The app must not run real sessions from a placeholder library (unit 9
   checks `placeholder`).
 - Backend hosting target (e.g. Fly.io, Railway, Cloud Run).
@@ -413,7 +440,8 @@ Each line is one unit; app and backend units are kept separate.
 
 ## Session Notes
 
-- Run backend: `cd backend && .venv/bin/uvicorn app.main:app --reload`
+- Run backend: `cd backend && .venv/bin/uvicorn app.main:app --reload --env-file .env`
+  (`.env` holds `ANTHROPIC_API_KEY`; copy `.env.example`).
 - Test backend: `cd backend && .venv/bin/pytest`
 - Run app: `cd app && flutter run --dart-define-from-file=config/dev.json`
 - `app/config/dev.json` holds keys and is gitignored; copy

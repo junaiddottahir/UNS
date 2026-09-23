@@ -17,7 +17,7 @@
 | Auth             | Supabase Auth (`supabase_flutter`)          | Optional sign in: Apple, Google, email + password           |
 | Backend          | FastAPI (Python 3.12), Pydantic v2          | Verse library, mood classification, settings sync, account  |
 | Backend database | Supabase Postgres                           | Synced settings and tasbih history for signed-in users      |
-| Mood classifier  | Anthropic Claude API (called from backend)  | Free text → one fixed emotion label + risk flag             |
+| Mood classifier  | Anthropic Claude API (`claude-sonnet-5`, Python SDK, from backend) | Free text → one fixed emotion label + risk flag |
 | Purchases        | App Store / Google Play IAP via RevenueCat  | Monthly, yearly and lifetime premium; restore               |
 | Quran text       | fawazahmed0 Quran API                       | Arabic and translation text, fetched by the app             |
 | Recitation audio | UmmahAPI                                    | Per-ayah MP3, fetched by the app                            |
