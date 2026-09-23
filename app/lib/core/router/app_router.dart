@@ -14,6 +14,8 @@ import '../../features/onboarding/prayer_step_screen.dart';
 import '../../features/onboarding/notifications_step_screen.dart';
 import '../../features/onboarding/reciter_step_screen.dart';
 import '../../features/onboarding/welcome_screen.dart';
+import '../../features/paywall/limit_screen.dart';
+import '../../features/paywall/plans_screen.dart';
 import '../../features/prayer/method_screen.dart';
 import '../../features/prayer/prayer_schedule.dart';
 import '../../features/prayer/prayer_settings_screen.dart';
@@ -39,9 +41,7 @@ import '../../features/support/support_screen.dart';
 import '../../features/tasbih/counter_screen.dart';
 import '../../features/tasbih/history_screen.dart';
 import '../../features/tasbih/tasbih_screen.dart';
-import '../../l10n/app_localizations.dart';
 import '../storage/settings_store.dart';
-import '../widgets/coming_soon_screen.dart';
 import '../widgets/toast.dart';
 import '../widgets/tab_shell.dart';
 import 'routes.dart';
@@ -158,13 +158,8 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           justFinished: state.uri.queryParameters['done'] == '1',
         ),
       ),
-      GoRoute(
-        path: Routes.plans,
-        builder: (context, _) => ComingSoonScreen(
-          title: AppLocalizations.of(context).unsPremium,
-          back: true,
-        ),
-      ),
+      GoRoute(path: Routes.plans, builder: (_, _) => const PlansScreen()),
+      GoRoute(path: Routes.limit, builder: (_, _) => const LimitScreen()),
       GoRoute(
         path: Routes.qiblaCalibrate,
         builder: (_, _) => const CalibrationScreen(),

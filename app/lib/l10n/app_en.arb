@@ -192,7 +192,6 @@
   "tabShama": "Shama",
   "tabTasbih": "Tasbih",
   "tabProfile": "Profile",
-  "comingSoon": "Coming in a later update.",
   "alertDetail": "{time} · {place}",
   "@alertDetail": {
     "placeholders": {
@@ -320,7 +319,6 @@
   "customDhikr": "Custom dhikr",
   "premium": "Premium",
   "streaksPremium": "Streaks · Premium",
-  "unsPremium": "Uns Premium",
   "singleDhikr": "Single dhikr",
   "ofTarget": "of {target}",
   "@ofTarget": {
@@ -644,5 +642,80 @@
   "privacyClassify": "When you type or say how you feel, only those words are sent to be understood — with no name or account — and they aren't kept.",
   "privacyAccount": "If you sign in: your prayer and alert settings, reciter and tasbih history sync to your account. Nothing else.",
   "privacyNoAds": "No ads, ever.",
-  "reciterTitle": "Recitation"
+  "reciterTitle": "Recitation",
+  "goDeeper": "Go deeper",
+  "goDeeperBody": "Unlimited Shama sessions, every reciter offline, custom dhikr and mood insights.",
+  "planYearly": "Yearly",
+  "planMonthly": "Monthly",
+  "planLifetime": "Lifetime",
+  "perYear": "{price} / yr",
+  "@perYear": {
+    "placeholders": {
+      "price": {
+        "type": "String"
+      }
+    }
+  },
+  "perMonth": "{price} / mo",
+  "@perMonth": {
+    "placeholders": {
+      "price": {
+        "type": "String"
+      }
+    }
+  },
+  "once": "{price} once",
+  "@once": {
+    "placeholders": {
+      "price": {
+        "type": "String"
+      }
+    }
+  },
+  "savePercent": "Save {percent}%",
+  "@savePercent": {
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
+  "noAdsRestore": "No ads, ever",
+  "restore": "Restore",
+  "restorePurchases": "Restore purchases",
+  "youHavePremium": "You have Premium",
+  "premiumThanks": "Thank you for supporting Uns.",
+  "premiumActive": "Active",
+  "premiumWelcome": "Welcome to Premium",
+  "restored": "Purchases restored",
+  "nothingToRestore": "No purchases to restore",
+  "buyFailed": "The purchase didn't go through. You haven't been charged.",
+  "plansUnavailable": "Plans aren't available right now. Check your connection and try again.",
+  "freeLeft": "{left} of {total} free this week",
+  "@freeLeft": {
+    "placeholders": {
+      "left": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "noFreeLeft": "No free sessions left",
+  "usedOf": "{used} of {total} used",
+  "@usedOf": {
+    "placeholders": {
+      "used": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "resetsMonday": "Your free sessions reset on Monday",
+  "alwaysFree": "Prayer times, tasbih and your journal are always free.",
+  "seePremium": "See Premium",
+  "revisitPastSession": "Revisit a past session"
 }

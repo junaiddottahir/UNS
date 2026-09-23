@@ -97,7 +97,7 @@ void main() {
     await _openTasbih(tester);
     await tester.tap(find.text('Custom dhikr'));
     await tester.pumpAndSettle();
-    expect(find.text('Uns Premium'), findsOneWidget);
+    expect(find.text('Go deeper'), findsOneWidget);
     expect(find.byType(BackButton), findsNothing);
   });
 }

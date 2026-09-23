@@ -14,6 +14,7 @@ abstract final class Routes {
   static const tasbihCounter = '/tasbih/count';
   static const tasbihHistory = '/tasbih/history';
   static const plans = '/plans';
+  static const limit = '/limit';
   static const sources = '/sources';
   static const shamaHelp = '/shama/help';
   static const shamaVoice = '/shama/voice';

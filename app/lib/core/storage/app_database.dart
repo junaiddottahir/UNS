@@ -65,6 +65,10 @@ class Sessions extends Table {
   /// Never transcribed.
   TextColumn get voiceNote => text().nullable()();
   IntColumn get voiceSeconds => integer().nullable()();
+
+  /// Replays of a past session (from the journal) are free: they don't
+  /// count towards the weekly limit.
+  BoolColumn get isReplay => boolean().withDefault(const Constant(false))();
 }
 
 /// The encrypted on-device database. Holds every piece of user data; later
@@ -74,7 +78,7 @@ class AppDatabase extends _$AppDatabase {
   AppDatabase(super.executor);
 
   @override
-  int get schemaVersion => 6;
+  int get schemaVersion => 7;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -87,6 +91,7 @@ class AppDatabase extends _$AppDatabase {
         await m.addColumn(sessions, sessions.voiceNote);
         await m.addColumn(sessions, sessions.voiceSeconds);
       }
+      if (from >= 4 && from < 7) await m.addColumn(sessions, sessions.isReplay);
     },
   );
 

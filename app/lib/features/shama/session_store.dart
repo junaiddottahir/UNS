@@ -15,6 +15,7 @@ class SessionStore {
     required Emotion emotion,
     required bool comfort,
     required int minutes,
+    bool replay = false,
   }) => _db
       .into(_db.sessions)
       .insert(
@@ -23,8 +24,22 @@ class SessionStore {
           emotion: emotion.name,
           help: comfort ? 'comfort' : 'remind',
           minutes: minutes,
+          isReplay: Value(replay),
         ),
       );
+
+  /// New (not replayed) sessions started since [since], live.
+  Stream<int> watchStartedSince(DateTime since) {
+    final count = _db.sessions.id.count();
+    return (_db.selectOnly(_db.sessions)
+          ..addColumns([count])
+          ..where(
+            _db.sessions.startedAt.isBiggerOrEqualValue(since) &
+                _db.sessions.isReplay.equals(false),
+          ))
+        .map((r) => r.read(count) ?? 0)
+        .watchSingle();
+  }
 
   Future<void> recordVerses(int id, List<VerseRef> played) =>
       (_db.update(_db.sessions)..where((s) => s.id.equals(id))).write(

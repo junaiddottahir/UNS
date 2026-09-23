@@ -3,11 +3,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../core/auth/auth_service.dart';
+import '../../core/purchases/premium_store.dart';
 import '../../core/router/routes.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_theme.dart';
 import '../../core/widgets/ambient_background.dart';
 import '../../core/widgets/glass.dart';
+import '../../core/widgets/toast.dart';
 import '../../l10n/app_localizations.dart';
 import '../journal/journal_providers.dart';
 import '../reciter/reciter.dart';
@@ -25,6 +27,7 @@ class ProfileScreen extends ConsumerWidget {
     final auth = ref.watch(authServiceProvider);
     final account = ref.watch(accountProvider).value;
     final reciter = ref.watch(reciterProvider);
+    final premium = ref.watch(premiumProvider).value ?? false;
 
     return Scaffold(
       body: AmbientBackground(
@@ -79,6 +82,7 @@ class ProfileScreen extends ConsumerWidget {
                           GlassRow(
                             leading: Icons.auto_awesome_outlined,
                             label: Text(l10n.premium),
+                            value: premium ? l10n.premiumActive : null,
                             trailing: Icons.chevron_right,
                             onTap: () => context.push(Routes.plans),
                           ),
@@ -119,8 +123,21 @@ class ProfileScreen extends ConsumerWidget {
                             leading: Icons.menu_book_outlined,
                             label: Text(l10n.ourSources),
                             trailing: Icons.chevron_right,
-                            divider: false,
                             onTap: () => context.push(Routes.sources),
+                          ),
+                          GlassRow(
+                            leading: Icons.restore,
+                            label: Text(l10n.restorePurchases),
+                            divider: false,
+                            onTap: () async {
+                              final ok = await ref
+                                  .read(premiumStoreProvider)
+                                  .restore();
+                              ref.invalidate(premiumProvider);
+                              showToast(
+                                ok ? l10n.restored : l10n.nothingToRestore,
+                              );
+                            },
                           ),
                         ],
                       ),

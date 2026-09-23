@@ -194,6 +194,7 @@ class ShamaSessionNotifier extends Notifier<SessionState?> {
           emotion: emotion,
           comfort: comfort,
           minutes: minutes,
+          replay: replay != null,
         );
     state = state!.copyWith(queue: queue, sessionId: id);
     _positions = _player.positions.listen((p) {

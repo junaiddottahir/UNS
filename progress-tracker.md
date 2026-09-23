@@ -9,8 +9,7 @@ change.
 
 ## Current Goal
 
-- Unit 19: app — session quota (3/week) + paywall + RevenueCat store
-  purchases + restore.
+- Unit 20: app — Athletics font, English/Arabic localisation and RTL pass.
 
 ## Completed
 
@@ -415,6 +414,26 @@ change.
     retries, signed out does nothing). Live end-to-end needs a real
     account (see unit 17).
 
+- Unit 19 (2026-09-24): weekly limit, paywall, purchases.
+  - 3 new Shama sessions a week free (Monday 00:00 local); replays of
+    past sessions are free and don't count (schema v7 `is_replay`).
+    Counted on the phone. Shama tab shows "2 of 3 free this week" / "No
+    free sessions left" (tap → paywall); a 4th session shows the limit
+    screen (prototype): "3 of 3 used", "Your free sessions reset on
+    Monday", See Premium, Revisit a past session.
+  - Paywall "Go deeper" (prototype): Yearly (with "Save %" from real
+    prices), Monthly, Lifetime from the RevenueCat offering; Continue
+    buys through the App Store / Google Play; cancel is silent, failure
+    says nothing was charged; "No ads, ever · Restore". Premium users see
+    "You have Premium".
+  - Premium = RevenueCat `premium` entitlement on the phone, live via
+    the customer-info listener. Profile: Premium shows "Active"; new
+    "Restore purchases" row.
+  - Removed the last "coming soon" placeholder.
+  - 200 unit/widget tests; live: the real RevenueCat Test Store offering
+    (annual, monthly, lifetime with prices) loads on the simulator.
+    A test purchase needs a tap on the store sheet.
+
 ## In Progress
 
 - None yet.
@@ -482,6 +501,11 @@ Each line is one unit; app and backend units are kept separate.
   support varies by phone; where missing, the mic hides.
 - Weekly quota is on device, so reinstalling resets it. Acceptable for
   MVP 1, or track it on the server for signed-in users?
+- Premium features not built yet: custom tasbih lists and streaks, mood
+  insights, curated multi-day programs, offline audio download. Their
+  entry points lead to the paywall. Reciter choice is free for everyone
+  (prototype onboarding); scope lists "multiple reciters" as premium —
+  decide.
 - Arabic Quran font choice.
 - Athletics font files: the prototype's copies are marked "wf-rip" (taken
   from a website), so they are not bundled. Need the OTF files from the

@@ -9,6 +9,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:uns/core/api/api_client.dart';
 import 'package:uns/core/auth/auth_service.dart';
+import 'package:uns/core/purchases/premium_store.dart';
 import 'package:uns/core/quran/quran_providers.dart';
 import 'package:uns/core/quran/quran_repository.dart';
 import 'package:uns/core/quran/quran_text_client.dart';
@@ -480,6 +481,54 @@ class FakeAccountApi implements AccountApi {
   Future<void> deleteAccount() => send('DELETE', '/v1/me');
 }
 
+/// The store in memory: [outcome] decides what a purchase does.
+class FakePremiumStore implements PremiumStore {
+  FakePremiumStore({
+    this.premium = false,
+    this.canRestore = false,
+    this.outcome = BuyOutcome.bought,
+    List<Plan>? plans,
+  }) : _plans = plans ?? defaultPlans;
+
+  static const defaultPlans = [
+    Plan(kind: PlanKind.annual, price: 35.99, priceText: r'$35.99'),
+    Plan(kind: PlanKind.monthly, price: 4.99, priceText: r'$4.99'),
+    Plan(kind: PlanKind.lifetime, price: 89.99, priceText: r'$89.99'),
+  ];
+
+  bool premium;
+  final bool canRestore;
+  BuyOutcome outcome;
+  final List<Plan> _plans;
+  final bought = <PlanKind>[];
+  final _changes = StreamController<bool>.broadcast();
+
+  @override
+  bool get available => true;
+  @override
+  Future<bool> isPremium() async => premium;
+  @override
+  Stream<bool> get changes => _changes.stream;
+  @override
+  Future<List<Plan>> plans() async => _plans;
+
+  @override
+  Future<BuyOutcome> buy(Plan plan) async {
+    bought.add(plan.kind);
+    if (outcome == BuyOutcome.bought) {
+      premium = true;
+      _changes.add(true);
+    }
+    return outcome;
+  }
+
+  @override
+  Future<bool> restore() async {
+    if (canRestore) premium = true;
+    return premium;
+  }
+}
+
 /// A library of real references, for tests only (not a verse selection).
 VerseLibrary testLibrary({bool placeholder = false}) => VerseLibrary(
   version: 't',
@@ -530,6 +579,7 @@ Future<ProviderContainer> pumpApp(
   NotePlayer? notePlayer,
   AuthService? auth,
   AccountApi? accountApi,
+  PremiumStore? premium,
 }) async {
   // Assets load inside each test's fake clock; a load cached by an earlier
   // test would never complete in this one.
@@ -583,6 +633,7 @@ Future<ProviderContainer> pumpApp(
       authServiceProvider.overrideWithValue(auth ?? const NoAuthService()),
       accountApiProvider.overrideWithValue(accountApi ?? FakeAccountApi()),
       syncDelayProvider.overrideWithValue(Duration.zero),
+      premiumStoreProvider.overrideWithValue(premium ?? FakePremiumStore()),
     ],
   );
   addTearDown(container.dispose);

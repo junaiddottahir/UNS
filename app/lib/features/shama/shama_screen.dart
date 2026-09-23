@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../core/purchases/premium_store.dart';
 import '../../core/router/routes.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_theme.dart';
 import '../../core/widgets/ambient_background.dart';
 import '../../l10n/app_localizations.dart';
 import '../library/verse_library.dart';
+import '../paywall/quota.dart';
 import 'mood_chat.dart';
 import 'shama_labels.dart';
 import 'shama_session.dart';
@@ -75,6 +77,14 @@ class _ShamaScreenState extends ConsumerState<ShamaScreen> {
       _ => null,
     };
     final enabled = notice == null;
+    final premium = ref.watch(premiumProvider).value ?? false;
+    final used = ref.watch(sessionsThisWeekProvider).value;
+    final left = used == null ? null : freeSessionsPerWeek - used;
+    final String? quotaLabel = premium || left == null || !enabled
+        ? null
+        : left > 0
+        ? l10n.freeLeft(left, freeSessionsPerWeek)
+        : l10n.noFreeLeft;
 
     return Scaffold(
       body: AmbientBackground(
@@ -89,12 +99,19 @@ class _ShamaScreenState extends ConsumerState<ShamaScreen> {
                   padding: const EdgeInsets.symmetric(
                     horizontal: AppSpacing.screenH,
                   ),
-                  child: Align(
-                    alignment: AlignmentDirectional.centerStart,
-                    child: Text(
-                      l10n.tabShama.toUpperCase(),
-                      style: AppText.label,
-                    ),
+                  child: Row(
+                    children: [
+                      Text(l10n.tabShama.toUpperCase(), style: AppText.label),
+                      const Spacer(),
+                      if (quotaLabel != null)
+                        TextButton(
+                          onPressed: () => context.push(Routes.plans),
+                          child: Text(
+                            quotaLabel.toUpperCase(),
+                            style: AppText.label,
+                          ),
+                        ),
+                    ],
                   ),
                 ),
               ),

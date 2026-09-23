@@ -652,12 +652,6 @@ abstract class AppLocalizations {
   /// **'Profile'**
   String get tabProfile;
 
-  /// No description provided for @comingSoon.
-  ///
-  /// In en, this message translates to:
-  /// **'Coming in a later update.'**
-  String get comingSoon;
-
   /// No description provided for @alertDetail.
   ///
   /// In en, this message translates to:
@@ -987,12 +981,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Streaks · Premium'**
   String get streaksPremium;
-
-  /// No description provided for @unsPremium.
-  ///
-  /// In en, this message translates to:
-  /// **'Uns Premium'**
-  String get unsPremium;
 
   /// No description provided for @singleDhikr.
   ///
@@ -2025,6 +2013,168 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Recitation'**
   String get reciterTitle;
+
+  /// No description provided for @goDeeper.
+  ///
+  /// In en, this message translates to:
+  /// **'Go deeper'**
+  String get goDeeper;
+
+  /// No description provided for @goDeeperBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Unlimited Shama sessions, every reciter offline, custom dhikr and mood insights.'**
+  String get goDeeperBody;
+
+  /// No description provided for @planYearly.
+  ///
+  /// In en, this message translates to:
+  /// **'Yearly'**
+  String get planYearly;
+
+  /// No description provided for @planMonthly.
+  ///
+  /// In en, this message translates to:
+  /// **'Monthly'**
+  String get planMonthly;
+
+  /// No description provided for @planLifetime.
+  ///
+  /// In en, this message translates to:
+  /// **'Lifetime'**
+  String get planLifetime;
+
+  /// No description provided for @perYear.
+  ///
+  /// In en, this message translates to:
+  /// **'{price} / yr'**
+  String perYear(String price);
+
+  /// No description provided for @perMonth.
+  ///
+  /// In en, this message translates to:
+  /// **'{price} / mo'**
+  String perMonth(String price);
+
+  /// No description provided for @once.
+  ///
+  /// In en, this message translates to:
+  /// **'{price} once'**
+  String once(String price);
+
+  /// No description provided for @savePercent.
+  ///
+  /// In en, this message translates to:
+  /// **'Save {percent}%'**
+  String savePercent(int percent);
+
+  /// No description provided for @noAdsRestore.
+  ///
+  /// In en, this message translates to:
+  /// **'No ads, ever'**
+  String get noAdsRestore;
+
+  /// No description provided for @restore.
+  ///
+  /// In en, this message translates to:
+  /// **'Restore'**
+  String get restore;
+
+  /// No description provided for @restorePurchases.
+  ///
+  /// In en, this message translates to:
+  /// **'Restore purchases'**
+  String get restorePurchases;
+
+  /// No description provided for @youHavePremium.
+  ///
+  /// In en, this message translates to:
+  /// **'You have Premium'**
+  String get youHavePremium;
+
+  /// No description provided for @premiumThanks.
+  ///
+  /// In en, this message translates to:
+  /// **'Thank you for supporting Uns.'**
+  String get premiumThanks;
+
+  /// No description provided for @premiumActive.
+  ///
+  /// In en, this message translates to:
+  /// **'Active'**
+  String get premiumActive;
+
+  /// No description provided for @premiumWelcome.
+  ///
+  /// In en, this message translates to:
+  /// **'Welcome to Premium'**
+  String get premiumWelcome;
+
+  /// No description provided for @restored.
+  ///
+  /// In en, this message translates to:
+  /// **'Purchases restored'**
+  String get restored;
+
+  /// No description provided for @nothingToRestore.
+  ///
+  /// In en, this message translates to:
+  /// **'No purchases to restore'**
+  String get nothingToRestore;
+
+  /// No description provided for @buyFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'The purchase didn\'t go through. You haven\'t been charged.'**
+  String get buyFailed;
+
+  /// No description provided for @plansUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Plans aren\'t available right now. Check your connection and try again.'**
+  String get plansUnavailable;
+
+  /// No description provided for @freeLeft.
+  ///
+  /// In en, this message translates to:
+  /// **'{left} of {total} free this week'**
+  String freeLeft(int left, int total);
+
+  /// No description provided for @noFreeLeft.
+  ///
+  /// In en, this message translates to:
+  /// **'No free sessions left'**
+  String get noFreeLeft;
+
+  /// No description provided for @usedOf.
+  ///
+  /// In en, this message translates to:
+  /// **'{used} of {total} used'**
+  String usedOf(int used, int total);
+
+  /// No description provided for @resetsMonday.
+  ///
+  /// In en, this message translates to:
+  /// **'Your free sessions reset on Monday'**
+  String get resetsMonday;
+
+  /// No description provided for @alwaysFree.
+  ///
+  /// In en, this message translates to:
+  /// **'Prayer times, tasbih and your journal are always free.'**
+  String get alwaysFree;
+
+  /// No description provided for @seePremium.
+  ///
+  /// In en, this message translates to:
+  /// **'See Premium'**
+  String get seePremium;
+
+  /// No description provided for @revisitPastSession.
+  ///
+  /// In en, this message translates to:
+  /// **'Revisit a past session'**
+  String get revisitPastSession;
 }
 
 class _AppLocalizationsDelegate

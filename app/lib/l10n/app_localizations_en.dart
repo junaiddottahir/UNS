@@ -320,9 +320,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get tabProfile => 'Profile';
 
   @override
-  String get comingSoon => 'Coming in a later update.';
-
-  @override
   String alertDetail(String time, String place) {
     return '$time · $place';
   }
@@ -507,9 +504,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get streaksPremium => 'Streaks · Premium';
-
-  @override
-  String get unsPremium => 'Uns Premium';
 
   @override
   String get singleDhikr => 'Single dhikr';
@@ -1093,4 +1087,101 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get reciterTitle => 'Recitation';
+
+  @override
+  String get goDeeper => 'Go deeper';
+
+  @override
+  String get goDeeperBody =>
+      'Unlimited Shama sessions, every reciter offline, custom dhikr and mood insights.';
+
+  @override
+  String get planYearly => 'Yearly';
+
+  @override
+  String get planMonthly => 'Monthly';
+
+  @override
+  String get planLifetime => 'Lifetime';
+
+  @override
+  String perYear(String price) {
+    return '$price / yr';
+  }
+
+  @override
+  String perMonth(String price) {
+    return '$price / mo';
+  }
+
+  @override
+  String once(String price) {
+    return '$price once';
+  }
+
+  @override
+  String savePercent(int percent) {
+    return 'Save $percent%';
+  }
+
+  @override
+  String get noAdsRestore => 'No ads, ever';
+
+  @override
+  String get restore => 'Restore';
+
+  @override
+  String get restorePurchases => 'Restore purchases';
+
+  @override
+  String get youHavePremium => 'You have Premium';
+
+  @override
+  String get premiumThanks => 'Thank you for supporting Uns.';
+
+  @override
+  String get premiumActive => 'Active';
+
+  @override
+  String get premiumWelcome => 'Welcome to Premium';
+
+  @override
+  String get restored => 'Purchases restored';
+
+  @override
+  String get nothingToRestore => 'No purchases to restore';
+
+  @override
+  String get buyFailed =>
+      'The purchase didn\'t go through. You haven\'t been charged.';
+
+  @override
+  String get plansUnavailable =>
+      'Plans aren\'t available right now. Check your connection and try again.';
+
+  @override
+  String freeLeft(int left, int total) {
+    return '$left of $total free this week';
+  }
+
+  @override
+  String get noFreeLeft => 'No free sessions left';
+
+  @override
+  String usedOf(int used, int total) {
+    return '$used of $total used';
+  }
+
+  @override
+  String get resetsMonday => 'Your free sessions reset on Monday';
+
+  @override
+  String get alwaysFree =>
+      'Prayer times, tasbih and your journal are always free.';
+
+  @override
+  String get seePremium => 'See Premium';
+
+  @override
+  String get revisitPastSession => 'Revisit a past session';
 }

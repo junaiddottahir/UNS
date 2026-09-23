@@ -147,6 +147,7 @@ void main() {
       help: 'comfort',
       minutes: 5,
       verses: '2:286,x,94:5,0:1,',
+      isReplay: false,
     );
     expect(versesOf(s), [VerseRef(2, 286), VerseRef(94, 5)]);
   });
@@ -163,6 +164,7 @@ void main() {
       ..execute('ALTER TABLE sessions DROP COLUMN reflection;')
       ..execute('ALTER TABLE sessions DROP COLUMN voice_note;')
       ..execute('ALTER TABLE sessions DROP COLUMN voice_seconds;')
+      ..execute('ALTER TABLE sessions DROP COLUMN is_replay;')
       ..execute(
         "INSERT INTO sessions (started_at, emotion, help, minutes, verses) "
         "VALUES (0, 'hope', 'comfort', 5, '1:1');",
@@ -187,6 +189,7 @@ void main() {
     sqlite3.open(file.path)
       ..execute('ALTER TABLE sessions DROP COLUMN voice_note;')
       ..execute('ALTER TABLE sessions DROP COLUMN voice_seconds;')
+      ..execute('ALTER TABLE sessions DROP COLUMN is_replay;')
       ..execute(
         "INSERT INTO sessions (started_at, emotion, help, minutes, reflection) "
         "VALUES (0, 'hope', 'comfort', 5, 'kept');",

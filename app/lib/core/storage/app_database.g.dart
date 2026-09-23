@@ -850,6 +850,21 @@ class $SessionsTable extends Sessions with TableInfo<$SessionsTable, Session> {
     type: DriftSqlType.int,
     requiredDuringInsert: false,
   );
+  static const VerificationMeta _isReplayMeta = const VerificationMeta(
+    'isReplay',
+  );
+  @override
+  late final GeneratedColumn<bool> isReplay = GeneratedColumn<bool>(
+    'is_replay',
+    aliasedName,
+    false,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'CHECK ("is_replay" IN (0, 1))',
+    ),
+    defaultValue: const Constant(false),
+  );
   @override
   List<GeneratedColumn> get $columns => [
     id,
@@ -863,6 +878,7 @@ class $SessionsTable extends Sessions with TableInfo<$SessionsTable, Session> {
     reflection,
     voiceNote,
     voiceSeconds,
+    isReplay,
   ];
   @override
   String get aliasedName => _alias ?? actualTableName;
@@ -950,6 +966,12 @@ class $SessionsTable extends Sessions with TableInfo<$SessionsTable, Session> {
         ),
       );
     }
+    if (data.containsKey('is_replay')) {
+      context.handle(
+        _isReplayMeta,
+        isReplay.isAcceptableOrUnknown(data['is_replay']!, _isReplayMeta),
+      );
+    }
     return context;
   }
 
@@ -1003,6 +1025,10 @@ class $SessionsTable extends Sessions with TableInfo<$SessionsTable, Session> {
         DriftSqlType.int,
         data['${effectivePrefix}voice_seconds'],
       ),
+      isReplay: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}is_replay'],
+      )!,
     );
   }
 
@@ -1033,6 +1059,10 @@ class Session extends DataClass implements Insertable<Session> {
   /// Never transcribed.
   final String? voiceNote;
   final int? voiceSeconds;
+
+  /// Replays of a past session (from the journal) are free: they don't
+  /// count towards the weekly limit.
+  final bool isReplay;
   const Session({
     required this.id,
     required this.startedAt,
@@ -1045,6 +1075,7 @@ class Session extends DataClass implements Insertable<Session> {
     this.reflection,
     this.voiceNote,
     this.voiceSeconds,
+    required this.isReplay,
   });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
@@ -1070,6 +1101,7 @@ class Session extends DataClass implements Insertable<Session> {
     if (!nullToAbsent || voiceSeconds != null) {
       map['voice_seconds'] = Variable<int>(voiceSeconds);
     }
+    map['is_replay'] = Variable<bool>(isReplay);
     return map;
   }
 
@@ -1096,6 +1128,7 @@ class Session extends DataClass implements Insertable<Session> {
       voiceSeconds: voiceSeconds == null && nullToAbsent
           ? const Value.absent()
           : Value(voiceSeconds),
+      isReplay: Value(isReplay),
     );
   }
 
@@ -1116,6 +1149,7 @@ class Session extends DataClass implements Insertable<Session> {
       reflection: serializer.fromJson<String?>(json['reflection']),
       voiceNote: serializer.fromJson<String?>(json['voiceNote']),
       voiceSeconds: serializer.fromJson<int?>(json['voiceSeconds']),
+      isReplay: serializer.fromJson<bool>(json['isReplay']),
     );
   }
   @override
@@ -1133,6 +1167,7 @@ class Session extends DataClass implements Insertable<Session> {
       'reflection': serializer.toJson<String?>(reflection),
       'voiceNote': serializer.toJson<String?>(voiceNote),
       'voiceSeconds': serializer.toJson<int?>(voiceSeconds),
+      'isReplay': serializer.toJson<bool>(isReplay),
     };
   }
 
@@ -1148,6 +1183,7 @@ class Session extends DataClass implements Insertable<Session> {
     Value<String?> reflection = const Value.absent(),
     Value<String?> voiceNote = const Value.absent(),
     Value<int?> voiceSeconds = const Value.absent(),
+    bool? isReplay,
   }) => Session(
     id: id ?? this.id,
     startedAt: startedAt ?? this.startedAt,
@@ -1160,6 +1196,7 @@ class Session extends DataClass implements Insertable<Session> {
     reflection: reflection.present ? reflection.value : this.reflection,
     voiceNote: voiceNote.present ? voiceNote.value : this.voiceNote,
     voiceSeconds: voiceSeconds.present ? voiceSeconds.value : this.voiceSeconds,
+    isReplay: isReplay ?? this.isReplay,
   );
   Session copyWithCompanion(SessionsCompanion data) {
     return Session(
@@ -1178,6 +1215,7 @@ class Session extends DataClass implements Insertable<Session> {
       voiceSeconds: data.voiceSeconds.present
           ? data.voiceSeconds.value
           : this.voiceSeconds,
+      isReplay: data.isReplay.present ? data.isReplay.value : this.isReplay,
     );
   }
 
@@ -1194,7 +1232,8 @@ class Session extends DataClass implements Insertable<Session> {
           ..write('endedAt: $endedAt, ')
           ..write('reflection: $reflection, ')
           ..write('voiceNote: $voiceNote, ')
-          ..write('voiceSeconds: $voiceSeconds')
+          ..write('voiceSeconds: $voiceSeconds, ')
+          ..write('isReplay: $isReplay')
           ..write(')'))
         .toString();
   }
@@ -1212,6 +1251,7 @@ class Session extends DataClass implements Insertable<Session> {
     reflection,
     voiceNote,
     voiceSeconds,
+    isReplay,
   );
   @override
   bool operator ==(Object other) =>
@@ -1227,7 +1267,8 @@ class Session extends DataClass implements Insertable<Session> {
           other.endedAt == this.endedAt &&
           other.reflection == this.reflection &&
           other.voiceNote == this.voiceNote &&
-          other.voiceSeconds == this.voiceSeconds);
+          other.voiceSeconds == this.voiceSeconds &&
+          other.isReplay == this.isReplay);
 }
 
 class SessionsCompanion extends UpdateCompanion<Session> {
@@ -1242,6 +1283,7 @@ class SessionsCompanion extends UpdateCompanion<Session> {
   final Value<String?> reflection;
   final Value<String?> voiceNote;
   final Value<int?> voiceSeconds;
+  final Value<bool> isReplay;
   const SessionsCompanion({
     this.id = const Value.absent(),
     this.startedAt = const Value.absent(),
@@ -1254,6 +1296,7 @@ class SessionsCompanion extends UpdateCompanion<Session> {
     this.reflection = const Value.absent(),
     this.voiceNote = const Value.absent(),
     this.voiceSeconds = const Value.absent(),
+    this.isReplay = const Value.absent(),
   });
   SessionsCompanion.insert({
     this.id = const Value.absent(),
@@ -1267,6 +1310,7 @@ class SessionsCompanion extends UpdateCompanion<Session> {
     this.reflection = const Value.absent(),
     this.voiceNote = const Value.absent(),
     this.voiceSeconds = const Value.absent(),
+    this.isReplay = const Value.absent(),
   }) : startedAt = Value(startedAt),
        emotion = Value(emotion),
        help = Value(help),
@@ -1283,6 +1327,7 @@ class SessionsCompanion extends UpdateCompanion<Session> {
     Expression<String>? reflection,
     Expression<String>? voiceNote,
     Expression<int>? voiceSeconds,
+    Expression<bool>? isReplay,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
@@ -1296,6 +1341,7 @@ class SessionsCompanion extends UpdateCompanion<Session> {
       if (reflection != null) 'reflection': reflection,
       if (voiceNote != null) 'voice_note': voiceNote,
       if (voiceSeconds != null) 'voice_seconds': voiceSeconds,
+      if (isReplay != null) 'is_replay': isReplay,
     });
   }
 
@@ -1311,6 +1357,7 @@ class SessionsCompanion extends UpdateCompanion<Session> {
     Value<String?>? reflection,
     Value<String?>? voiceNote,
     Value<int?>? voiceSeconds,
+    Value<bool>? isReplay,
   }) {
     return SessionsCompanion(
       id: id ?? this.id,
@@ -1324,6 +1371,7 @@ class SessionsCompanion extends UpdateCompanion<Session> {
       reflection: reflection ?? this.reflection,
       voiceNote: voiceNote ?? this.voiceNote,
       voiceSeconds: voiceSeconds ?? this.voiceSeconds,
+      isReplay: isReplay ?? this.isReplay,
     );
   }
 
@@ -1363,6 +1411,9 @@ class SessionsCompanion extends UpdateCompanion<Session> {
     if (voiceSeconds.present) {
       map['voice_seconds'] = Variable<int>(voiceSeconds.value);
     }
+    if (isReplay.present) {
+      map['is_replay'] = Variable<bool>(isReplay.value);
+    }
     return map;
   }
 
@@ -1379,7 +1430,8 @@ class SessionsCompanion extends UpdateCompanion<Session> {
           ..write('endedAt: $endedAt, ')
           ..write('reflection: $reflection, ')
           ..write('voiceNote: $voiceNote, ')
-          ..write('voiceSeconds: $voiceSeconds')
+          ..write('voiceSeconds: $voiceSeconds, ')
+          ..write('isReplay: $isReplay')
           ..write(')'))
         .toString();
   }
@@ -1880,6 +1932,7 @@ typedef $$SessionsTableCreateCompanionBuilder = SessionsCompanion Function({
   Value<String?> reflection,
   Value<String?> voiceNote,
   Value<int?> voiceSeconds,
+  Value<bool> isReplay,
 });
 typedef $$SessionsTableUpdateCompanionBuilder = SessionsCompanion Function({
   Value<int> id,
@@ -1893,6 +1946,7 @@ typedef $$SessionsTableUpdateCompanionBuilder = SessionsCompanion Function({
   Value<String?> reflection,
   Value<String?> voiceNote,
   Value<int?> voiceSeconds,
+  Value<bool> isReplay,
 });
 
 class $$SessionsTableFilterComposer
@@ -1956,6 +2010,11 @@ class $$SessionsTableFilterComposer
 
   ColumnFilters<int> get voiceSeconds => $composableBuilder(
     column: $table.voiceSeconds,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<bool> get isReplay => $composableBuilder(
+    column: $table.isReplay,
     builder: (column) => ColumnFilters(column),
   );
 }
@@ -2023,6 +2082,11 @@ class $$SessionsTableOrderingComposer
     column: $table.voiceSeconds,
     builder: (column) => ColumnOrderings(column),
   );
+
+  ColumnOrderings<bool> get isReplay => $composableBuilder(
+    column: $table.isReplay,
+    builder: (column) => ColumnOrderings(column),
+  );
 }
 
 class $$SessionsTableAnnotationComposer
@@ -2070,6 +2134,9 @@ class $$SessionsTableAnnotationComposer
     column: $table.voiceSeconds,
     builder: (column) => column,
   );
+
+  GeneratedColumn<bool> get isReplay =>
+      $composableBuilder(column: $table.isReplay, builder: (column) => column);
 }
 
 class $$SessionsTableTableManager
@@ -2111,6 +2178,7 @@ class $$SessionsTableTableManager
                 Value<String?> reflection = const Value.absent(),
                 Value<String?> voiceNote = const Value.absent(),
                 Value<int?> voiceSeconds = const Value.absent(),
+                Value<bool> isReplay = const Value.absent(),
               }) => SessionsCompanion(
                 id: id,
                 startedAt: startedAt,
@@ -2123,6 +2191,7 @@ class $$SessionsTableTableManager
                 reflection: reflection,
                 voiceNote: voiceNote,
                 voiceSeconds: voiceSeconds,
+                isReplay: isReplay,
               ),
           createCompanionCallback:
               ({
@@ -2137,6 +2206,7 @@ class $$SessionsTableTableManager
                 Value<String?> reflection = const Value.absent(),
                 Value<String?> voiceNote = const Value.absent(),
                 Value<int?> voiceSeconds = const Value.absent(),
+                Value<bool> isReplay = const Value.absent(),
               }) => SessionsCompanion.insert(
                 id: id,
                 startedAt: startedAt,
@@ -2149,6 +2219,7 @@ class $$SessionsTableTableManager
                 reflection: reflection,
                 voiceNote: voiceNote,
                 voiceSeconds: voiceSeconds,
+                isReplay: isReplay,
               ),
           withReferenceMapper: (p0) => p0
               .map(
