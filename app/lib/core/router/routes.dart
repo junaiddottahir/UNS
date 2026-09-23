@@ -19,6 +19,7 @@ abstract final class Routes {
   static const shamaLength = '/shama/length';
   static const shamaPlay = '/shama/play';
   static const shamaAfter = '/shama/after';
+  static const support = '/support';
   static const qiblaCalibrate = '/qibla/calibrate';
   static const prayerTimes = '/prayer/times';
   static const prayerSettings = '/prayer/settings';

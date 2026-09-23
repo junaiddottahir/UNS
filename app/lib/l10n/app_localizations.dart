@@ -1395,6 +1395,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Session saved'**
   String get sessionSaved;
+
+  /// No description provided for @supportTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'You don\'t have to carry this alone'**
+  String get supportTitle;
+
+  /// No description provided for @supportBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Talking to someone can help, right now.'**
+  String get supportBody;
+
+  /// No description provided for @emergencyCall.
+  ///
+  /// In en, this message translates to:
+  /// **'Emergency · {number}'**
+  String emergencyCall(String number);
+
+  /// No description provided for @imSafe.
+  ///
+  /// In en, this message translates to:
+  /// **'I\'m safe, go back'**
+  String get imSafe;
+
+  /// No description provided for @callFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t start a call here. Please dial {number} from your phone.'**
+  String callFailed(String number);
 }
 
 class _AppLocalizationsDelegate

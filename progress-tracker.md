@@ -9,8 +9,7 @@ change.
 
 ## Current Goal
 
-- Unit 10: app — on-device safety check (phrase list, helpline from
-  config) + support resources screen.
+- Unit 11: backend `POST /v1/classify` (free text → category + risk).
 
 ## Completed
 
@@ -225,6 +224,25 @@ change.
     with real text (test-only library of real references); simulator
     screenshots checked (fixed full-width chips).
 
+- Unit 10 (2026-09-23): on-device safety check + support resources.
+  - `assets/data/safety_phrases.json`: English = the prototype's phrases
+    plus spelling variants of the same phrases; Arabic = a DRAFT list
+    (marked in the file) pending review. Whole-word match after
+    normalising (case, apostrophes, punctuation, Arabic diacritics and
+    letter variants, Arabic attached prefixes like ال/و/ب); `*` marks a
+    stem (`suicid*`). Plain matching, no AI (journal-safe).
+  - `SafetyCheck.isRisky(text)` via `safetyCheckProvider`; used by
+    typed/voice mood input (units 12–13) and journal (unit 14).
+  - Support screen (prototype): "You don't have to carry this alone",
+    Emergency · {helpline from AppConfig} dials (url_launcher `tel:`);
+    if a call can't start (e.g. simulator) it says to dial; "I'm safe,
+    go back".
+  - "Heavier" after a session opens support; going back returns to the
+    mood screen.
+  - 146 unit/widget tests (incl. near-misses like "want to diet" and
+    "killing me" not flagged); phrase list verified on the simulator;
+    screenshots checked.
+
 ## In Progress
 
 - None yet.
@@ -341,7 +359,11 @@ Each line is one unit; app and backend units are kept separate.
 - Session length: the session ends after the verse playing when time
   runs out, so it can run over by up to one verse. OK?
 - Self-harm phrase list: who writes and reviews the English and Arabic
-  phrases.
+  phrases. English is the prototype's list (+ variants); Arabic is my
+  unreviewed DRAFT — must be reviewed by a native speaker and clinician
+  before release.
+- Support screen shows only the emergency number (prototype). Add a
+  crisis line (e.g. Lifeline 13 11 14 in Australia) alongside 000?
 - Scholar still to confirm the Arabic and English editions (from scope).
   In use: `ara-quranuthmanihaf` and `eng-ummmuhammad` (AppConfig).
 - Reciter sample verse is 1:1 (AppConfig), my placeholder choice; the

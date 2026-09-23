@@ -1,0 +1,33 @@
+{
+  "version": 1,
+  "en_status": "From the prototype, plus spelling variants of the same phrases. Needs review.",
+  "en": [
+    "kill myself",
+    "killing myself",
+    "suicid*",
+    "end my life",
+    "ending my life",
+    "end it all",
+    "hurt myself",
+    "hurting myself",
+    "self harm",
+    "selfharm",
+    "want to die",
+    "wanna die",
+    "dont want to live",
+    "do not want to live"
+  ],
+  "ar_status": "DRAFT written without review. Must be reviewed by a native speaker and a clinician before release.",
+  "ar": [
+    "انتحر*",
+    "انتحار",
+    "اقتل نفسي",
+    "انهي حياتي",
+    "اريد ان اموت",
+    "بدي اموت",
+    "لا اريد ان اعيش",
+    "اوذي نفسي",
+    "ايذاء نفسي"
+  ],
+  "format": "Whole words, matched after normalising (see safety_check.dart). A trailing * matches any ending, e.g. suicid* → suicide, suicidal."
+}

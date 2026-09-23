@@ -732,4 +732,23 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get sessionSaved => 'Session saved';
+
+  @override
+  String get supportTitle => 'You don\'t have to carry this alone';
+
+  @override
+  String get supportBody => 'Talking to someone can help, right now.';
+
+  @override
+  String emergencyCall(String number) {
+    return 'Emergency · $number';
+  }
+
+  @override
+  String get imSafe => 'I\'m safe, go back';
+
+  @override
+  String callFailed(String number) {
+    return 'Couldn\'t start a call here. Please dial $number from your phone.';
+  }
 }

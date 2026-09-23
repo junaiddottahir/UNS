@@ -12,8 +12,8 @@ import '../../l10n/app_localizations.dart';
 import 'shama_labels.dart';
 import 'shama_session.dart';
 
-/// "How do you feel now?", then Done saves the session. Reflections join
-/// in units 14–15; "Heavier" leads to support in unit 10.
+/// "How do you feel now?", then Done saves the session. "Heavier" opens
+/// support resources first. Reflections join in units 14–15.
 class AfterScreen extends ConsumerStatefulWidget {
   const AfterScreen({super.key});
 
@@ -63,7 +63,11 @@ class _AfterScreenState extends ConsumerState<AfterScreen> {
                   options: AfterMood.values,
                   selected: _mood,
                   labelOf: (m) => l10n.afterMoodName(m!),
-                  onSelected: (m) => setState(() => _mood = m),
+                  onSelected: (m) {
+                    setState(() => _mood = m);
+                    // Feeling heavier: offer support first (prototype).
+                    if (m == AfterMood.heavier) context.push(Routes.support);
+                  },
                 ),
                 const SizedBox(height: 30),
                 PrimaryButton(label: l10n.done, onPressed: _done),

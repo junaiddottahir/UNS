@@ -27,6 +27,7 @@ import '../../features/shama/length_screen.dart';
 import '../../features/shama/player_screen.dart';
 import '../../features/shama/shama_screen.dart';
 import '../../features/sources/sources_screen.dart';
+import '../../features/support/support_screen.dart';
 import '../../features/tasbih/counter_screen.dart';
 import '../../features/tasbih/history_screen.dart';
 import '../../features/tasbih/tasbih_screen.dart';
@@ -91,6 +92,7 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       ),
       GoRoute(path: Routes.shamaPlay, builder: (_, _) => const PlayerScreen()),
       GoRoute(path: Routes.shamaAfter, builder: (_, _) => const AfterScreen()),
+      GoRoute(path: Routes.support, builder: (_, _) => const SupportScreen()),
       GoRoute(
         path: Routes.tasbihCounter,
         builder: (_, _) => const CounterScreen(),

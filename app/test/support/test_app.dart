@@ -27,6 +27,7 @@ import 'package:uns/features/library/verse_library.dart';
 import 'package:uns/features/reciter/reciter_sample.dart';
 import 'package:uns/features/shama/shama_session.dart';
 import 'package:uns/features/shama/verse_player.dart';
+import 'package:uns/features/support/support_screen.dart';
 import 'package:uns/main.dart';
 
 const sydney = City(
@@ -266,6 +267,7 @@ Future<ProviderContainer> pumpApp(
   VerseLibrary? library,
   bool noLibrary = false,
   QuranRepository? quran,
+  Dialer? dialer,
 }) async {
   // Reduced motion, so the pulsing mood button lets frames settle.
   tester.platformDispatcher.accessibilityFeaturesTestValue =
@@ -306,6 +308,7 @@ Future<ProviderContainer> pumpApp(
       ),
       sessionRandomProvider.overrideWithValue(Random(1)),
       quranRepositoryProvider.overrideWithValue(quran ?? FakeQuran()),
+      if (dialer != null) dialerProvider.overrideWithValue(dialer),
     ],
   );
   addTearDown(container.dispose);
