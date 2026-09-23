@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../core/auth/auth_service.dart';
+import '../../core/l10n/language.dart';
 import '../../core/purchases/premium_store.dart';
 import '../../core/router/routes.dart';
 import '../../core/theme/app_colors.dart';
@@ -14,6 +15,7 @@ import '../../l10n/app_localizations.dart';
 import '../journal/journal_providers.dart';
 import '../reciter/reciter.dart';
 import '../reciter/reciter_labels.dart';
+import 'language_screen.dart';
 
 /// Profile (prototype): the account card, then journal, premium, prayer,
 /// alerts, recitation, privacy and sources.
@@ -103,8 +105,17 @@ class ProfileScreen extends ConsumerWidget {
                             label: Text(l10n.recitation),
                             value: l10n.reciterName(reciter),
                             trailing: Icons.chevron_right,
-                            divider: false,
                             onTap: () => context.push(Routes.reciterSettings),
+                          ),
+                          GlassRow(
+                            leading: Icons.translate,
+                            label: Text(l10n.language),
+                            value: l10n.languageName(
+                              ref.watch(languageProvider),
+                            ),
+                            trailing: Icons.chevron_right,
+                            divider: false,
+                            onTap: () => context.push(Routes.language),
                           ),
                         ],
                       ),
@@ -172,7 +183,7 @@ class _AccountCard extends StatelessWidget {
       child: InkWell(
         onTap: onTap,
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(2, 14, 0, 14),
+          padding: const EdgeInsetsDirectional.fromSTEB(2, 14, 0, 14),
           child: Row(
             children: [
               Expanded(

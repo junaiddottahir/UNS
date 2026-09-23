@@ -11,7 +11,7 @@ __pycache__/
 .venv/
 
 # Licensed font files: never commit while the repo is public
-*.otf
+/*.otf
 *.ttf
 *.woff
 *.woff2

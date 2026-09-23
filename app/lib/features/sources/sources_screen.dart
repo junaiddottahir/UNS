@@ -95,7 +95,10 @@ class SourcesScreen extends ConsumerWidget {
                     ),
                     const SizedBox(height: 26),
                     Padding(
-                      padding: const EdgeInsets.only(left: 8, bottom: 12),
+                      padding: const EdgeInsetsDirectional.only(
+                        start: 8,
+                        bottom: 12,
+                      ),
                       child: Text(
                         l10n.otherData.toUpperCase(),
                         style: AppText.label,

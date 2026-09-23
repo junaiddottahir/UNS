@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
 
+import '../../core/l10n/language.dart';
 import '../../core/storage/settings_store.dart';
 import '../../l10n/app_localizations.dart';
 import '../location/location_providers.dart';
@@ -89,13 +90,16 @@ class PermissionCheck extends Notifier<int> {
 }
 
 /// Keeps the OS's pending notifications in step with [plannedAlertsProvider].
-/// Watched by the app root so it runs from launch.
+/// Watched by the app root so it runs from launch. Written in the app's
+/// language, so changing it rewrites the pending alerts.
 final alertSyncProvider = Provider<void>((ref) {
   final planned = ref.watch(plannedAlertsProvider);
   ref.watch(permissionCheckProvider);
   final place = ref.watch(userLocationProvider)?.city.name ?? '';
   final scheduler = ref.read(alertSchedulerProvider);
-  final l10n = lookupAppLocalizations(_deviceLocale());
+  final l10n = lookupAppLocalizations(
+    ref.watch(languageProvider).locale ?? _deviceLocale(),
+  );
   unawaited(() async {
     // This can run before the app's localisations load at launch.
     await initializeDateFormatting(l10n.localeName);

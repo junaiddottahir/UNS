@@ -32,6 +32,7 @@ abstract final class Routes {
   static const accountNewPassword = '/account/new-password';
   static const account = '/account';
   static const reciterSettings = '/settings/reciter';
+  static const language = '/settings/language';
   static const privacy = '/privacy';
 
   /// One journal entry, e.g. `/journal/12`.

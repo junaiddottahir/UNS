@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/api/api_client.dart';
 import '../../core/auth/auth_service.dart';
+import '../../core/l10n/language.dart';
 import '../../core/storage/settings_store.dart';
 import '../alerts/alert_providers.dart';
 import '../prayer/prayer_providers.dart';
@@ -42,6 +43,9 @@ class AccountSync {
     'alerts': ?_store.readJson(SettingKeys.alerts),
     if (_store.readJson(SettingKeys.reciter)?['id'] case final String r)
       'reciter': r,
+    if (_store.readJson(SettingKeys.language)?['id'] case final String l
+        when l != AppLanguage.system.name)
+      'language': l,
   };
 
   /// Newest wins: the phone's settings go up if they changed more recently,
@@ -77,6 +81,10 @@ class AccountSync {
     if (settings['reciter'] case final String r) {
       _store.writeJson(SettingKeys.reciter, {'id': r}, syncedAt: at);
       _ref.invalidate(reciterProvider);
+    }
+    if (settings['language'] case final String l) {
+      _store.writeJson(SettingKeys.language, {'id': l}, syncedAt: at);
+      _ref.invalidate(languageProvider);
     }
   }
 
@@ -128,6 +136,7 @@ final syncDriverProvider = Provider<void>((ref) {
     ..listen(prayerSettingsProvider, (_, _) => soon())
     ..listen(alertSettingsProvider, (_, _) => soon())
     ..listen(reciterProvider, (_, _) => soon())
+    ..listen(languageProvider, (_, _) => soon())
     ..listen(todayTasbihProvider, (_, _) => soon())
     // Bumped when the app comes back to the foreground.
     ..listen(permissionCheckProvider, (_, _) => soon())

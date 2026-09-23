@@ -147,7 +147,9 @@ ThemeData buildAppTheme() {
     useMaterial3: true,
     colorScheme: scheme,
     scaffoldBackgroundColor: AppColors.bgDeep,
-    // TODO: switch to Athletics once the licensed font files are in assets/fonts.
+    // Athletics once the licensed files are declared in pubspec.yaml (see
+    // the fonts block there); until then this falls back to the system font.
+    fontFamily: 'Athletics',
     textTheme: ThemeData.dark().textTheme.apply(
       bodyColor: AppColors.textPrimary,
       displayColor: AppColors.textPrimary,

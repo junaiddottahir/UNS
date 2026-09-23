@@ -128,7 +128,7 @@ class _AfterPrayerCard extends StatelessWidget {
         child: InkWell(
           onTap: onTap,
           child: Padding(
-            padding: const EdgeInsets.fromLTRB(2, 14, 0, 14),
+            padding: const EdgeInsetsDirectional.fromSTEB(2, 14, 0, 14),
             child: Row(
               children: [
                 Expanded(

@@ -20,6 +20,7 @@ import '../../features/prayer/method_screen.dart';
 import '../../features/prayer/prayer_schedule.dart';
 import '../../features/prayer/prayer_settings_screen.dart';
 import '../../features/prayer/prayer_times_screen.dart';
+import '../../features/profile/language_screen.dart';
 import '../../features/profile/privacy_screen.dart';
 import '../../features/profile/profile_screen.dart';
 import '../../features/profile/reciter_settings_screen.dart';
@@ -138,6 +139,7 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         path: Routes.reciterSettings,
         builder: (_, _) => const ReciterSettingsScreen(),
       ),
+      GoRoute(path: Routes.language, builder: (_, _) => const LanguageScreen()),
       GoRoute(path: Routes.privacy, builder: (_, _) => const PrivacyScreen()),
       GoRoute(
         path: '${Routes.journal}/:id',

@@ -53,6 +53,25 @@ flutter:
     - assets/images/
     - assets/data/
 
+  # Athletics (the brand font). The files in the repo root are web-font
+  # copies, not a licence to ship it. Once the licensed desktop/app OTFs
+  # are bought, put them in assets/fonts/ and uncomment this block.
+  # fonts:
+  #   - family: Athletics
+  #     fonts:
+  #       - asset: assets/fonts/Athletics-Light.otf
+  #         weight: 300
+  #       - asset: assets/fonts/Athletics-Regular.otf
+  #         weight: 400
+  #       - asset: assets/fonts/Athletics-Medium.otf
+  #         weight: 500
+  #       - asset: assets/fonts/Athletics-Bold.otf
+  #         weight: 700
+  #       - asset: assets/fonts/Athletics-ExtraBold.otf
+  #         weight: 800
+  #       - asset: assets/fonts/Athletics-Black.otf
+  #         weight: 900
+
 hooks:
   user_defines:
     sqlite3:

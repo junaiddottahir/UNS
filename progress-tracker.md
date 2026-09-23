@@ -5,11 +5,12 @@ change.
 
 ## Current Phase
 
-- In progress — foundations
+- MVP units 1–20 built; remaining work is on the owner's side (keys,
+  store set-up, licensed assets, reviews, device testing).
 
 ## Current Goal
 
-- Unit 20: app — Athletics font, English/Arabic localisation and RTL pass.
+- None — all planned units are done. See Open Questions for what's left.
 
 ## Completed
 
@@ -433,6 +434,23 @@ change.
   - 200 unit/widget tests; live: the real RevenueCat Test Store offering
     (annual, monthly, lifetime with prices) loads on the simulator.
     A test purchase needs a tap on the store sheet.
+- Unit 20 (2026-09-24): Athletics font, Arabic, RTL.
+  - `app_ar.arb`: all strings in Arabic, marked DRAFT — needs review
+    by a native speaker. Arabic plurals for the journal count.
+  - Profile → Language: phone setting / English / العربية
+    (`language` setting, synced to the account as en/ar; "phone
+    setting" stays local). Drives `MaterialApp.locale` and the
+    language of scheduled prayer notifications.
+  - Arabic uses Western digits (0-9) everywhere, so DateFormat times
+    match counts and durations; dates use the Arabic comma.
+  - RTL: the remaining left/right paddings made directional. The
+    Arabic verse always stays right to left.
+  - Theme font family is `Athletics`; the pubspec block is commented
+    out until the licensed files are in `assets/fonts/` (the root
+    OTFs are web-font copies, git-ignored, not shipped). Falls back to
+    the system font until then; Arabic falls back to the system
+    Arabic font.
+  - 202 unit/widget tests; checked in Arabic on the simulator.
 
 ## In Progress
 

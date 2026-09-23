@@ -67,7 +67,7 @@ class _IntroScreenState extends State<IntroScreen> {
               fade: BackgroundFade.bottom,
               child: SafeArea(
                 child: Padding(
-                  padding: const EdgeInsets.fromLTRB(
+                  padding: const EdgeInsetsDirectional.fromSTEB(
                     AppSpacing.screenH,
                     0,
                     AppSpacing.screenH + 84,

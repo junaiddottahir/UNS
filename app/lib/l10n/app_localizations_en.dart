@@ -1184,4 +1184,20 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get revisitPastSession => 'Revisit a past session';
+
+  @override
+  String get language => 'Language';
+
+  @override
+  String get languageSystem => 'Phone setting';
+
+  @override
+  String get languageEnglish => 'English';
+
+  @override
+  String get languageArabic => 'العربية';
+
+  @override
+  String get languageBody =>
+      'Verses always show in Arabic, with the English translation.';
 }

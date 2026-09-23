@@ -14,6 +14,7 @@ abstract final class SettingKeys {
   static const reciter = 'reciter';
   static const library = 'library';
   static const accountOffered = 'account_offered';
+  static const language = 'language';
 
   /// When the synced settings (below) last changed on this phone.
   static const syncedChangedAt = 'synced_changed_at';
@@ -22,7 +23,7 @@ abstract final class SettingKeys {
   static const syncedAgreedAt = 'synced_agreed_at';
 
   /// The settings that sync to a signed-in account (architecture.md).
-  static const synced = {prayer, alerts, reciter};
+  static const synced = {prayer, alerts, reciter, language};
 }
 
 /// Settings loaded into memory at startup, so providers can read them
