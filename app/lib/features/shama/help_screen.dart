@@ -24,7 +24,6 @@ class HelpScreen extends StatelessWidget {
     void pick(bool comfort) => context.push(
       '${Routes.shamaLength}?emotion=${emotion.name}&help=${comfort ? 'comfort' : 'remind'}',
     );
-    final mood = l10n.emotionName(emotion);
 
     return Scaffold(
       body: AmbientBackground(
@@ -39,9 +38,7 @@ class HelpScreen extends StatelessWidget {
                   const BackTopBar(),
                   Text(
                     l10n
-                        .feelingMood(
-                          locale.startsWith('en') ? mood.toLowerCase() : mood,
-                        )
+                        .feelingMood(emotionInSentence(l10n, emotion, locale))
                         .toUpperCase(),
                     style: AppText.label,
                   ),

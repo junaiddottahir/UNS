@@ -107,6 +107,14 @@ abstract final class AppText {
     fontFamilyFallback: ['monospace'],
     color: Color(0x73F3EDE8),
   );
+
+  /// The app's replies in the Shama chat (prototype `.say`).
+  static const say = TextStyle(
+    fontSize: 22,
+    height: 1.25,
+    letterSpacing: -0.33,
+    color: AppColors.textPrimary,
+  );
   static const row = TextStyle(fontSize: 16, color: AppColors.textPrimary);
   static const rowValue = TextStyle(fontSize: 14, color: Color(0x8CF3EDE8));
   static const pill = TextStyle(

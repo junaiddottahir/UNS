@@ -751,4 +751,25 @@ class AppLocalizationsEn extends AppLocalizations {
   String callFailed(String number) {
     return 'Couldn\'t start a call here. Please dial $number from your phone.';
   }
+
+  @override
+  String get tellMeInYourWords => 'Tell me in your words…';
+
+  @override
+  String get send => 'Send';
+
+  @override
+  String replyFeeling(String mood) {
+    return 'It sounds like you\'re feeling $mood.';
+  }
+
+  @override
+  String get replyTellMore => 'Tell me a little more, or pick a feeling below.';
+
+  @override
+  String get replyUnavailable =>
+      'I couldn\'t read that just now. Pick a feeling below.';
+
+  @override
+  String get somethingElse => 'Something else';
 }

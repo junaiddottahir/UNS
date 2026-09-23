@@ -9,7 +9,7 @@ change.
 
 ## Current Goal
 
-- Unit 12: app — free-text chat input wired to classify + safety flow.
+- Unit 13: app — voice mood input (on-device speech-to-text → chat path).
 
 ## Completed
 
@@ -264,6 +264,26 @@ change.
     failures; route: validation, rate limit, 503, no logging). Not yet
     run against the live API (no key on this Mac).
 
+- Unit 12 (2026-09-24): typed mood input.
+  - Shama tab chat (prototype): "Tell me in your words…" bar with send
+    button; the user's words as a glass bubble, the app's replies as
+    large text; the greeting gives way once there are messages.
+  - Order: on-device safety check first → risk clears the chat and
+    opens support, and nothing is sent. Otherwise `POST /v1/classify`
+    with the text only. Backend risk → support. A category → "It sounds
+    like you're feeling {x}." with Yes (→ comfort/remind) / Something
+    else ("Tell me a little more, or pick a feeling below."). Unknown →
+    the same ask. Classifier unavailable (e.g. no API key, offline) →
+    "I couldn't read that just now. Pick a feeling below."; chips stay.
+  - The chat lives in memory only; it clears when a chip starts a
+    session and after a session is saved. Typing is disabled while the
+    library is the placeholder, like the chips.
+  - Fixed on the way: the text box was disabled while waiting for a
+    reply, which dropped focus and the keyboard, so the next message
+    didn't go in; now only Send waits.
+  - 156 unit/widget tests; on the simulator: real backend (503 without a
+    key) → "couldn't read that"; a risky second message → support.
+
 ## In Progress
 
 - None yet.
@@ -385,6 +405,8 @@ Each line is one unit; app and backend units are kept separate.
   name (names aren't sourced yet).
 - Session length: the session ends after the verse playing when time
   runs out, so it can run over by up to one verse. OK?
+- New chat copy to review: "I couldn't read that just now. Pick a
+  feeling below." (shown when the classifier is unavailable).
 - Self-harm phrase list: who writes and reviews the English and Arabic
   phrases. English is the prototype's list (+ variants); Arabic is my
   unreviewed DRAFT — must be reviewed by a native speaker and clinician

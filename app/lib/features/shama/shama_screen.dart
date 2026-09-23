@@ -7,23 +7,61 @@ import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_theme.dart';
 import '../../core/widgets/ambient_background.dart';
 import '../../l10n/app_localizations.dart';
+import '../library/verse_library.dart';
+import 'mood_chat.dart';
 import 'shama_labels.dart';
 import 'shama_session.dart';
 
-/// Shama tab: "How are you feeling?" with emotion chips. Typed and voice
-/// input join in units 12–13.
-class ShamaScreen extends ConsumerWidget {
+/// Shama tab: "How are you feeling?" — type it, or pick a chip. Typed words
+/// are checked on the phone for risk, then classified; they're never saved.
+class ShamaScreen extends ConsumerStatefulWidget {
   const ShamaScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<ShamaScreen> createState() => _ShamaScreenState();
+}
+
+class _ShamaScreenState extends ConsumerState<ShamaScreen> {
+  final _draft = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    _draft.addListener(() => setState(() {}));
+  }
+
+  @override
+  void dispose() {
+    _draft.dispose();
+    super.dispose();
+  }
+
+  void _start(Emotion e) {
+    ref.read(moodChatProvider.notifier).reset();
+    context.push('${Routes.shamaHelp}?emotion=${e.name}');
+  }
+
+  Future<void> _send() async {
+    final text = _draft.text;
+    if (text.trim().isEmpty) return;
+    _draft.clear();
+    final outcome = await ref.read(moodChatProvider.notifier).send(text);
+    if (outcome == SendOutcome.showSupport && mounted) {
+      context.push(Routes.support);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
+    final chat = ref.watch(moodChatProvider);
     final library = ref.watch(verseLibraryProvider);
     final notice = switch (library) {
       AsyncData(value: null) => l10n.libraryOffline,
       AsyncData(:final value?) when value.placeholder => l10n.libraryNotReady,
       _ => null,
     };
+    final enabled = notice == null;
 
     return Scaffold(
       body: AmbientBackground(
@@ -47,54 +85,107 @@ class ShamaScreen extends ConsumerWidget {
                   ),
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(
-                  AppSpacing.screenH,
-                  30,
-                  AppSpacing.screenH,
-                  0,
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      l10n.welcomeGreeting.toUpperCase(),
-                      style: AppText.label,
-                    ),
-                    const SizedBox(height: 14),
-                    Text(l10n.howAreYouFeeling, style: AppText.headline),
-                    if (notice != null) ...[
+              if (chat.messages.isEmpty)
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(
+                    AppSpacing.screenH,
+                    30,
+                    AppSpacing.screenH,
+                    0,
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        l10n.welcomeGreeting.toUpperCase(),
+                        style: AppText.label,
+                      ),
                       const SizedBox(height: 14),
-                      Text(notice, style: AppText.body),
+                      Text(l10n.howAreYouFeeling, style: AppText.headline),
+                      if (notice != null) ...[
+                        const SizedBox(height: 14),
+                        Text(notice, style: AppText.body),
+                      ],
                     ],
+                  ),
+                ),
+              Expanded(
+                child: ListView(
+                  // Newest first + reverse: newest sits at the bottom.
+                  reverse: true,
+                  padding: const EdgeInsets.fromLTRB(
+                    AppSpacing.screenH,
+                    16,
+                    AppSpacing.screenH,
+                    0,
+                  ),
+                  children: [
+                    for (final m in chat.messages.reversed)
+                      Padding(
+                        padding: const EdgeInsets.only(top: 14),
+                        child: switch (m) {
+                          UserMessage(:final text) => _Bubble(text),
+                          AppMessage(:final reply, :final emotion) => Text(
+                            _replyText(l10n, reply, emotion),
+                            style: AppText.say,
+                          ),
+                        },
+                      ),
                   ],
                 ),
               ),
-              const Spacer(),
               Padding(
+                // Clears the floating tab bar.
                 padding: const EdgeInsets.fromLTRB(
                   AppSpacing.screenH,
                   16,
                   AppSpacing.screenH,
                   124,
                 ),
-                child: Opacity(
-                  opacity: notice == null ? 1 : 0.45,
-                  child: Wrap(
-                    spacing: 8,
-                    runSpacing: 8,
-                    children: [
-                      for (final e in moodChips)
-                        _Chip(
-                          label: l10n.emotionName(e),
-                          onTap: notice != null
-                              ? null
-                              : () => context.push(
-                                  '${Routes.shamaHelp}?emotion=${e.name}',
-                                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    if (chat.pending case final emotion?)
+                      Wrap(
+                        spacing: 8,
+                        runSpacing: 8,
+                        children: [
+                          _Chip(
+                            label: l10n.yes,
+                            selected: true,
+                            onTap: () => _start(emotion),
+                          ),
+                          _Chip(
+                            label: l10n.somethingElse,
+                            onTap: ref.read(moodChatProvider.notifier).notQuite,
+                          ),
+                        ],
+                      )
+                    else
+                      Opacity(
+                        opacity: enabled ? 1 : 0.45,
+                        child: Wrap(
+                          spacing: 8,
+                          runSpacing: 8,
+                          children: [
+                            for (final e in moodChips)
+                              _Chip(
+                                label: l10n.emotionName(e),
+                                onTap: enabled ? () => _start(e) : null,
+                              ),
+                          ],
                         ),
-                    ],
-                  ),
+                      ),
+                    const SizedBox(height: 14),
+                    _InputBar(
+                      controller: _draft,
+                      // Stays enabled while a reply is pending so the
+                      // keyboard and focus aren't lost; only Send waits.
+                      enabled: enabled,
+                      thinking: chat.thinking,
+                      onSend: _send,
+                    ),
+                  ],
                 ),
               ),
             ],
@@ -103,20 +194,165 @@ class ShamaScreen extends ConsumerWidget {
       ),
     );
   }
+
+  String _replyText(AppLocalizations l10n, Reply reply, Emotion? emotion) {
+    final locale = Localizations.localeOf(context).toLanguageTag();
+    return switch (reply) {
+      Reply.feeling => l10n.replyFeeling(
+        emotionInSentence(l10n, emotion!, locale),
+      ),
+      Reply.tellMore => l10n.replyTellMore,
+      Reply.unavailable => l10n.replyUnavailable,
+    };
+  }
 }
 
-/// The prototype's small `.opt.sm` pill.
-class _Chip extends StatelessWidget {
-  const _Chip({required this.label, required this.onTap});
+/// The user's words, the prototype's glass `.bub` on the end side.
+class _Bubble extends StatelessWidget {
+  const _Bubble(this.text);
 
-  final String label;
-  final VoidCallback? onTap;
+  final String text;
 
   @override
   Widget build(BuildContext context) {
+    return Align(
+      alignment: AlignmentDirectional.centerEnd,
+      child: ConstrainedBox(
+        constraints: BoxConstraints(
+          maxWidth: MediaQuery.sizeOf(context).width * 0.8,
+        ),
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 12),
+          decoration: BoxDecoration(
+            color: AppColors.glassFill,
+            border: Border.all(color: AppColors.glassEdge),
+            borderRadius: const BorderRadiusDirectional.only(
+              topStart: Radius.circular(22),
+              topEnd: Radius.circular(22),
+              bottomStart: Radius.circular(22),
+              bottomEnd: Radius.circular(6),
+            ),
+          ),
+          child: Text(
+            text,
+            style: const TextStyle(
+              fontSize: 15,
+              height: 1.4,
+              color: AppColors.textPrimary,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// The prototype's glass `.inbar` with the cream send button.
+class _InputBar extends StatelessWidget {
+  const _InputBar({
+    required this.controller,
+    required this.enabled,
+    required this.thinking,
+    required this.onSend,
+  });
+
+  final TextEditingController controller;
+  final bool enabled;
+  final bool thinking;
+  final VoidCallback onSend;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    final canSend = enabled && !thinking && controller.text.trim().isNotEmpty;
+    return Container(
+      height: 56,
+      padding: const EdgeInsetsDirectional.only(start: 20, end: 6),
+      decoration: BoxDecoration(
+        color: AppColors.glassFill,
+        borderRadius: BorderRadius.circular(AppRadius.pill),
+        border: Border.all(color: AppColors.glassEdge),
+      ),
+      child: Row(
+        children: [
+          Expanded(
+            child: TextField(
+              controller: controller,
+              enabled: enabled,
+              maxLength: 1000,
+              textInputAction: TextInputAction.send,
+              onSubmitted: (_) => canSend ? onSend() : null,
+              style: const TextStyle(
+                fontSize: 15,
+                color: AppColors.textPrimary,
+              ),
+              decoration: InputDecoration(
+                hintText: l10n.tellMeInYourWords,
+                hintStyle: const TextStyle(color: AppColors.textFaint),
+                border: InputBorder.none,
+                counterText: '',
+                isDense: true,
+              ),
+            ),
+          ),
+          SizedBox.square(
+            dimension: 44,
+            child: FilledButton(
+              onPressed: canSend ? onSend : null,
+              style: FilledButton.styleFrom(
+                backgroundColor: AppColors.ctaBackground,
+                foregroundColor: AppColors.ctaForeground,
+                disabledBackgroundColor: AppColors.ctaBackground.withValues(
+                  alpha: 0.35,
+                ),
+                shape: const CircleBorder(),
+                padding: EdgeInsets.zero,
+              ),
+              child: thinking
+                  ? const SizedBox.square(
+                      dimension: 16,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2,
+                        color: AppColors.ctaForeground,
+                      ),
+                    )
+                  : Icon(
+                      Icons.arrow_upward,
+                      size: 18,
+                      semanticLabel: l10n.send,
+                    ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// The prototype's small `.opt.sm` pill; [selected] is the cream `.on`.
+class _Chip extends StatelessWidget {
+  const _Chip({
+    required this.label,
+    required this.onTap,
+    this.selected = false,
+  });
+
+  final String label;
+  final VoidCallback? onTap;
+  final bool selected;
+
+  @override
+  Widget build(BuildContext context) {
+    final foreground = selected
+        ? AppColors.ctaForeground
+        : AppColors.textPrimary;
     return Material(
-      color: AppColors.pillFill,
-      shape: const StadiumBorder(side: BorderSide(color: AppColors.pillEdge)),
+      color: selected ? AppColors.pillSelected : AppColors.pillFill,
+      shape: StadiumBorder(
+        side: selected
+            ? BorderSide.none
+            : const BorderSide(color: AppColors.pillEdge),
+      ),
       child: InkWell(
         customBorder: const StadiumBorder(),
         onTap: onTap,
@@ -126,12 +362,18 @@ class _Chip extends StatelessWidget {
           // widthFactor 1: hug the label instead of filling the row.
           child: Center(
             widthFactor: 1,
-            child: Text(
-              label.toUpperCase(),
-              style: AppText.pill.copyWith(
-                fontSize: 10,
-                color: AppColors.textPrimary,
-              ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                if (selected) ...[
+                  Icon(Icons.check, size: 13, color: foreground),
+                  const SizedBox(width: 6),
+                ],
+                Text(
+                  label.toUpperCase(),
+                  style: AppText.pill.copyWith(fontSize: 10, color: foreground),
+                ),
+              ],
             ),
           ),
         ),

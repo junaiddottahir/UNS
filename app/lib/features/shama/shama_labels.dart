@@ -38,3 +38,10 @@ extension ShamaLabels on AppLocalizations {
     AfterMood.heavier => afterHeavier,
   };
 }
+
+/// The feeling as it reads mid-sentence ("feeling anxious"): lower case
+/// in English, unchanged in Arabic.
+String emotionInSentence(AppLocalizations l10n, Emotion e, String locale) {
+  final name = l10n.emotionName(e);
+  return locale.startsWith('en') ? name.toLowerCase() : name;
+}

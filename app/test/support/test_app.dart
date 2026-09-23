@@ -4,7 +4,7 @@ import 'dart:math';
 
 import 'package:drift/native.dart';
 import 'package:http/http.dart' show BaseClient, BaseRequest, StreamedResponse;
-import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:uns/core/quran/quran_providers.dart';
@@ -12,6 +12,7 @@ import 'package:uns/core/quran/quran_repository.dart';
 import 'package:uns/core/quran/quran_text_client.dart';
 import 'package:uns/core/quran/recitation_client.dart';
 import 'package:uns/core/quran/verse_ref.dart';
+import 'package:uns/core/safety/safety_check.dart';
 import 'package:uns/core/storage/app_database.dart';
 import 'package:uns/core/storage/settings_store.dart';
 import 'package:uns/features/alerts/alert_providers.dart';
@@ -25,6 +26,8 @@ import 'package:uns/features/qibla/compass_source.dart';
 import 'package:uns/features/qibla/qibla_providers.dart';
 import 'package:uns/features/library/verse_library.dart';
 import 'package:uns/features/reciter/reciter_sample.dart';
+import 'package:uns/features/shama/classify_client.dart';
+import 'package:uns/features/shama/mood_chat.dart';
 import 'package:uns/features/shama/shama_session.dart';
 import 'package:uns/features/shama/verse_player.dart';
 import 'package:uns/features/support/support_screen.dart';
@@ -225,6 +228,24 @@ class FakeQuran extends QuranRepository {
   }
 }
 
+/// Classifier answers keyed by text; records what was sent.
+class FakeClassify implements ClassifyClient {
+  FakeClassify([this.answers = const {}]);
+  final Map<String, MoodReading> answers;
+  final sent = <String>[];
+
+  @override
+  String get baseUrl => 'http://fake';
+
+  @override
+  Future<MoodReading> classify(String text) async {
+    sent.add(text);
+    final answer = answers[text];
+    if (answer == null) throw const ClassifyUnavailable();
+    return answer;
+  }
+}
+
 /// A library of real references, for tests only (not a verse selection).
 VerseLibrary testLibrary({bool placeholder = false}) => VerseLibrary(
   version: 't',
@@ -268,7 +289,12 @@ Future<ProviderContainer> pumpApp(
   bool noLibrary = false,
   QuranRepository? quran,
   Dialer? dialer,
+  ClassifyClient? classify,
 }) async {
+  // Assets load inside each test's fake clock; a load cached by an earlier
+  // test would never complete in this one.
+  rootBundle.evict(SafetyCheck.assetPath);
+
   // Reduced motion, so the pulsing mood button lets frames settle.
   tester.platformDispatcher.accessibilityFeaturesTestValue =
       FakeAccessibilityFeatures(disableAnimations: true);
@@ -309,6 +335,7 @@ Future<ProviderContainer> pumpApp(
       sessionRandomProvider.overrideWithValue(Random(1)),
       quranRepositoryProvider.overrideWithValue(quran ?? FakeQuran()),
       if (dialer != null) dialerProvider.overrideWithValue(dialer),
+      classifyClientProvider.overrideWithValue(classify ?? FakeClassify()),
     ],
   );
   addTearDown(container.dispose);

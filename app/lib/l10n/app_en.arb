@@ -468,5 +468,18 @@
         "type": "String"
       }
     }
-  }
+  },
+  "tellMeInYourWords": "Tell me in your words…",
+  "send": "Send",
+  "replyFeeling": "It sounds like you're feeling {mood}.",
+  "@replyFeeling": {
+    "placeholders": {
+      "mood": {
+        "type": "String"
+      }
+    }
+  },
+  "replyTellMore": "Tell me a little more, or pick a feeling below.",
+  "replyUnavailable": "I couldn't read that just now. Pick a feeling below.",
+  "somethingElse": "Something else"
 }

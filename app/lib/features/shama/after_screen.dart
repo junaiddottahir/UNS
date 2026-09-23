@@ -9,6 +9,7 @@ import '../../core/widgets/buttons.dart';
 import '../../core/widgets/glass.dart';
 import '../../core/widgets/toast.dart';
 import '../../l10n/app_localizations.dart';
+import 'mood_chat.dart';
 import 'shama_labels.dart';
 import 'shama_session.dart';
 
@@ -27,6 +28,7 @@ class _AfterScreenState extends ConsumerState<AfterScreen> {
   Future<void> _done() async {
     final l10n = AppLocalizations.of(context);
     await ref.read(shamaSessionProvider.notifier).save(_mood?.name);
+    ref.read(moodChatProvider.notifier).reset();
     if (!mounted) return;
     context.go(Routes.home);
     showToast(l10n.sessionSaved);

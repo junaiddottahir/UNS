@@ -1425,6 +1425,42 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Couldn\'t start a call here. Please dial {number} from your phone.'**
   String callFailed(String number);
+
+  /// No description provided for @tellMeInYourWords.
+  ///
+  /// In en, this message translates to:
+  /// **'Tell me in your words…'**
+  String get tellMeInYourWords;
+
+  /// No description provided for @send.
+  ///
+  /// In en, this message translates to:
+  /// **'Send'**
+  String get send;
+
+  /// No description provided for @replyFeeling.
+  ///
+  /// In en, this message translates to:
+  /// **'It sounds like you\'re feeling {mood}.'**
+  String replyFeeling(String mood);
+
+  /// No description provided for @replyTellMore.
+  ///
+  /// In en, this message translates to:
+  /// **'Tell me a little more, or pick a feeling below.'**
+  String get replyTellMore;
+
+  /// No description provided for @replyUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'I couldn\'t read that just now. Pick a feeling below.'**
+  String get replyUnavailable;
+
+  /// No description provided for @somethingElse.
+  ///
+  /// In en, this message translates to:
+  /// **'Something else'**
+  String get somethingElse;
 }
 
 class _AppLocalizationsDelegate
