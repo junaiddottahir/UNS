@@ -1,0 +1,168 @@
+{
+  "version": "placeholder-1",
+  "placeholder": true,
+  "entries": [
+    {
+      "surah": 0,
+      "ayah": 1,
+      "category": "sadness",
+      "tag": "comfort"
+    },
+    {
+      "surah": 0,
+      "ayah": 2,
+      "category": "sadness",
+      "tag": "gentle_reminder"
+    },
+    {
+      "surah": 0,
+      "ayah": 3,
+      "category": "sadness",
+      "tag": "warning"
+    },
+    {
+      "surah": 0,
+      "ayah": 4,
+      "category": "anxiety",
+      "tag": "comfort"
+    },
+    {
+      "surah": 0,
+      "ayah": 5,
+      "category": "anxiety",
+      "tag": "gentle_reminder"
+    },
+    {
+      "surah": 0,
+      "ayah": 6,
+      "category": "anxiety",
+      "tag": "warning"
+    },
+    {
+      "surah": 0,
+      "ayah": 7,
+      "category": "anger",
+      "tag": "comfort"
+    },
+    {
+      "surah": 0,
+      "ayah": 8,
+      "category": "anger",
+      "tag": "gentle_reminder"
+    },
+    {
+      "surah": 0,
+      "ayah": 9,
+      "category": "anger",
+      "tag": "warning"
+    },
+    {
+      "surah": 0,
+      "ayah": 10,
+      "category": "loneliness",
+      "tag": "comfort"
+    },
+    {
+      "surah": 0,
+      "ayah": 11,
+      "category": "loneliness",
+      "tag": "gentle_reminder"
+    },
+    {
+      "surah": 0,
+      "ayah": 12,
+      "category": "loneliness",
+      "tag": "warning"
+    },
+    {
+      "surah": 0,
+      "ayah": 13,
+      "category": "gratitude",
+      "tag": "comfort"
+    },
+    {
+      "surah": 0,
+      "ayah": 14,
+      "category": "gratitude",
+      "tag": "gentle_reminder"
+    },
+    {
+      "surah": 0,
+      "ayah": 15,
+      "category": "gratitude",
+      "tag": "warning"
+    },
+    {
+      "surah": 0,
+      "ayah": 16,
+      "category": "hope",
+      "tag": "comfort"
+    },
+    {
+      "surah": 0,
+      "ayah": 17,
+      "category": "hope",
+      "tag": "gentle_reminder"
+    },
+    {
+      "surah": 0,
+      "ayah": 18,
+      "category": "hope",
+      "tag": "warning"
+    },
+    {
+      "surah": 0,
+      "ayah": 19,
+      "category": "humility",
+      "tag": "comfort"
+    },
+    {
+      "surah": 0,
+      "ayah": 20,
+      "category": "humility",
+      "tag": "gentle_reminder"
+    },
+    {
+      "surah": 0,
+      "ayah": 21,
+      "category": "humility",
+      "tag": "warning"
+    },
+    {
+      "surah": 0,
+      "ayah": 22,
+      "category": "arrogance",
+      "tag": "comfort"
+    },
+    {
+      "surah": 0,
+      "ayah": 23,
+      "category": "arrogance",
+      "tag": "gentle_reminder"
+    },
+    {
+      "surah": 0,
+      "ayah": 24,
+      "category": "arrogance",
+      "tag": "warning"
+    },
+    {
+      "surah": 0,
+      "ayah": 25,
+      "category": "greed",
+      "tag": "comfort"
+    },
+    {
+      "surah": 0,
+      "ayah": 26,
+      "category": "greed",
+      "tag": "gentle_reminder"
+    },
+    {
+      "surah": 0,
+      "ayah": 27,
+      "category": "greed",
+      "tag": "warning"
+    }
+  ]
+}

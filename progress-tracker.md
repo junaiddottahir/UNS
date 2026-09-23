@@ -9,8 +9,8 @@ change.
 
 ## Current Goal
 
-- Unit 7: backend `GET /v1/library` serving the approved verse library
-  (placeholder library until the scholar delivers).
+- Unit 8: app — Quran text + audio clients with on-device cache;
+  "Our sources".
 
 ## Completed
 
@@ -159,6 +159,21 @@ change.
   - 87 unit/widget tests; simulator screenshots checked; persistence
     integration test still passes.
 
+- Unit 7 (2026-09-23): backend `GET /v1/library`.
+  - `backend/app/data/library.json`: `{version, placeholder, entries:
+    [{surah, ayah, category, tag}]}`, references and tags only (a `text`
+    field is rejected). Categories: the scope's nine emotions; tags:
+    comfort / gentle_reminder / warning.
+  - Placeholder until the scholar delivers (user's choice, 2026-09-23):
+    27 entries (one per category × tag), all on surah 0, which doesn't
+    exist, and `"placeholder": true`, so it can't pass as approved
+    content. A real library must use real references (surah 1–114, ayah
+    within the surah; Hafs counts, 6,236 total).
+  - Loaded and validated at startup; an invalid file stops the server.
+  - ETag from the content + `Cache-Control: public, max-age=3600`;
+    `If-None-Match` → 304. Errors use `{"error": {"code", "message"}}`.
+  - 14 pytest tests; ruff clean; checked against a running server.
+
 ## In Progress
 
 - None yet.
@@ -222,6 +237,11 @@ Each line is one unit; app and backend units are kept separate.
 - GeoNames (CC BY 4.0) needs attribution — add to "Our sources" or an
   About/licences screen.
 - Error/success colors are not defined in the prototype.
+- Rate limiting for the public endpoints (architecture.md): the library
+  is a small cached file, so a CDN/host limit may be enough; `/classify`
+  (unit 11) needs a real limit. Decide with the hosting choice.
+- The app must not run real sessions from a placeholder library (unit 9
+  checks `placeholder`).
 - Backend hosting target (e.g. Fly.io, Railway, Cloud Run).
 - Pricing: $4.99 / $35.99 / $89.99 (USD base) is a suggestion adopted for
   the Test Store; confirm before creating real store products. Regional

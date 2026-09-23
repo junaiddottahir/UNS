@@ -38,7 +38,10 @@
   classifies free-text mood, syncs settings for signed-in users and deletes
   accounts. Verifies Supabase JWTs; never issues its own credentials.
 - `backend/app/data/` — the approved verse library as versioned data
-  (verse references + category + tag only, never verse text).
+  (verse references + category + tag only, never verse text). Served by
+  `GET /v1/library` with an ETag; validated at startup. Until the scholar
+  delivers, a placeholder on the non-existent surah 0 with
+  `"placeholder": true` stands in.
 - `backend/migrations/` — SQL migrations for the Supabase Postgres schema.
 - `app/lib/features/prayer/` — prayer calculation (`PrayerSchedule` wraps
   `adhan`), settings, country → method suggestion, and the times/settings
