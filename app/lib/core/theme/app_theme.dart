@@ -115,6 +115,12 @@ abstract final class AppText {
     letterSpacing: -0.33,
     color: AppColors.textPrimary,
   );
+  static const transcript = TextStyle(
+    fontSize: 24,
+    height: 1.35,
+    letterSpacing: -0.24,
+    color: AppColors.textPrimary,
+  );
   static const row = TextStyle(fontSize: 16, color: AppColors.textPrimary);
   static const rowValue = TextStyle(fontSize: 14, color: Color(0x8CF3EDE8));
   static const pill = TextStyle(

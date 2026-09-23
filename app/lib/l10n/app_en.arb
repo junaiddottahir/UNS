@@ -481,5 +481,13 @@
   },
   "replyTellMore": "Tell me a little more, or pick a feeling below.",
   "replyUnavailable": "I couldn't read that just now. Pick a feeling below.",
-  "somethingElse": "Something else"
+  "somethingElse": "Something else",
+  "listening": "Listening",
+  "tellMeHowYouFeel": "Tell me how you feel",
+  "speakNaturally": "Speak naturally. I'll listen.",
+  "tapToFinish": "Tap to finish",
+  "finishListening": "Finish",
+  "talkInstead": "Speak instead of typing",
+  "voiceNoPermission": "Allow the microphone and speech recognition for Uns in Settings to talk instead of typing.",
+  "voiceUnsupported": "Voice isn't available on this phone. You can type instead."
 }

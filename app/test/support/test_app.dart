@@ -29,6 +29,7 @@ import 'package:uns/features/reciter/reciter_sample.dart';
 import 'package:uns/features/shama/classify_client.dart';
 import 'package:uns/features/shama/mood_chat.dart';
 import 'package:uns/features/shama/shama_session.dart';
+import 'package:uns/features/shama/voice_input.dart';
 import 'package:uns/features/shama/verse_player.dart';
 import 'package:uns/features/support/support_screen.dart';
 import 'package:uns/main.dart';
@@ -246,6 +247,38 @@ class FakeClassify implements ClassifyClient {
   }
 }
 
+/// Voice input the test drives: [say] delivers words, [problem] makes
+/// starting fail.
+class FakeVoiceInput implements VoiceInput {
+  FakeVoiceInput({this.supported = false, this.problem});
+
+  @override
+  final bool supported;
+  final VoiceProblem? problem;
+  VoiceListener? _listener;
+  int starts = 0;
+  int stops = 0;
+  int cancels = 0;
+
+  @override
+  Future<VoiceProblem?> start(VoiceListener listener) async {
+    starts++;
+    _listener = listener;
+    return problem;
+  }
+
+  void say(String words) {
+    _listener?.onLevel(0.8);
+    _listener?.onWords(words);
+  }
+
+  @override
+  Future<void> stop() async => stops++;
+
+  @override
+  Future<void> cancel() async => cancels++;
+}
+
 /// A library of real references, for tests only (not a verse selection).
 VerseLibrary testLibrary({bool placeholder = false}) => VerseLibrary(
   version: 't',
@@ -290,6 +323,7 @@ Future<ProviderContainer> pumpApp(
   QuranRepository? quran,
   Dialer? dialer,
   ClassifyClient? classify,
+  VoiceInput? voice,
 }) async {
   // Assets load inside each test's fake clock; a load cached by an earlier
   // test would never complete in this one.
@@ -336,6 +370,7 @@ Future<ProviderContainer> pumpApp(
       quranRepositoryProvider.overrideWithValue(quran ?? FakeQuran()),
       if (dialer != null) dialerProvider.overrideWithValue(dialer),
       classifyClientProvider.overrideWithValue(classify ?? FakeClassify()),
+      voiceInputProvider.overrideWithValue(voice ?? FakeVoiceInput()),
     ],
   );
   addTearDown(container.dispose);

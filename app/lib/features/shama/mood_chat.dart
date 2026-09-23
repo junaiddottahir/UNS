@@ -102,3 +102,21 @@ class MoodChatNotifier extends Notifier<MoodChat> {
     state = MoodChat(messages: [...state.messages, message], pending: pending);
   }
 }
+
+/// Words from the voice screen waiting to fill the Shama text box, so the
+/// user sees (and can edit) the transcript before sending it.
+final moodDraftProvider = NotifierProvider<MoodDraft, String?>(MoodDraft.new);
+
+class MoodDraft extends Notifier<String?> {
+  @override
+  String? build() => null;
+
+  void set(String words) => state = words.isEmpty ? null : words;
+
+  /// Hands the words over once; the text box owns them from then on.
+  String? take() {
+    final words = state;
+    state = null;
+    return words;
+  }
+}

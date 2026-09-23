@@ -9,7 +9,8 @@ change.
 
 ## Current Goal
 
-- Unit 13: app — voice mood input (on-device speech-to-text → chat path).
+- Unit 14: app — reflection journal (written entries, list, replay,
+  safety check).
 
 ## Completed
 
@@ -284,6 +285,25 @@ change.
   - 156 unit/widget tests; on the simulator: real backend (503 without a
     key) → "couldn't read that"; a risky second message → support.
 
+- Unit 13 (2026-09-24): voice mood input.
+  - "Listening" screen (prototype): "Tell me how you feel", live words,
+    sound wave, stop button "Tap to finish", X to discard. Opened by the
+    home voice button (goes to Shama and listens) and by the mic in the
+    Shama input bar when it's empty.
+  - `speech_to_text` with on-device recognition: on iOS it's enforced
+    (`requiresOnDeviceRecognition`), so audio never leaves the phone.
+    Finishing puts the transcript in the text box to check/edit; Send
+    then takes the typed path (safety check first, then classify).
+  - No permission → explains + Open Settings. Not supported on this
+    phone → explains and the mic is hidden from then on.
+  - Android: voice is OFF — the package falls back to a cloud recogniser
+    when no on-device one exists, which would break invariant 8.
+  - iOS usage strings for microphone and speech recognition.
+  - Fixed on the way: the wave's list was fixed-length and would have
+    crashed on the first sound.
+  - 162 unit/widget tests; simulator screenshots with scripted words.
+    Real speech needs a device (permission prompts).
+
 ## In Progress
 
 - None yet.
@@ -331,9 +351,10 @@ Each line is one unit; app and backend units are kept separate.
   RevenueCat.
 - Android SDK is not installed on this Mac, so Android builds can't be
   verified yet.
-- Voice transcription for Arabic: on-device recognition support differs by
-  phone and OS version. If on-device isn't available, hide the mic or allow
-  the platform's cloud recognizer? (Default until decided: hide the mic.)
+- Voice transcription: iOS only for now (on-device enforced). Android
+  needs a native check (`SpeechRecognizer.isOnDeviceRecognitionAvailable`)
+  or a cloud-recogniser decision before enabling. Arabic on-device
+  support varies by phone; where missing, the mic hides.
 - Weekly quota is on device, so reinstalling resets it. Acceptable for
   MVP 1, or track it on the server for signed-in users?
 - Arabic Quran font choice.

@@ -13,6 +13,7 @@ import '../prayer/prayer_background.dart';
 import '../prayer/prayer_labels.dart';
 import '../prayer/prayer_providers.dart';
 import '../prayer/prayer_times_unavailable.dart';
+import '../shama/voice_input.dart';
 import 'mood_orb.dart';
 
 /// Home: date and place, the next prayer with a countdown, qibla and
@@ -155,7 +156,13 @@ class HomeScreen extends ConsumerWidget {
                       const SizedBox(width: 18),
                       MoodOrb(
                         label: l10n.moodVoice,
-                        onPressed: () => context.go(Routes.shama),
+                        onPressed: () {
+                          context.go(Routes.shama);
+                          // The prototype's button listens straight away.
+                          if (ref.read(voiceAvailableProvider)) {
+                            context.push(Routes.shamaVoice);
+                          }
+                        },
                       ),
                     ],
                   ),

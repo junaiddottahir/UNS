@@ -11,6 +11,7 @@ import '../library/verse_library.dart';
 import 'mood_chat.dart';
 import 'shama_labels.dart';
 import 'shama_session.dart';
+import 'voice_input.dart';
 
 /// Shama tab: "How are you feeling?" — type it, or pick a chip. Typed words
 /// are checked on the phone for risk, then classified; they're never saved.
@@ -51,10 +52,22 @@ class _ShamaScreenState extends ConsumerState<ShamaScreen> {
     }
   }
 
+  void _fillFromVoice() {
+    final words = ref.read(moodDraftProvider.notifier).take();
+    if (words != null) {
+      _draft.text = words;
+      _draft.selection = TextSelection.collapsed(offset: words.length);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    ref.listen(moodDraftProvider, (_, words) {
+      if (words != null) _fillFromVoice();
+    });
     final l10n = AppLocalizations.of(context);
     final chat = ref.watch(moodChatProvider);
+    final voice = ref.watch(voiceAvailableProvider);
     final library = ref.watch(verseLibraryProvider);
     final notice = switch (library) {
       AsyncData(value: null) => l10n.libraryOffline,
@@ -178,6 +191,9 @@ class _ShamaScreenState extends ConsumerState<ShamaScreen> {
                       ),
                     const SizedBox(height: 14),
                     _InputBar(
+                      onVoice: voice && enabled
+                          ? () => context.push(Routes.shamaVoice)
+                          : null,
                       controller: _draft,
                       // Stays enabled while a reply is pending so the
                       // keyboard and focus aren't lost; only Send waits.
@@ -250,12 +266,15 @@ class _Bubble extends StatelessWidget {
 /// The prototype's glass `.inbar` with the cream send button.
 class _InputBar extends StatelessWidget {
   const _InputBar({
+    required this.onVoice,
     required this.controller,
     required this.enabled,
     required this.thinking,
     required this.onSend,
   });
 
+  /// Opens the voice screen; null hides the mic.
+  final VoidCallback? onVoice;
   final TextEditingController controller;
   final bool enabled;
   final bool thinking;
@@ -264,7 +283,10 @@ class _InputBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
-    final canSend = enabled && !thinking && controller.text.trim().isNotEmpty;
+    final hasText = controller.text.trim().isNotEmpty;
+    final canSend = enabled && !thinking && hasText;
+    // Empty box: the button is the mic (prototype), when voice is offered.
+    final showMic = !hasText && !thinking && onVoice != null;
     return Container(
       height: 56,
       padding: const EdgeInsetsDirectional.only(start: 20, end: 6),
@@ -298,7 +320,7 @@ class _InputBar extends StatelessWidget {
           SizedBox.square(
             dimension: 44,
             child: FilledButton(
-              onPressed: canSend ? onSend : null,
+              onPressed: showMic ? onVoice : (canSend ? onSend : null),
               style: FilledButton.styleFrom(
                 backgroundColor: AppColors.ctaBackground,
                 foregroundColor: AppColors.ctaForeground,
@@ -315,6 +337,12 @@ class _InputBar extends StatelessWidget {
                         strokeWidth: 2,
                         color: AppColors.ctaForeground,
                       ),
+                    )
+                  : showMic
+                  ? Icon(
+                      Icons.graphic_eq,
+                      size: 18,
+                      semanticLabel: l10n.talkInstead,
                     )
                   : Icon(
                       Icons.arrow_upward,

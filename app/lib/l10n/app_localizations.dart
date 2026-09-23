@@ -1461,6 +1461,54 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Something else'**
   String get somethingElse;
+
+  /// No description provided for @listening.
+  ///
+  /// In en, this message translates to:
+  /// **'Listening'**
+  String get listening;
+
+  /// No description provided for @tellMeHowYouFeel.
+  ///
+  /// In en, this message translates to:
+  /// **'Tell me how you feel'**
+  String get tellMeHowYouFeel;
+
+  /// No description provided for @speakNaturally.
+  ///
+  /// In en, this message translates to:
+  /// **'Speak naturally. I\'ll listen.'**
+  String get speakNaturally;
+
+  /// No description provided for @tapToFinish.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap to finish'**
+  String get tapToFinish;
+
+  /// No description provided for @finishListening.
+  ///
+  /// In en, this message translates to:
+  /// **'Finish'**
+  String get finishListening;
+
+  /// No description provided for @talkInstead.
+  ///
+  /// In en, this message translates to:
+  /// **'Speak instead of typing'**
+  String get talkInstead;
+
+  /// No description provided for @voiceNoPermission.
+  ///
+  /// In en, this message translates to:
+  /// **'Allow the microphone and speech recognition for Uns in Settings to talk instead of typing.'**
+  String get voiceNoPermission;
+
+  /// No description provided for @voiceUnsupported.
+  ///
+  /// In en, this message translates to:
+  /// **'Voice isn\'t available on this phone. You can type instead.'**
+  String get voiceUnsupported;
 }
 
 class _AppLocalizationsDelegate

@@ -16,6 +16,7 @@ abstract final class Routes {
   static const plans = '/plans';
   static const sources = '/sources';
   static const shamaHelp = '/shama/help';
+  static const shamaVoice = '/shama/voice';
   static const shamaLength = '/shama/length';
   static const shamaPlay = '/shama/play';
   static const shamaAfter = '/shama/after';

@@ -772,4 +772,30 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get somethingElse => 'Something else';
+
+  @override
+  String get listening => 'Listening';
+
+  @override
+  String get tellMeHowYouFeel => 'Tell me how you feel';
+
+  @override
+  String get speakNaturally => 'Speak naturally. I\'ll listen.';
+
+  @override
+  String get tapToFinish => 'Tap to finish';
+
+  @override
+  String get finishListening => 'Finish';
+
+  @override
+  String get talkInstead => 'Speak instead of typing';
+
+  @override
+  String get voiceNoPermission =>
+      'Allow the microphone and speech recognition for Uns in Settings to talk instead of typing.';
+
+  @override
+  String get voiceUnsupported =>
+      'Voice isn\'t available on this phone. You can type instead.';
 }
