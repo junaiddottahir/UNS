@@ -1155,6 +1155,246 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'NOAA · WMM-2025'**
   String get sourceCompassValue;
+
+  /// No description provided for @howAreYouFeeling.
+  ///
+  /// In en, this message translates to:
+  /// **'How are you feeling?'**
+  String get howAreYouFeeling;
+
+  /// No description provided for @moodAnxious.
+  ///
+  /// In en, this message translates to:
+  /// **'Anxious'**
+  String get moodAnxious;
+
+  /// No description provided for @moodSad.
+  ///
+  /// In en, this message translates to:
+  /// **'Sad'**
+  String get moodSad;
+
+  /// No description provided for @moodLonely.
+  ///
+  /// In en, this message translates to:
+  /// **'Lonely'**
+  String get moodLonely;
+
+  /// No description provided for @moodAngry.
+  ///
+  /// In en, this message translates to:
+  /// **'Angry'**
+  String get moodAngry;
+
+  /// No description provided for @moodGrateful.
+  ///
+  /// In en, this message translates to:
+  /// **'Grateful'**
+  String get moodGrateful;
+
+  /// No description provided for @moodHopeful.
+  ///
+  /// In en, this message translates to:
+  /// **'Hopeful'**
+  String get moodHopeful;
+
+  /// No description provided for @moodHumble.
+  ///
+  /// In en, this message translates to:
+  /// **'Humble'**
+  String get moodHumble;
+
+  /// No description provided for @moodArrogant.
+  ///
+  /// In en, this message translates to:
+  /// **'Proud'**
+  String get moodArrogant;
+
+  /// No description provided for @moodGreedy.
+  ///
+  /// In en, this message translates to:
+  /// **'Wanting more'**
+  String get moodGreedy;
+
+  /// No description provided for @libraryNotReady.
+  ///
+  /// In en, this message translates to:
+  /// **'Sessions open once our scholar has approved the verses.'**
+  String get libraryNotReady;
+
+  /// No description provided for @libraryOffline.
+  ///
+  /// In en, this message translates to:
+  /// **'Connect to the internet once to download the verses.'**
+  String get libraryOffline;
+
+  /// No description provided for @feelingMood.
+  ///
+  /// In en, this message translates to:
+  /// **'Feeling {mood}'**
+  String feelingMood(String mood);
+
+  /// No description provided for @whatWouldHelp.
+  ///
+  /// In en, this message translates to:
+  /// **'What would help right now?'**
+  String get whatWouldHelp;
+
+  /// No description provided for @comfortMe.
+  ///
+  /// In en, this message translates to:
+  /// **'Comfort me'**
+  String get comfortMe;
+
+  /// No description provided for @comfortMeBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Verses of mercy and reassurance'**
+  String get comfortMeBody;
+
+  /// No description provided for @remindMe.
+  ///
+  /// In en, this message translates to:
+  /// **'Remind me'**
+  String get remindMe;
+
+  /// No description provided for @remindMeBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Gentle reminders to reset'**
+  String get remindMeBody;
+
+  /// No description provided for @helpComfort.
+  ///
+  /// In en, this message translates to:
+  /// **'Comfort'**
+  String get helpComfort;
+
+  /// No description provided for @helpRemind.
+  ///
+  /// In en, this message translates to:
+  /// **'Remind'**
+  String get helpRemind;
+
+  /// No description provided for @moodAndHelp.
+  ///
+  /// In en, this message translates to:
+  /// **'{mood} · {help}'**
+  String moodAndHelp(String mood, String help);
+
+  /// No description provided for @howMuchTime.
+  ///
+  /// In en, this message translates to:
+  /// **'How much time do you have?'**
+  String get howMuchTime;
+
+  /// No description provided for @timeRecommend.
+  ///
+  /// In en, this message translates to:
+  /// **'We recommend {minutes} minutes, so there\'s time to slow down.'**
+  String timeRecommend(int minutes);
+
+  /// No description provided for @minutesShort.
+  ///
+  /// In en, this message translates to:
+  /// **'{minutes} min'**
+  String minutesShort(int minutes);
+
+  /// No description provided for @verseLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Surah · {ref}'**
+  String verseLabel(String ref);
+
+  /// No description provided for @arabicSourceLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Arabic · Uthmani · from Quran API'**
+  String get arabicSourceLabel;
+
+  /// No description provided for @translationSourceLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Translation · Sahih International'**
+  String get translationSourceLabel;
+
+  /// No description provided for @endSession.
+  ///
+  /// In en, this message translates to:
+  /// **'End session'**
+  String get endSession;
+
+  /// No description provided for @previousVerse.
+  ///
+  /// In en, this message translates to:
+  /// **'Previous verse'**
+  String get previousVerse;
+
+  /// No description provided for @nextVerse.
+  ///
+  /// In en, this message translates to:
+  /// **'Next verse'**
+  String get nextVerse;
+
+  /// No description provided for @play.
+  ///
+  /// In en, this message translates to:
+  /// **'Play'**
+  String get play;
+
+  /// No description provided for @pause.
+  ///
+  /// In en, this message translates to:
+  /// **'Pause'**
+  String get pause;
+
+  /// No description provided for @preparingVerses.
+  ///
+  /// In en, this message translates to:
+  /// **'Preparing verses…'**
+  String get preparingVerses;
+
+  /// No description provided for @beforeMood.
+  ///
+  /// In en, this message translates to:
+  /// **'Before · {mood}'**
+  String beforeMood(String mood);
+
+  /// No description provided for @howDoYouFeelNow.
+  ///
+  /// In en, this message translates to:
+  /// **'How do you feel now?'**
+  String get howDoYouFeelNow;
+
+  /// No description provided for @afterCalmer.
+  ///
+  /// In en, this message translates to:
+  /// **'Calmer'**
+  String get afterCalmer;
+
+  /// No description provided for @afterBetter.
+  ///
+  /// In en, this message translates to:
+  /// **'A little better'**
+  String get afterBetter;
+
+  /// No description provided for @afterSame.
+  ///
+  /// In en, this message translates to:
+  /// **'The same'**
+  String get afterSame;
+
+  /// No description provided for @afterHeavier.
+  ///
+  /// In en, this message translates to:
+  /// **'Heavier'**
+  String get afterHeavier;
+
+  /// No description provided for @sessionSaved.
+  ///
+  /// In en, this message translates to:
+  /// **'Session saved'**
+  String get sessionSaved;
 }
 
 class _AppLocalizationsDelegate

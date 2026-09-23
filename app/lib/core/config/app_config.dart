@@ -11,6 +11,12 @@ abstract final class AppConfig {
   /// Shown on the support resources screen. Per-country numbers come later.
   static const helplineNumber = '000';
 
+  /// Uns backend (verse library, later classification and sync).
+  static const apiBaseUrl = String.fromEnvironment(
+    'API_BASE_URL',
+    defaultValue: 'http://localhost:8000',
+  );
+
   /// Quran text (fawazahmed0 Quran API) and the editions shown. Pending the
   /// scholar's confirmation of the editions (see progress-tracker.md).
   static const quranTextBaseUrl =

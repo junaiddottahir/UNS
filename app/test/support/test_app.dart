@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+import 'dart:math';
 
 import 'package:drift/native.dart';
 import 'package:http/http.dart' show BaseClient, BaseRequest, StreamedResponse;
@@ -8,6 +9,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:uns/core/quran/quran_providers.dart';
 import 'package:uns/core/quran/quran_repository.dart';
+import 'package:uns/core/quran/quran_text_client.dart';
 import 'package:uns/core/quran/recitation_client.dart';
 import 'package:uns/core/quran/verse_ref.dart';
 import 'package:uns/core/storage/app_database.dart';
@@ -21,7 +23,10 @@ import 'package:uns/features/location/location_providers.dart';
 import 'package:uns/features/prayer/prayer_providers.dart';
 import 'package:uns/features/qibla/compass_source.dart';
 import 'package:uns/features/qibla/qibla_providers.dart';
+import 'package:uns/features/library/verse_library.dart';
 import 'package:uns/features/reciter/reciter_sample.dart';
+import 'package:uns/features/shama/shama_session.dart';
+import 'package:uns/features/shama/verse_player.dart';
 import 'package:uns/main.dart';
 
 const sydney = City(
@@ -159,6 +164,84 @@ class _NoHttp extends BaseClient {
       throw UnsupportedError('no network in tests');
 }
 
+/// A verse player the test steps through: [finishVerse] plays the loaded
+/// verse to its end; [advance] moves the position.
+class FakeVersePlayer implements VersePlayer {
+  final _positions = StreamController<Duration>.broadcast();
+  final _completions = StreamController<void>.broadcast();
+  final opened = <String>[];
+  bool playing = false;
+  Duration verseLength = const Duration(seconds: 90);
+
+  @override
+  Future<Duration?> open(File file) async {
+    opened.add(file.path);
+    return verseLength;
+  }
+
+  @override
+  void play() => playing = true;
+
+  @override
+  Future<void> pause() async => playing = false;
+
+  @override
+  Future<void> stop() async => playing = false;
+
+  void advance(Duration to) => _positions.add(to);
+
+  void finishVerse() {
+    _positions.add(verseLength);
+    _completions.add(null);
+  }
+
+  @override
+  Stream<Duration> get positions => _positions.stream;
+
+  @override
+  Stream<void> get completions => _completions.stream;
+
+  @override
+  Future<void> dispose() async {}
+}
+
+/// Verse "text" for tests: labelled stand-ins, never real verse text.
+class FakeQuran extends QuranRepository {
+  FakeQuran({this.offlineRefs = const {}})
+    : super(AppDatabase(NativeDatabase.memory()), QuranTextClient(_NoHttp()));
+
+  /// Verses that fail as if offline and not cached.
+  final Set<VerseRef> offlineRefs;
+
+  @override
+  Future<VerseText> verse(VerseRef ref) async {
+    if (offlineRefs.contains(ref)) throw Exception('offline');
+    return VerseText(
+      ref: ref,
+      arabic: 'arabic $ref',
+      translation: 'translation $ref',
+    );
+  }
+}
+
+/// A library of real references, for tests only (not a verse selection).
+VerseLibrary testLibrary({bool placeholder = false}) => VerseLibrary(
+  version: 't',
+  placeholder: placeholder,
+  entries: placeholder
+      ? const []
+      : [
+          LibraryEntry(VerseRef(1, 1), Emotion.anxiety, VerseTag.comfort),
+          LibraryEntry(VerseRef(1, 2), Emotion.anxiety, VerseTag.comfort),
+          LibraryEntry(VerseRef(1, 3), Emotion.anxiety, VerseTag.comfort),
+          LibraryEntry(
+            VerseRef(1, 4),
+            Emotion.anxiety,
+            VerseTag.gentleReminder,
+          ),
+        ],
+);
+
 /// A settings store on an in-memory database.
 Future<SettingsStore> memoryStore() async {
   final db = AppDatabase(NativeDatabase.memory());
@@ -179,6 +262,10 @@ Future<ProviderContainer> pumpApp(
   AppDatabase? database,
   SamplePlayer? player,
   RecitationRepository? recitations,
+  VersePlayer? versePlayer,
+  VerseLibrary? library,
+  bool noLibrary = false,
+  QuranRepository? quran,
 }) async {
   // Reduced motion, so the pulsing mood button lets frames settle.
   tester.platformDispatcher.accessibilityFeaturesTestValue =
@@ -213,6 +300,12 @@ Future<ProviderContainer> pumpApp(
       recitationRepositoryProvider.overrideWithValue(
         recitations ?? FakeRecitations(),
       ),
+      versePlayerProvider.overrideWithValue(versePlayer ?? FakeVersePlayer()),
+      verseLibraryProvider.overrideWith(
+        (ref) async => noLibrary ? null : (library ?? testLibrary()),
+      ),
+      sessionRandomProvider.overrideWithValue(Random(1)),
+      quranRepositoryProvider.overrideWithValue(quran ?? FakeQuran()),
     ],
   );
   addTearDown(container.dispose);

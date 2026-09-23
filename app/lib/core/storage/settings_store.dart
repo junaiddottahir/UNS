@@ -12,6 +12,7 @@ abstract final class SettingKeys {
   static const onboardingComplete = 'onboarding_complete';
   static const alerts = 'alerts';
   static const reciter = 'reciter';
+  static const library = 'library';
 }
 
 /// Settings loaded into memory at startup, so providers can read them

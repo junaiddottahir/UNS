@@ -9,7 +9,8 @@ change.
 
 ## Current Goal
 
-- Unit 9: app — Shama session via emotion chips (on-device) + playback.
+- Unit 10: app — on-device safety check (phrase list, helpline from
+  config) + support resources screen.
 
 ## Completed
 
@@ -194,6 +195,36 @@ change.
     text fetched and served offline from the encrypted cache; all three
     reciters' samples download and load.
 
+- Unit 9 (2026-09-23): Shama session via emotion chips + playback.
+  - Flow (prototype): Shama tab "How are you feeling?" with 6 chips →
+    "What would help right now?" (Comfort me / Remind me) → "How much
+    time do you have?" (5/10/15/30, 10 recommended) → player → "How do
+    you feel now?" (Calmer / A little better / The same / Heavier) →
+    Done → home with "Session saved". Home's voice button opens Shama.
+  - Library: `GET /v1/library` from the backend (`API_BASE_URL`,
+    dart-define; `http://localhost:8000` in dev), validated, cached on
+    the device with its ETag; offline uses the cache.
+  - Only approved verses play: a placeholder library disables the chips
+    with "Sessions open once our scholar has approved the verses." (what
+    the app shows today). No library and offline → "Connect to the
+    internet once…".
+  - Comfort = `comfort` tag; Remind = `gentle_reminder` + `warning`.
+    Random order; plays until the chosen time, finishing the verse then
+    playing (or until verses run out). Previous restarts the verse (or
+    goes back if < 3 s in); next; pause; X ends.
+  - Text and audio come from the unit 8 caches; offline, verses not yet
+    cached are skipped. Background audio enabled (iOS
+    `UIBackgroundModes: audio`, speech audio session).
+  - Player shows Arabic above the translation with the prototype's
+    source tags, progress, reciter and time left.
+  - Sessions saved in the encrypted database (`sessions`, schema v4):
+    emotion, help, minutes, verses played, mood after, times.
+  - iOS dev: `NSAllowsLocalNetworking` so the app can reach the local
+    backend over http.
+  - 118 unit/widget tests; iOS integration test plays real recitation
+    with real text (test-only library of real references); simulator
+    screenshots checked (fixed full-width chips).
+
 ## In Progress
 
 - None yet.
@@ -299,6 +330,16 @@ Each line is one unit; app and backend units are kept separate.
   calibration, true-north correction) before release.
 - Dhikr names are English transliterations from the scope. Arabic-script
   forms (for the Arabic app language) need the scholar.
+- Shama chips: the prototype has 6 (Anxious, Sad, Lonely, Angry,
+  Grateful, Hopeful); the scope has 9 categories. Humility, arrogance
+  and greed are reachable only through free text (unit 12) for now.
+  Their labels ("Humble", "Proud", "Wanting more") are my wording.
+- "Heavier" after a session should lead to support (unit 10); for now it
+  just saves.
+- The player shows the verse reference ("Surah · 2:255"), not the surah
+  name (names aren't sourced yet).
+- Session length: the session ends after the verse playing when time
+  runs out, so it can run over by up to one verse. OK?
 - Self-harm phrase list: who writes and reviews the English and Arabic
   phrases.
 - Scholar still to confirm the Arabic and English editions (from scope).

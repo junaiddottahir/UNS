@@ -96,7 +96,9 @@
 ## Runtime Flows
 
 - Chips → category decided on device → pick verses from cached library by
-  category + tag (comfort vs. reminder) → load text/audio from cache → play.
+  category + tag (comfort = `comfort`; reminder = `gentle_reminder` +
+  `warning`) → load text/audio from cache (fetch once if online) → play
+  until the chosen length. A placeholder library never plays.
 - Voice → on-device speech-to-text → handled as free text.
 - Free text → on-device safety check → `POST /v1/classify` → `{category,
   risk}` → risk shows support resources; otherwise same as chips.

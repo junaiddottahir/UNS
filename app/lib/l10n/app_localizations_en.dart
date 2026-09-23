@@ -598,4 +598,138 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get sourceCompassValue => 'NOAA · WMM-2025';
+
+  @override
+  String get howAreYouFeeling => 'How are you feeling?';
+
+  @override
+  String get moodAnxious => 'Anxious';
+
+  @override
+  String get moodSad => 'Sad';
+
+  @override
+  String get moodLonely => 'Lonely';
+
+  @override
+  String get moodAngry => 'Angry';
+
+  @override
+  String get moodGrateful => 'Grateful';
+
+  @override
+  String get moodHopeful => 'Hopeful';
+
+  @override
+  String get moodHumble => 'Humble';
+
+  @override
+  String get moodArrogant => 'Proud';
+
+  @override
+  String get moodGreedy => 'Wanting more';
+
+  @override
+  String get libraryNotReady =>
+      'Sessions open once our scholar has approved the verses.';
+
+  @override
+  String get libraryOffline =>
+      'Connect to the internet once to download the verses.';
+
+  @override
+  String feelingMood(String mood) {
+    return 'Feeling $mood';
+  }
+
+  @override
+  String get whatWouldHelp => 'What would help right now?';
+
+  @override
+  String get comfortMe => 'Comfort me';
+
+  @override
+  String get comfortMeBody => 'Verses of mercy and reassurance';
+
+  @override
+  String get remindMe => 'Remind me';
+
+  @override
+  String get remindMeBody => 'Gentle reminders to reset';
+
+  @override
+  String get helpComfort => 'Comfort';
+
+  @override
+  String get helpRemind => 'Remind';
+
+  @override
+  String moodAndHelp(String mood, String help) {
+    return '$mood · $help';
+  }
+
+  @override
+  String get howMuchTime => 'How much time do you have?';
+
+  @override
+  String timeRecommend(int minutes) {
+    return 'We recommend $minutes minutes, so there\'s time to slow down.';
+  }
+
+  @override
+  String minutesShort(int minutes) {
+    return '$minutes min';
+  }
+
+  @override
+  String verseLabel(String ref) {
+    return 'Surah · $ref';
+  }
+
+  @override
+  String get arabicSourceLabel => 'Arabic · Uthmani · from Quran API';
+
+  @override
+  String get translationSourceLabel => 'Translation · Sahih International';
+
+  @override
+  String get endSession => 'End session';
+
+  @override
+  String get previousVerse => 'Previous verse';
+
+  @override
+  String get nextVerse => 'Next verse';
+
+  @override
+  String get play => 'Play';
+
+  @override
+  String get pause => 'Pause';
+
+  @override
+  String get preparingVerses => 'Preparing verses…';
+
+  @override
+  String beforeMood(String mood) {
+    return 'Before · $mood';
+  }
+
+  @override
+  String get howDoYouFeelNow => 'How do you feel now?';
+
+  @override
+  String get afterCalmer => 'Calmer';
+
+  @override
+  String get afterBetter => 'A little better';
+
+  @override
+  String get afterSame => 'The same';
+
+  @override
+  String get afterHeavier => 'Heavier';
+
+  @override
+  String get sessionSaved => 'Session saved';
 }

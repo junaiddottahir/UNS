@@ -8,6 +8,7 @@ environment:
 
 dependencies:
   adhan: ^2.0.0+1
+  audio_session: ^0.2.4
   drift: ^2.35.0
   flutter:
     sdk: flutter

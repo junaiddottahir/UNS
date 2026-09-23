@@ -7,6 +7,7 @@ import 'core/router/app_router.dart';
 import 'core/storage/app_database.dart';
 import 'core/storage/settings_store.dart';
 import 'core/theme/app_theme.dart';
+import 'core/widgets/toast.dart';
 import 'features/alerts/alert_providers.dart';
 import 'l10n/app_localizations.dart';
 
@@ -56,6 +57,7 @@ class _UnsAppState extends ConsumerState<UnsApp> {
     // Keeps scheduled prayer alerts current from launch.
     ref.watch(alertSyncProvider);
     return MaterialApp.router(
+      scaffoldMessengerKey: rootMessengerKey,
       onGenerateTitle: (context) => AppLocalizations.of(context).appTitle,
       debugShowCheckedModeBanner: false,
       theme: buildAppTheme(),

@@ -364,5 +364,90 @@
   "sourceCities": "Cities",
   "sourceCitiesValue": "GeoNames · CC BY 4.0",
   "sourceCompass": "Compass",
-  "sourceCompassValue": "NOAA · WMM-2025"
+  "sourceCompassValue": "NOAA · WMM-2025",
+  "howAreYouFeeling": "How are you feeling?",
+  "moodAnxious": "Anxious",
+  "moodSad": "Sad",
+  "moodLonely": "Lonely",
+  "moodAngry": "Angry",
+  "moodGrateful": "Grateful",
+  "moodHopeful": "Hopeful",
+  "moodHumble": "Humble",
+  "moodArrogant": "Proud",
+  "moodGreedy": "Wanting more",
+  "libraryNotReady": "Sessions open once our scholar has approved the verses.",
+  "libraryOffline": "Connect to the internet once to download the verses.",
+  "feelingMood": "Feeling {mood}",
+  "@feelingMood": {
+    "placeholders": {
+      "mood": {
+        "type": "String"
+      }
+    }
+  },
+  "whatWouldHelp": "What would help right now?",
+  "comfortMe": "Comfort me",
+  "comfortMeBody": "Verses of mercy and reassurance",
+  "remindMe": "Remind me",
+  "remindMeBody": "Gentle reminders to reset",
+  "helpComfort": "Comfort",
+  "helpRemind": "Remind",
+  "moodAndHelp": "{mood} · {help}",
+  "@moodAndHelp": {
+    "placeholders": {
+      "mood": {
+        "type": "String"
+      },
+      "help": {
+        "type": "String"
+      }
+    }
+  },
+  "howMuchTime": "How much time do you have?",
+  "timeRecommend": "We recommend {minutes} minutes, so there's time to slow down.",
+  "@timeRecommend": {
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "minutesShort": "{minutes} min",
+  "@minutesShort": {
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "verseLabel": "Surah · {ref}",
+  "@verseLabel": {
+    "placeholders": {
+      "ref": {
+        "type": "String"
+      }
+    }
+  },
+  "arabicSourceLabel": "Arabic · Uthmani · from Quran API",
+  "translationSourceLabel": "Translation · Sahih International",
+  "endSession": "End session",
+  "previousVerse": "Previous verse",
+  "nextVerse": "Next verse",
+  "play": "Play",
+  "pause": "Pause",
+  "preparingVerses": "Preparing verses…",
+  "beforeMood": "Before · {mood}",
+  "@beforeMood": {
+    "placeholders": {
+      "mood": {
+        "type": "String"
+      }
+    }
+  },
+  "howDoYouFeelNow": "How do you feel now?",
+  "afterCalmer": "Calmer",
+  "afterBetter": "A little better",
+  "afterSame": "The same",
+  "afterHeavier": "Heavier",
+  "sessionSaved": "Session saved"
 }

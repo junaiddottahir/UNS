@@ -417,7 +417,7 @@ class TasbihDaysCompanion extends UpdateCompanion<TasbihDay> {
 }
 
 class $VerseTextsTable extends VerseTexts
-    with TableInfo<$VerseTextsTable, VerseText> {
+    with TableInfo<$VerseTextsTable, CachedVerseText> {
   @override
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
@@ -469,7 +469,7 @@ class $VerseTextsTable extends VerseTexts
   static const String $name = 'verse_texts';
   @override
   VerificationContext validateIntegrity(
-    Insertable<VerseText> instance, {
+    Insertable<CachedVerseText> instance, {
     bool isInserting = false,
   }) {
     final context = VerificationContext();
@@ -512,9 +512,9 @@ class $VerseTextsTable extends VerseTexts
   @override
   Set<GeneratedColumn> get $primaryKey => {edition, surah, ayah};
   @override
-  VerseText map(Map<String, dynamic> data, {String? tablePrefix}) {
+  CachedVerseText map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
-    return VerseText(
+    return CachedVerseText(
       edition: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
         data['${effectivePrefix}edition'],
@@ -540,12 +540,12 @@ class $VerseTextsTable extends VerseTexts
   }
 }
 
-class VerseText extends DataClass implements Insertable<VerseText> {
+class CachedVerseText extends DataClass implements Insertable<CachedVerseText> {
   final String edition;
   final int surah;
   final int ayah;
   final String body;
-  const VerseText({
+  const CachedVerseText({
     required this.edition,
     required this.surah,
     required this.ayah,
@@ -570,12 +570,12 @@ class VerseText extends DataClass implements Insertable<VerseText> {
     );
   }
 
-  factory VerseText.fromJson(
+  factory CachedVerseText.fromJson(
     Map<String, dynamic> json, {
     ValueSerializer? serializer,
   }) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
-    return VerseText(
+    return CachedVerseText(
       edition: serializer.fromJson<String>(json['edition']),
       surah: serializer.fromJson<int>(json['surah']),
       ayah: serializer.fromJson<int>(json['ayah']),
@@ -593,15 +593,19 @@ class VerseText extends DataClass implements Insertable<VerseText> {
     };
   }
 
-  VerseText copyWith({String? edition, int? surah, int? ayah, String? body}) =>
-      VerseText(
-        edition: edition ?? this.edition,
-        surah: surah ?? this.surah,
-        ayah: ayah ?? this.ayah,
-        body: body ?? this.body,
-      );
-  VerseText copyWithCompanion(VerseTextsCompanion data) {
-    return VerseText(
+  CachedVerseText copyWith({
+    String? edition,
+    int? surah,
+    int? ayah,
+    String? body,
+  }) => CachedVerseText(
+    edition: edition ?? this.edition,
+    surah: surah ?? this.surah,
+    ayah: ayah ?? this.ayah,
+    body: body ?? this.body,
+  );
+  CachedVerseText copyWithCompanion(VerseTextsCompanion data) {
+    return CachedVerseText(
       edition: data.edition.present ? data.edition.value : this.edition,
       surah: data.surah.present ? data.surah.value : this.surah,
       ayah: data.ayah.present ? data.ayah.value : this.ayah,
@@ -611,7 +615,7 @@ class VerseText extends DataClass implements Insertable<VerseText> {
 
   @override
   String toString() {
-    return (StringBuffer('VerseText(')
+    return (StringBuffer('CachedVerseText(')
           ..write('edition: $edition, ')
           ..write('surah: $surah, ')
           ..write('ayah: $ayah, ')
@@ -625,14 +629,14 @@ class VerseText extends DataClass implements Insertable<VerseText> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      (other is VerseText &&
+      (other is CachedVerseText &&
           other.edition == this.edition &&
           other.surah == this.surah &&
           other.ayah == this.ayah &&
           other.body == this.body);
 }
 
-class VerseTextsCompanion extends UpdateCompanion<VerseText> {
+class VerseTextsCompanion extends UpdateCompanion<CachedVerseText> {
   final Value<String> edition;
   final Value<int> surah;
   final Value<int> ayah;
@@ -655,7 +659,7 @@ class VerseTextsCompanion extends UpdateCompanion<VerseText> {
        surah = Value(surah),
        ayah = Value(ayah),
        body = Value(body);
-  static Insertable<VerseText> custom({
+  static Insertable<CachedVerseText> custom({
     Expression<String>? edition,
     Expression<int>? surah,
     Expression<int>? ayah,
@@ -721,12 +725,514 @@ class VerseTextsCompanion extends UpdateCompanion<VerseText> {
   }
 }
 
+class $SessionsTable extends Sessions with TableInfo<$SessionsTable, Session> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $SessionsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+    'id',
+    aliasedName,
+    false,
+    hasAutoIncrement: true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'PRIMARY KEY AUTOINCREMENT',
+    ),
+  );
+  static const VerificationMeta _startedAtMeta = const VerificationMeta(
+    'startedAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> startedAt = GeneratedColumn<DateTime>(
+    'started_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _emotionMeta = const VerificationMeta(
+    'emotion',
+  );
+  @override
+  late final GeneratedColumn<String> emotion = GeneratedColumn<String>(
+    'emotion',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _helpMeta = const VerificationMeta('help');
+  @override
+  late final GeneratedColumn<String> help = GeneratedColumn<String>(
+    'help',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _minutesMeta = const VerificationMeta(
+    'minutes',
+  );
+  @override
+  late final GeneratedColumn<int> minutes = GeneratedColumn<int>(
+    'minutes',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _versesMeta = const VerificationMeta('verses');
+  @override
+  late final GeneratedColumn<String> verses = GeneratedColumn<String>(
+    'verses',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(''),
+  );
+  static const VerificationMeta _moodAfterMeta = const VerificationMeta(
+    'moodAfter',
+  );
+  @override
+  late final GeneratedColumn<String> moodAfter = GeneratedColumn<String>(
+    'mood_after',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _endedAtMeta = const VerificationMeta(
+    'endedAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> endedAt = GeneratedColumn<DateTime>(
+    'ended_at',
+    aliasedName,
+    true,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    id,
+    startedAt,
+    emotion,
+    help,
+    minutes,
+    verses,
+    moodAfter,
+    endedAt,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'sessions';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<Session> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('started_at')) {
+      context.handle(
+        _startedAtMeta,
+        startedAt.isAcceptableOrUnknown(data['started_at']!, _startedAtMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_startedAtMeta);
+    }
+    if (data.containsKey('emotion')) {
+      context.handle(
+        _emotionMeta,
+        emotion.isAcceptableOrUnknown(data['emotion']!, _emotionMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_emotionMeta);
+    }
+    if (data.containsKey('help')) {
+      context.handle(
+        _helpMeta,
+        help.isAcceptableOrUnknown(data['help']!, _helpMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_helpMeta);
+    }
+    if (data.containsKey('minutes')) {
+      context.handle(
+        _minutesMeta,
+        minutes.isAcceptableOrUnknown(data['minutes']!, _minutesMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_minutesMeta);
+    }
+    if (data.containsKey('verses')) {
+      context.handle(
+        _versesMeta,
+        verses.isAcceptableOrUnknown(data['verses']!, _versesMeta),
+      );
+    }
+    if (data.containsKey('mood_after')) {
+      context.handle(
+        _moodAfterMeta,
+        moodAfter.isAcceptableOrUnknown(data['mood_after']!, _moodAfterMeta),
+      );
+    }
+    if (data.containsKey('ended_at')) {
+      context.handle(
+        _endedAtMeta,
+        endedAt.isAcceptableOrUnknown(data['ended_at']!, _endedAtMeta),
+      );
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  Session map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return Session(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}id'],
+      )!,
+      startedAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}started_at'],
+      )!,
+      emotion: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}emotion'],
+      )!,
+      help: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}help'],
+      )!,
+      minutes: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}minutes'],
+      )!,
+      verses: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}verses'],
+      )!,
+      moodAfter: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}mood_after'],
+      ),
+      endedAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}ended_at'],
+      ),
+    );
+  }
+
+  @override
+  $SessionsTable createAlias(String alias) {
+    return $SessionsTable(attachedDatabase, alias);
+  }
+}
+
+class Session extends DataClass implements Insertable<Session> {
+  final int id;
+  final DateTime startedAt;
+  final String emotion;
+
+  /// `comfort` or `remind`.
+  final String help;
+  final int minutes;
+
+  /// Verses played, e.g. `2:286,94:5`.
+  final String verses;
+  final String? moodAfter;
+  final DateTime? endedAt;
+  const Session({
+    required this.id,
+    required this.startedAt,
+    required this.emotion,
+    required this.help,
+    required this.minutes,
+    required this.verses,
+    this.moodAfter,
+    this.endedAt,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    map['started_at'] = Variable<DateTime>(startedAt);
+    map['emotion'] = Variable<String>(emotion);
+    map['help'] = Variable<String>(help);
+    map['minutes'] = Variable<int>(minutes);
+    map['verses'] = Variable<String>(verses);
+    if (!nullToAbsent || moodAfter != null) {
+      map['mood_after'] = Variable<String>(moodAfter);
+    }
+    if (!nullToAbsent || endedAt != null) {
+      map['ended_at'] = Variable<DateTime>(endedAt);
+    }
+    return map;
+  }
+
+  SessionsCompanion toCompanion(bool nullToAbsent) {
+    return SessionsCompanion(
+      id: Value(id),
+      startedAt: Value(startedAt),
+      emotion: Value(emotion),
+      help: Value(help),
+      minutes: Value(minutes),
+      verses: Value(verses),
+      moodAfter: moodAfter == null && nullToAbsent
+          ? const Value.absent()
+          : Value(moodAfter),
+      endedAt: endedAt == null && nullToAbsent
+          ? const Value.absent()
+          : Value(endedAt),
+    );
+  }
+
+  factory Session.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return Session(
+      id: serializer.fromJson<int>(json['id']),
+      startedAt: serializer.fromJson<DateTime>(json['startedAt']),
+      emotion: serializer.fromJson<String>(json['emotion']),
+      help: serializer.fromJson<String>(json['help']),
+      minutes: serializer.fromJson<int>(json['minutes']),
+      verses: serializer.fromJson<String>(json['verses']),
+      moodAfter: serializer.fromJson<String?>(json['moodAfter']),
+      endedAt: serializer.fromJson<DateTime?>(json['endedAt']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'startedAt': serializer.toJson<DateTime>(startedAt),
+      'emotion': serializer.toJson<String>(emotion),
+      'help': serializer.toJson<String>(help),
+      'minutes': serializer.toJson<int>(minutes),
+      'verses': serializer.toJson<String>(verses),
+      'moodAfter': serializer.toJson<String?>(moodAfter),
+      'endedAt': serializer.toJson<DateTime?>(endedAt),
+    };
+  }
+
+  Session copyWith({
+    int? id,
+    DateTime? startedAt,
+    String? emotion,
+    String? help,
+    int? minutes,
+    String? verses,
+    Value<String?> moodAfter = const Value.absent(),
+    Value<DateTime?> endedAt = const Value.absent(),
+  }) => Session(
+    id: id ?? this.id,
+    startedAt: startedAt ?? this.startedAt,
+    emotion: emotion ?? this.emotion,
+    help: help ?? this.help,
+    minutes: minutes ?? this.minutes,
+    verses: verses ?? this.verses,
+    moodAfter: moodAfter.present ? moodAfter.value : this.moodAfter,
+    endedAt: endedAt.present ? endedAt.value : this.endedAt,
+  );
+  Session copyWithCompanion(SessionsCompanion data) {
+    return Session(
+      id: data.id.present ? data.id.value : this.id,
+      startedAt: data.startedAt.present ? data.startedAt.value : this.startedAt,
+      emotion: data.emotion.present ? data.emotion.value : this.emotion,
+      help: data.help.present ? data.help.value : this.help,
+      minutes: data.minutes.present ? data.minutes.value : this.minutes,
+      verses: data.verses.present ? data.verses.value : this.verses,
+      moodAfter: data.moodAfter.present ? data.moodAfter.value : this.moodAfter,
+      endedAt: data.endedAt.present ? data.endedAt.value : this.endedAt,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('Session(')
+          ..write('id: $id, ')
+          ..write('startedAt: $startedAt, ')
+          ..write('emotion: $emotion, ')
+          ..write('help: $help, ')
+          ..write('minutes: $minutes, ')
+          ..write('verses: $verses, ')
+          ..write('moodAfter: $moodAfter, ')
+          ..write('endedAt: $endedAt')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+    id,
+    startedAt,
+    emotion,
+    help,
+    minutes,
+    verses,
+    moodAfter,
+    endedAt,
+  );
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is Session &&
+          other.id == this.id &&
+          other.startedAt == this.startedAt &&
+          other.emotion == this.emotion &&
+          other.help == this.help &&
+          other.minutes == this.minutes &&
+          other.verses == this.verses &&
+          other.moodAfter == this.moodAfter &&
+          other.endedAt == this.endedAt);
+}
+
+class SessionsCompanion extends UpdateCompanion<Session> {
+  final Value<int> id;
+  final Value<DateTime> startedAt;
+  final Value<String> emotion;
+  final Value<String> help;
+  final Value<int> minutes;
+  final Value<String> verses;
+  final Value<String?> moodAfter;
+  final Value<DateTime?> endedAt;
+  const SessionsCompanion({
+    this.id = const Value.absent(),
+    this.startedAt = const Value.absent(),
+    this.emotion = const Value.absent(),
+    this.help = const Value.absent(),
+    this.minutes = const Value.absent(),
+    this.verses = const Value.absent(),
+    this.moodAfter = const Value.absent(),
+    this.endedAt = const Value.absent(),
+  });
+  SessionsCompanion.insert({
+    this.id = const Value.absent(),
+    required DateTime startedAt,
+    required String emotion,
+    required String help,
+    required int minutes,
+    this.verses = const Value.absent(),
+    this.moodAfter = const Value.absent(),
+    this.endedAt = const Value.absent(),
+  }) : startedAt = Value(startedAt),
+       emotion = Value(emotion),
+       help = Value(help),
+       minutes = Value(minutes);
+  static Insertable<Session> custom({
+    Expression<int>? id,
+    Expression<DateTime>? startedAt,
+    Expression<String>? emotion,
+    Expression<String>? help,
+    Expression<int>? minutes,
+    Expression<String>? verses,
+    Expression<String>? moodAfter,
+    Expression<DateTime>? endedAt,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (startedAt != null) 'started_at': startedAt,
+      if (emotion != null) 'emotion': emotion,
+      if (help != null) 'help': help,
+      if (minutes != null) 'minutes': minutes,
+      if (verses != null) 'verses': verses,
+      if (moodAfter != null) 'mood_after': moodAfter,
+      if (endedAt != null) 'ended_at': endedAt,
+    });
+  }
+
+  SessionsCompanion copyWith({
+    Value<int>? id,
+    Value<DateTime>? startedAt,
+    Value<String>? emotion,
+    Value<String>? help,
+    Value<int>? minutes,
+    Value<String>? verses,
+    Value<String?>? moodAfter,
+    Value<DateTime?>? endedAt,
+  }) {
+    return SessionsCompanion(
+      id: id ?? this.id,
+      startedAt: startedAt ?? this.startedAt,
+      emotion: emotion ?? this.emotion,
+      help: help ?? this.help,
+      minutes: minutes ?? this.minutes,
+      verses: verses ?? this.verses,
+      moodAfter: moodAfter ?? this.moodAfter,
+      endedAt: endedAt ?? this.endedAt,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (startedAt.present) {
+      map['started_at'] = Variable<DateTime>(startedAt.value);
+    }
+    if (emotion.present) {
+      map['emotion'] = Variable<String>(emotion.value);
+    }
+    if (help.present) {
+      map['help'] = Variable<String>(help.value);
+    }
+    if (minutes.present) {
+      map['minutes'] = Variable<int>(minutes.value);
+    }
+    if (verses.present) {
+      map['verses'] = Variable<String>(verses.value);
+    }
+    if (moodAfter.present) {
+      map['mood_after'] = Variable<String>(moodAfter.value);
+    }
+    if (endedAt.present) {
+      map['ended_at'] = Variable<DateTime>(endedAt.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('SessionsCompanion(')
+          ..write('id: $id, ')
+          ..write('startedAt: $startedAt, ')
+          ..write('emotion: $emotion, ')
+          ..write('help: $help, ')
+          ..write('minutes: $minutes, ')
+          ..write('verses: $verses, ')
+          ..write('moodAfter: $moodAfter, ')
+          ..write('endedAt: $endedAt')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
   $AppDatabaseManager get managers => $AppDatabaseManager(this);
   late final $SettingsTable settings = $SettingsTable(this);
   late final $TasbihDaysTable tasbihDays = $TasbihDaysTable(this);
   late final $VerseTextsTable verseTexts = $VerseTextsTable(this);
+  late final $SessionsTable sessions = $SessionsTable(this);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
@@ -735,6 +1241,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
     settings,
     tasbihDays,
     verseTexts,
+    sessions,
   ];
 }
 
@@ -1116,17 +1623,17 @@ class $$VerseTextsTableTableManager
         RootTableManager<
           _$AppDatabase,
           $VerseTextsTable,
-          VerseText,
+          CachedVerseText,
           $$VerseTextsTableFilterComposer,
           $$VerseTextsTableOrderingComposer,
           $$VerseTextsTableAnnotationComposer,
           $$VerseTextsTableCreateCompanionBuilder,
           $$VerseTextsTableUpdateCompanionBuilder,
           (
-            VerseText,
-            BaseReferences<_$AppDatabase, $VerseTextsTable, VerseText>,
+            CachedVerseText,
+            BaseReferences<_$AppDatabase, $VerseTextsTable, CachedVerseText>,
           ),
-          VerseText,
+          CachedVerseText,
           PrefetchHooks Function()
         > {
   $$VerseTextsTableTableManager(_$AppDatabase db, $VerseTextsTable table)
@@ -1171,12 +1678,12 @@ class $$VerseTextsTableTableManager
           withReferenceMapper: (p0) => p0
               .map(
                 (e) => (
-                  e.readTable<$VerseTextsTable, VerseText>(table),
-                  BaseReferences<_$AppDatabase, $VerseTextsTable, VerseText>(
-                    db,
-                    table,
-                    e,
-                  ),
+                  e.readTable<$VerseTextsTable, CachedVerseText>(table),
+                  BaseReferences<
+                    _$AppDatabase,
+                    $VerseTextsTable,
+                    CachedVerseText
+                  >(db, table, e),
                 ),
               )
               .toList(),
@@ -1189,14 +1696,269 @@ typedef $$VerseTextsTableProcessedTableManager =
     ProcessedTableManager<
       _$AppDatabase,
       $VerseTextsTable,
-      VerseText,
+      CachedVerseText,
       $$VerseTextsTableFilterComposer,
       $$VerseTextsTableOrderingComposer,
       $$VerseTextsTableAnnotationComposer,
       $$VerseTextsTableCreateCompanionBuilder,
       $$VerseTextsTableUpdateCompanionBuilder,
-      (VerseText, BaseReferences<_$AppDatabase, $VerseTextsTable, VerseText>),
-      VerseText,
+      (
+        CachedVerseText,
+        BaseReferences<_$AppDatabase, $VerseTextsTable, CachedVerseText>,
+      ),
+      CachedVerseText,
+      PrefetchHooks Function()
+    >;
+typedef $$SessionsTableCreateCompanionBuilder = SessionsCompanion Function({
+  Value<int> id,
+  required DateTime startedAt,
+  required String emotion,
+  required String help,
+  required int minutes,
+  Value<String> verses,
+  Value<String?> moodAfter,
+  Value<DateTime?> endedAt,
+});
+typedef $$SessionsTableUpdateCompanionBuilder = SessionsCompanion Function({
+  Value<int> id,
+  Value<DateTime> startedAt,
+  Value<String> emotion,
+  Value<String> help,
+  Value<int> minutes,
+  Value<String> verses,
+  Value<String?> moodAfter,
+  Value<DateTime?> endedAt,
+});
+
+class $$SessionsTableFilterComposer
+    extends Composer<_$AppDatabase, $SessionsTable> {
+  $$SessionsTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get startedAt => $composableBuilder(
+    column: $table.startedAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get emotion => $composableBuilder(
+    column: $table.emotion,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get help => $composableBuilder(
+    column: $table.help,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get minutes => $composableBuilder(
+    column: $table.minutes,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get verses => $composableBuilder(
+    column: $table.verses,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get moodAfter => $composableBuilder(
+    column: $table.moodAfter,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get endedAt => $composableBuilder(
+    column: $table.endedAt,
+    builder: (column) => ColumnFilters(column),
+  );
+}
+
+class $$SessionsTableOrderingComposer
+    extends Composer<_$AppDatabase, $SessionsTable> {
+  $$SessionsTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get startedAt => $composableBuilder(
+    column: $table.startedAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get emotion => $composableBuilder(
+    column: $table.emotion,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get help => $composableBuilder(
+    column: $table.help,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get minutes => $composableBuilder(
+    column: $table.minutes,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get verses => $composableBuilder(
+    column: $table.verses,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get moodAfter => $composableBuilder(
+    column: $table.moodAfter,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get endedAt => $composableBuilder(
+    column: $table.endedAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$SessionsTableAnnotationComposer
+    extends Composer<_$AppDatabase, $SessionsTable> {
+  $$SessionsTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get startedAt =>
+      $composableBuilder(column: $table.startedAt, builder: (column) => column);
+
+  GeneratedColumn<String> get emotion =>
+      $composableBuilder(column: $table.emotion, builder: (column) => column);
+
+  GeneratedColumn<String> get help =>
+      $composableBuilder(column: $table.help, builder: (column) => column);
+
+  GeneratedColumn<int> get minutes =>
+      $composableBuilder(column: $table.minutes, builder: (column) => column);
+
+  GeneratedColumn<String> get verses =>
+      $composableBuilder(column: $table.verses, builder: (column) => column);
+
+  GeneratedColumn<String> get moodAfter =>
+      $composableBuilder(column: $table.moodAfter, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get endedAt =>
+      $composableBuilder(column: $table.endedAt, builder: (column) => column);
+}
+
+class $$SessionsTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $SessionsTable,
+          Session,
+          $$SessionsTableFilterComposer,
+          $$SessionsTableOrderingComposer,
+          $$SessionsTableAnnotationComposer,
+          $$SessionsTableCreateCompanionBuilder,
+          $$SessionsTableUpdateCompanionBuilder,
+          (Session, BaseReferences<_$AppDatabase, $SessionsTable, Session>),
+          Session,
+          PrefetchHooks Function()
+        > {
+  $$SessionsTableTableManager(_$AppDatabase db, $SessionsTable table)
+    : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$SessionsTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$SessionsTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$SessionsTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                Value<DateTime> startedAt = const Value.absent(),
+                Value<String> emotion = const Value.absent(),
+                Value<String> help = const Value.absent(),
+                Value<int> minutes = const Value.absent(),
+                Value<String> verses = const Value.absent(),
+                Value<String?> moodAfter = const Value.absent(),
+                Value<DateTime?> endedAt = const Value.absent(),
+              }) => SessionsCompanion(
+                id: id,
+                startedAt: startedAt,
+                emotion: emotion,
+                help: help,
+                minutes: minutes,
+                verses: verses,
+                moodAfter: moodAfter,
+                endedAt: endedAt,
+              ),
+          createCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                required DateTime startedAt,
+                required String emotion,
+                required String help,
+                required int minutes,
+                Value<String> verses = const Value.absent(),
+                Value<String?> moodAfter = const Value.absent(),
+                Value<DateTime?> endedAt = const Value.absent(),
+              }) => SessionsCompanion.insert(
+                id: id,
+                startedAt: startedAt,
+                emotion: emotion,
+                help: help,
+                minutes: minutes,
+                verses: verses,
+                moodAfter: moodAfter,
+                endedAt: endedAt,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) => (
+                  e.readTable<$SessionsTable, Session>(table),
+                  BaseReferences<_$AppDatabase, $SessionsTable, Session>(
+                    db,
+                    table,
+                    e,
+                  ),
+                ),
+              )
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$SessionsTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $SessionsTable,
+      Session,
+      $$SessionsTableFilterComposer,
+      $$SessionsTableOrderingComposer,
+      $$SessionsTableAnnotationComposer,
+      $$SessionsTableCreateCompanionBuilder,
+      $$SessionsTableUpdateCompanionBuilder,
+      (Session, BaseReferences<_$AppDatabase, $SessionsTable, Session>),
+      Session,
       PrefetchHooks Function()
     >;
 
@@ -1209,4 +1971,6 @@ class $AppDatabaseManager {
       $$TasbihDaysTableTableManager(_db, _db.tasbihDays);
   $$VerseTextsTableTableManager get verseTexts =>
       $$VerseTextsTableTableManager(_db, _db.verseTexts);
+  $$SessionsTableTableManager get sessions =>
+      $$SessionsTableTableManager(_db, _db.sessions);
 }

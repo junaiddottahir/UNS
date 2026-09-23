@@ -31,6 +31,7 @@ class TasbihDays extends Table {
 
 /// Verse text exactly as fetched from the Quran API, per edition, so
 /// sessions work offline.
+@DataClassName('CachedVerseText')
 class VerseTexts extends Table {
   TextColumn get edition => text()();
   IntColumn get surah => integer()();
@@ -41,20 +42,38 @@ class VerseTexts extends Table {
   Set<Column> get primaryKey => {edition, surah, ayah};
 }
 
+/// Shama sessions: what was chosen and played, and the mood after. Never
+/// leaves the device.
+class Sessions extends Table {
+  IntColumn get id => integer().autoIncrement()();
+  DateTimeColumn get startedAt => dateTime()();
+  TextColumn get emotion => text()();
+
+  /// `comfort` or `remind`.
+  TextColumn get help => text()();
+  IntColumn get minutes => integer()();
+
+  /// Verses played, e.g. `2:286,94:5`.
+  TextColumn get verses => text().withDefault(const Constant(''))();
+  TextColumn get moodAfter => text().nullable()();
+  DateTimeColumn get endedAt => dateTime().nullable()();
+}
+
 /// The encrypted on-device database. Holds every piece of user data; later
-/// units add journal and session tables.
-@DriftDatabase(tables: [Settings, TasbihDays, VerseTexts])
+/// units add journal tables.
+@DriftDatabase(tables: [Settings, TasbihDays, VerseTexts, Sessions])
 class AppDatabase extends _$AppDatabase {
   AppDatabase(super.executor);
 
   @override
-  int get schemaVersion => 3;
+  int get schemaVersion => 4;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
     onUpgrade: (m, from, to) async {
       if (from < 2) await m.createTable(tasbihDays);
       if (from < 3) await m.createTable(verseTexts);
+      if (from < 4) await m.createTable(sessions);
     },
   );
 

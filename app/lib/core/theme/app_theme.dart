@@ -86,6 +86,27 @@ abstract final class AppText {
     color: AppColors.textPrimary,
     fontFeatures: [FontFeature.tabularFigures()],
   );
+
+  /// Quran Arabic. System font until the Uthmani font is chosen (see
+  /// progress-tracker.md).
+  static const arabic = TextStyle(
+    fontSize: 28,
+    height: 1.9,
+    color: AppColors.textPrimary,
+  );
+  static const translation = TextStyle(
+    fontSize: 18,
+    height: 1.5,
+    color: AppColors.textPrimary,
+  );
+
+  /// Source tags under verse text ("ARABIC · UTHMANI · FROM QURAN API").
+  static const sourceTag = TextStyle(
+    fontSize: 10,
+    fontFamily: 'Menlo',
+    fontFamilyFallback: ['monospace'],
+    color: Color(0x73F3EDE8),
+  );
   static const row = TextStyle(fontSize: 16, color: AppColors.textPrimary);
   static const rowValue = TextStyle(fontSize: 14, color: Color(0x8CF3EDE8));
   static const pill = TextStyle(

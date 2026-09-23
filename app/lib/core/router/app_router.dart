@@ -20,6 +20,12 @@ import '../../features/prayer/prayer_times_screen.dart';
 import '../../features/profile/profile_screen.dart';
 import '../../features/qibla/calibration_screen.dart';
 import '../../features/qibla/qibla_screen.dart';
+import '../../features/library/verse_library.dart';
+import '../../features/shama/after_screen.dart';
+import '../../features/shama/help_screen.dart';
+import '../../features/shama/length_screen.dart';
+import '../../features/shama/player_screen.dart';
+import '../../features/shama/shama_screen.dart';
 import '../../features/sources/sources_screen.dart';
 import '../../features/tasbih/counter_screen.dart';
 import '../../features/tasbih/history_screen.dart';
@@ -63,17 +69,28 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         builder: (_, _, shell) => TabShell(shell: shell),
         branches: [
           _branch(Routes.home, (_) => const HomeScreen()),
-          _branch(
-            Routes.shama,
-            (context) =>
-                ComingSoonScreen(title: AppLocalizations.of(context).tabShama),
-          ),
+          _branch(Routes.shama, (_) => const ShamaScreen()),
           _branch(Routes.tasbih, (_) => const TasbihScreen()),
           _branch(Routes.profile, (_) => const ProfileScreen()),
         ],
       ),
       GoRoute(path: Routes.qibla, builder: (_, _) => const QiblaScreen()),
       GoRoute(path: Routes.sources, builder: (_, _) => const SourcesScreen()),
+      GoRoute(
+        path: Routes.shamaHelp,
+        redirect: (_, state) => _emotion(state) == null ? Routes.shama : null,
+        builder: (_, state) => HelpScreen(emotion: _emotion(state)!),
+      ),
+      GoRoute(
+        path: Routes.shamaLength,
+        redirect: (_, state) => _emotion(state) == null ? Routes.shama : null,
+        builder: (_, state) => LengthScreen(
+          emotion: _emotion(state)!,
+          comfort: state.uri.queryParameters['help'] != 'remind',
+        ),
+      ),
+      GoRoute(path: Routes.shamaPlay, builder: (_, _) => const PlayerScreen()),
+      GoRoute(path: Routes.shamaAfter, builder: (_, _) => const AfterScreen()),
       GoRoute(
         path: Routes.tasbihCounter,
         builder: (_, _) => const CounterScreen(),
@@ -133,3 +150,6 @@ StatefulShellBranch _branch(String path, Widget Function(BuildContext) page) =>
     StatefulShellBranch(
       routes: [GoRoute(path: path, builder: (context, _) => page(context))],
     );
+
+Emotion? _emotion(GoRouterState state) =>
+    Emotion.values.asNameMap()[state.uri.queryParameters['emotion']];
