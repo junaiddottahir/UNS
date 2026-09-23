@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:uns/core/storage/settings_store.dart';
+import 'package:uns/features/alerts/alert_providers.dart';
+import 'package:uns/features/alerts/alert_settings.dart';
 import 'package:uns/features/location/city.dart';
+import 'package:uns/features/prayer/prayer_schedule.dart';
+import 'package:uns/features/reciter/reciter.dart';
 import 'package:uns/features/location/device_locator.dart';
 import 'package:uns/features/location/location_providers.dart';
 import 'package:uns/features/prayer/prayer_providers.dart';
@@ -107,7 +111,7 @@ void main() {
     await tester.tap(find.text('Continue'));
     await tester.pumpAndSettle();
     expect(find.text('3 OF 4'), findsOneWidget);
-    await tester.tap(find.text('Continue'));
+    await tester.tap(find.text('Allow notifications'));
     await tester.pumpAndSettle();
     expect(find.text('4 OF 4'), findsOneWidget);
     await tester.tap(find.text('Finish'));
@@ -153,5 +157,46 @@ void main() {
     );
     await pumpApp(tester, settings: store);
     expect(find.text('Begin'), findsOneWidget);
+  });
+
+  testWidgets('step 3: pick prayers and sound, then ask permission', (
+    tester,
+  ) async {
+    final permission = FakeNotificationPermission(allow: false);
+    final container = await pumpApp(tester, notifications: permission);
+    container
+        .read(userLocationProvider.notifier)
+        .set(UserLocation.fromCity(sydney));
+    await _toLocationStep(tester);
+    await tester.tap(find.text('Choose a city'));
+    await tester.pumpAndSettle();
+    await tester.enterText(find.byType(TextField), 'sydney');
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Sydney'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Continue'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('ALERT ME FOR'), findsOneWidget);
+    expect(find.text('SOUND'), findsOneWidget);
+    await tester.tap(find.text('ISHA'));
+    await tester.tap(find.text('FAJR'));
+    await tester.tap(find.text('SILENT'));
+    await tester.pumpAndSettle();
+    final alerts = container.read(alertSettingsProvider);
+    expect(alerts.modeOf(Prayer.isha), AlertMode.silent);
+    expect(alerts.modeOf(Prayer.fajr), AlertMode.off);
+    expect(alerts.modeOf(Prayer.dhuhr), AlertMode.silent);
+
+    // A "no" still moves on: notifications never block onboarding.
+    await tester.tap(find.text('Allow notifications'));
+    await tester.pumpAndSettle();
+    expect(permission.requests, 1);
+    expect(find.text('4 OF 4'), findsOneWidget);
+
+    expect(find.text('RECITER'), findsOneWidget);
+    await tester.tap(find.text('AL-SUDAIS'));
+    await tester.pumpAndSettle();
+    expect(container.read(reciterProvider), Reciter.sudais);
   });
 }

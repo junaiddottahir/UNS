@@ -4,6 +4,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:uns/core/storage/app_database.dart';
 import 'package:uns/core/storage/settings_store.dart';
+import 'package:uns/features/alerts/alert_providers.dart';
+import 'package:uns/features/alerts/notification_permission.dart';
 import 'package:uns/features/location/city.dart';
 import 'package:uns/features/location/city_repository.dart';
 import 'package:uns/features/location/device_locator.dart';
@@ -59,6 +61,18 @@ class FixedClock extends MinuteClock {
   DateTime build() => now;
 }
 
+class FakeNotificationPermission implements NotificationPermission {
+  FakeNotificationPermission({this.allow = true});
+  final bool allow;
+  int requests = 0;
+
+  @override
+  Future<bool> request() async {
+    requests++;
+    return allow;
+  }
+}
+
 /// A settings store on an in-memory database.
 Future<SettingsStore> memoryStore() async {
   final db = AppDatabase(NativeDatabase.memory());
@@ -73,7 +87,12 @@ Future<ProviderContainer> pumpApp(
   DeviceLocator? locator,
   DateTime? now,
   SettingsStore? settings,
+  NotificationPermission? notifications,
 }) async {
+  // Reduced motion, so the pulsing mood button lets frames settle.
+  tester.platformDispatcher.accessibilityFeaturesTestValue =
+      FakeAccessibilityFeatures(disableAnimations: true);
+  addTearDown(tester.platformDispatcher.clearAccessibilityFeaturesTestValue);
   tester.view.physicalSize = const Size(1170, 2532);
   tester.view.devicePixelRatio = 3;
   addTearDown(tester.view.reset);
@@ -89,6 +108,9 @@ Future<ProviderContainer> pumpApp(
         (ref) async => CityRepository([sydney, makkah]),
       ),
       nowProvider.overrideWith(() => FixedClock(now ?? testNow)),
+      notificationPermissionProvider.overrideWithValue(
+        notifications ?? FakeNotificationPermission(),
+      ),
     ],
   );
   addTearDown(container.dispose);

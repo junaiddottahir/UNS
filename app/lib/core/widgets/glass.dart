@@ -102,7 +102,8 @@ class GlassRow extends StatelessWidget {
   }
 }
 
-/// Single-choice pills, the prototype's `.opts` of `.opt`.
+/// Single-choice pills, the prototype's `.opts` of `.opt`. The selected
+/// pill shows a check, or [iconOf]'s icon on every pill when given.
 class OptionPills<T> extends StatelessWidget {
   const OptionPills({
     super.key,
@@ -110,12 +111,14 @@ class OptionPills<T> extends StatelessWidget {
     required this.selected,
     required this.labelOf,
     required this.onSelected,
+    this.iconOf,
   });
 
   final List<T> options;
   final T selected;
   final String Function(T) labelOf;
   final ValueChanged<T> onSelected;
+  final IconData Function(T option, bool selected)? iconOf;
 
   @override
   Widget build(BuildContext context) {
@@ -127,7 +130,40 @@ class OptionPills<T> extends StatelessWidget {
           _Pill(
             label: labelOf(option),
             selected: option == selected,
+            icon: iconOf?.call(option, option == selected),
             onTap: () => onSelected(option),
+          ),
+      ],
+    );
+  }
+}
+
+/// Pills that each turn on and off; on pills show a check.
+class TogglePills<T> extends StatelessWidget {
+  const TogglePills({
+    super.key,
+    required this.options,
+    required this.isOn,
+    required this.labelOf,
+    required this.onToggle,
+  });
+
+  final List<T> options;
+  final bool Function(T) isOn;
+  final String Function(T) labelOf;
+  final ValueChanged<T> onToggle;
+
+  @override
+  Widget build(BuildContext context) {
+    return Wrap(
+      spacing: 8,
+      runSpacing: 8,
+      children: [
+        for (final option in options)
+          _Pill(
+            label: labelOf(option),
+            selected: isOn(option),
+            onTap: () => onToggle(option),
           ),
       ],
     );
@@ -139,17 +175,20 @@ class _Pill extends StatelessWidget {
     required this.label,
     required this.selected,
     required this.onTap,
+    this.icon,
   });
 
   final String label;
   final bool selected;
   final VoidCallback onTap;
+  final IconData? icon;
 
   @override
   Widget build(BuildContext context) {
     final foreground = selected
         ? AppColors.ctaForeground
         : AppColors.textPrimary;
+    final shownIcon = icon ?? (selected ? Icons.check : null);
     return Semantics(
       button: true,
       selected: selected,
@@ -169,8 +208,8 @@ class _Pill extends StatelessWidget {
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                if (selected) ...[
-                  Icon(Icons.check, size: 15, color: foreground),
+                if (shownIcon != null) ...[
+                  Icon(shownIcon, size: 15, color: foreground),
                   const SizedBox(width: 9),
                 ],
                 Text(

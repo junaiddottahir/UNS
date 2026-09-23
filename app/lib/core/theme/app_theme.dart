@@ -65,6 +65,12 @@ abstract final class AppText {
     color: Color(0xBFF3EDE8),
     fontFeatures: [FontFeature.tabularFigures()],
   );
+  static const moodPrompt = TextStyle(
+    fontSize: 23,
+    height: 1.2,
+    letterSpacing: -0.23,
+    color: AppColors.textPrimary,
+  );
   static const row = TextStyle(fontSize: 16, color: AppColors.textPrimary);
   static const rowValue = TextStyle(fontSize: 14, color: Color(0x8CF3EDE8));
   static const pill = TextStyle(

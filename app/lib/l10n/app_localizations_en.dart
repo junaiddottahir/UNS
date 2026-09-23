@@ -261,4 +261,64 @@ class AppLocalizationsEn extends AppLocalizations {
   String methodLine(String method) {
     return 'Method · $method';
   }
+
+  @override
+  String get alertMeFor => 'Alert me for';
+
+  @override
+  String get soundLabel => 'Sound';
+
+  @override
+  String get soundAdhan => 'Adhan';
+
+  @override
+  String get soundAlert => 'Alert';
+
+  @override
+  String get soundSilent => 'Silent';
+
+  @override
+  String get soundOff => 'Off';
+
+  @override
+  String get allowNotifications => 'Allow notifications';
+
+  @override
+  String get reciterLabel => 'Reciter';
+
+  @override
+  String get reciterAlafasy => 'Mishary Alafasy';
+
+  @override
+  String get reciterAbdulBasit => 'Abdul Basit';
+
+  @override
+  String get reciterSudais => 'Al-Sudais';
+
+  @override
+  String get qibla => 'Qibla';
+
+  @override
+  String get tasbih => 'Tasbih';
+
+  @override
+  String get moodPrompt => 'How are you feeling today?';
+
+  @override
+  String get moodVoice => 'Tell us how you feel';
+
+  @override
+  String get tabHome => 'Home';
+
+  @override
+  String get tabShama => 'Shama';
+
+  @override
+  String get tabTasbih => 'Tasbih';
+
+  @override
+  String get tabProfile => 'Profile';
+
+  @override
+  String get comingSoon => 'Coming in a later update.';
 }

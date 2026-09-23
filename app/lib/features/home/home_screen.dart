@@ -12,9 +12,10 @@ import '../prayer/prayer_background.dart';
 import '../prayer/prayer_labels.dart';
 import '../prayer/prayer_providers.dart';
 import '../prayer/prayer_times_unavailable.dart';
+import 'mood_orb.dart';
 
-/// Home: date and place, and the next prayer with a countdown. Shortcuts
-/// and the mood check-in arrive with their units.
+/// Home: date and place, the next prayer with a countdown, qibla and
+/// tasbih shortcuts, and the mood check-in.
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
 
@@ -113,8 +114,93 @@ class HomeScreen extends ConsumerWidget {
                       ),
                     ),
                   ),
+                const SizedBox(height: 22),
+                Wrap(
+                  spacing: 8,
+                  children: [
+                    _Shortcut(
+                      icon: Icons.explore_outlined,
+                      label: l10n.qibla,
+                      onTap: () => context.push(Routes.qibla),
+                    ),
+                    _Shortcut(
+                      icon: Icons.radio_button_checked,
+                      label: l10n.tasbih,
+                      onTap: () => context.go(Routes.tasbih),
+                    ),
+                  ],
+                ),
+                const Spacer(),
+                Padding(
+                  // Clears the floating tab bar.
+                  padding: const EdgeInsets.fromLTRB(4, 0, 4, 124),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              l10n.welcomeGreeting.toUpperCase(),
+                              style: AppText.label.copyWith(
+                                color: AppColors.textFaint,
+                              ),
+                            ),
+                            const SizedBox(height: 8),
+                            Text(l10n.moodPrompt, style: AppText.moodPrompt),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(width: 18),
+                      MoodOrb(
+                        label: l10n.moodVoice,
+                        onPressed: () => context.go(Routes.shama),
+                      ),
+                    ],
+                  ),
+                ),
               ],
             ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// A pill shortcut, the prototype's `.opt` with an icon.
+class _Shortcut extends StatelessWidget {
+  const _Shortcut({
+    required this.icon,
+    required this.label,
+    required this.onTap,
+  });
+
+  final IconData icon;
+  final String label;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      color: AppColors.pillFill,
+      shape: const StadiumBorder(side: BorderSide(color: AppColors.pillEdge)),
+      child: InkWell(
+        customBorder: const StadiumBorder(),
+        onTap: onTap,
+        child: Container(
+          height: 44,
+          padding: const EdgeInsets.symmetric(horizontal: 18),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(icon, size: 15, color: AppColors.textPrimary),
+              const SizedBox(width: 9),
+              Text(
+                label.toUpperCase(),
+                style: AppText.pill.copyWith(color: AppColors.textPrimary),
+              ),
+            ],
           ),
         ),
       ),

@@ -1,3 +1,4 @@
+import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
@@ -7,13 +8,16 @@ import '../../features/onboarding/city_search_screen.dart';
 import '../../features/onboarding/intro_screen.dart';
 import '../../features/onboarding/location_screen.dart';
 import '../../features/onboarding/prayer_step_screen.dart';
-import '../../features/onboarding/step_placeholder_screen.dart';
+import '../../features/onboarding/notifications_step_screen.dart';
+import '../../features/onboarding/reciter_step_screen.dart';
 import '../../features/onboarding/welcome_screen.dart';
 import '../../features/prayer/method_screen.dart';
 import '../../features/prayer/prayer_settings_screen.dart';
 import '../../features/prayer/prayer_times_screen.dart';
 import '../../l10n/app_localizations.dart';
 import '../storage/settings_store.dart';
+import '../widgets/coming_soon_screen.dart';
+import '../widgets/tab_shell.dart';
 import 'routes.dart';
 
 final appRouterProvider = Provider<GoRouter>((ref) {
@@ -39,36 +43,41 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       ),
       GoRoute(
         path: Routes.notificationsStep,
-        builder: (context, _) {
-          final l10n = AppLocalizations.of(context);
-          return StepPlaceholderScreen(
-            step: 3,
-            title: l10n.notificationsStepTitle,
-            body: l10n.notificationsStepBody,
-            actionLabel: l10n.continueLabel,
-            onAction: () => context.push(Routes.reciterStep),
-          );
-        },
+        builder: (_, _) => const NotificationsStepScreen(),
       ),
       GoRoute(
         path: Routes.reciterStep,
-        builder: (context, _) {
-          final l10n = AppLocalizations.of(context);
-          return StepPlaceholderScreen(
-            step: 4,
-            title: l10n.reciterStepTitle,
-            body: l10n.reciterStepBody,
-            actionLabel: l10n.finish,
-            onAction: () {
-              ref
-                  .read(settingsStoreProvider)
-                  .writeBool(SettingKeys.onboardingComplete, true);
-              context.go(Routes.home);
-            },
-          );
-        },
+        builder: (_, _) => const ReciterStepScreen(),
       ),
-      GoRoute(path: Routes.home, builder: (_, _) => const HomeScreen()),
+      StatefulShellRoute.indexedStack(
+        builder: (_, _, shell) => TabShell(shell: shell),
+        branches: [
+          _branch(Routes.home, (_) => const HomeScreen()),
+          _branch(
+            Routes.shama,
+            (context) =>
+                ComingSoonScreen(title: AppLocalizations.of(context).tabShama),
+          ),
+          _branch(
+            Routes.tasbih,
+            (context) =>
+                ComingSoonScreen(title: AppLocalizations.of(context).tabTasbih),
+          ),
+          _branch(
+            Routes.profile,
+            (context) => ComingSoonScreen(
+              title: AppLocalizations.of(context).tabProfile,
+            ),
+          ),
+        ],
+      ),
+      GoRoute(
+        path: Routes.qibla,
+        builder: (context, _) => ComingSoonScreen(
+          title: AppLocalizations.of(context).qibla,
+          back: true,
+        ),
+      ),
       GoRoute(
         path: Routes.prayerTimes,
         builder: (_, _) => const PrayerTimesScreen(),
@@ -88,3 +97,8 @@ final appRouterProvider = Provider<GoRouter>((ref) {
     ],
   );
 });
+
+StatefulShellBranch _branch(String path, Widget Function(BuildContext) page) =>
+    StatefulShellBranch(
+      routes: [GoRoute(path: path, builder: (context, _) => page(context))],
+    );

@@ -137,4 +137,26 @@ void main() {
     expect(location.source, LocationSource.device);
     expect(location.city.name, 'Makkah');
   });
+
+  testWidgets('home shortcuts and tabs', (tester) async {
+    await _home(tester);
+    expect(find.text('How are you feeling today?'), findsOneWidget);
+    expect(find.text('QIBLA'), findsOneWidget);
+
+    await tester.tap(find.text('QIBLA'));
+    await tester.pumpAndSettle();
+    expect(find.text('Qibla'), findsOneWidget);
+    await tester.tap(find.byTooltip('Back'));
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.text('TASBIH'));
+    await tester.pumpAndSettle();
+    expect(find.text('Coming in a later update.'), findsOneWidget);
+
+    await tester.tap(find.bySemanticsLabel('Home'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.bySemanticsLabel('Tell us how you feel'));
+    await tester.pumpAndSettle();
+    expect(find.text('Shama'), findsWidgets);
+  });
 }

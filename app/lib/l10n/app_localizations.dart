@@ -537,6 +537,126 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Method · {method}'**
   String methodLine(String method);
+
+  /// No description provided for @alertMeFor.
+  ///
+  /// In en, this message translates to:
+  /// **'Alert me for'**
+  String get alertMeFor;
+
+  /// No description provided for @soundLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Sound'**
+  String get soundLabel;
+
+  /// No description provided for @soundAdhan.
+  ///
+  /// In en, this message translates to:
+  /// **'Adhan'**
+  String get soundAdhan;
+
+  /// No description provided for @soundAlert.
+  ///
+  /// In en, this message translates to:
+  /// **'Alert'**
+  String get soundAlert;
+
+  /// No description provided for @soundSilent.
+  ///
+  /// In en, this message translates to:
+  /// **'Silent'**
+  String get soundSilent;
+
+  /// No description provided for @soundOff.
+  ///
+  /// In en, this message translates to:
+  /// **'Off'**
+  String get soundOff;
+
+  /// No description provided for @allowNotifications.
+  ///
+  /// In en, this message translates to:
+  /// **'Allow notifications'**
+  String get allowNotifications;
+
+  /// No description provided for @reciterLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Reciter'**
+  String get reciterLabel;
+
+  /// No description provided for @reciterAlafasy.
+  ///
+  /// In en, this message translates to:
+  /// **'Mishary Alafasy'**
+  String get reciterAlafasy;
+
+  /// No description provided for @reciterAbdulBasit.
+  ///
+  /// In en, this message translates to:
+  /// **'Abdul Basit'**
+  String get reciterAbdulBasit;
+
+  /// No description provided for @reciterSudais.
+  ///
+  /// In en, this message translates to:
+  /// **'Al-Sudais'**
+  String get reciterSudais;
+
+  /// No description provided for @qibla.
+  ///
+  /// In en, this message translates to:
+  /// **'Qibla'**
+  String get qibla;
+
+  /// No description provided for @tasbih.
+  ///
+  /// In en, this message translates to:
+  /// **'Tasbih'**
+  String get tasbih;
+
+  /// No description provided for @moodPrompt.
+  ///
+  /// In en, this message translates to:
+  /// **'How are you feeling today?'**
+  String get moodPrompt;
+
+  /// No description provided for @moodVoice.
+  ///
+  /// In en, this message translates to:
+  /// **'Tell us how you feel'**
+  String get moodVoice;
+
+  /// No description provided for @tabHome.
+  ///
+  /// In en, this message translates to:
+  /// **'Home'**
+  String get tabHome;
+
+  /// No description provided for @tabShama.
+  ///
+  /// In en, this message translates to:
+  /// **'Shama'**
+  String get tabShama;
+
+  /// No description provided for @tabTasbih.
+  ///
+  /// In en, this message translates to:
+  /// **'Tasbih'**
+  String get tabTasbih;
+
+  /// No description provided for @tabProfile.
+  ///
+  /// In en, this message translates to:
+  /// **'Profile'**
+  String get tabProfile;
+
+  /// No description provided for @comingSoon.
+  ///
+  /// In en, this message translates to:
+  /// **'Coming in a later update.'**
+  String get comingSoon;
 }
 
 class _AppLocalizationsDelegate

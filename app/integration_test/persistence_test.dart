@@ -9,12 +9,35 @@ import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 import 'package:uns/core/storage/app_database.dart';
 import 'package:uns/core/storage/settings_store.dart';
+import 'package:uns/features/alerts/alert_providers.dart';
+import 'package:uns/features/alerts/notification_permission.dart';
 import 'package:uns/main.dart';
 
 /// Real Keychain and encrypted SQLite on the device:
 ///   flutter test integration_test/persistence_test.dart -d SIMULATOR_ID
+/// The real permission prompt would wait for a tap; notifications have
+/// their own test in unit 4.
+final _noPrompt = notificationPermissionProvider.overrideWithValue(
+  _AllowNotifications(),
+);
+
+class _AllowNotifications implements NotificationPermission {
+  @override
+  Future<bool> request() async => true;
+}
+
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
+
+  // Reduced motion: the pulsing mood button would keep frames coming, so
+  // pumpAndSettle would never finish.
+  setUp(() {
+    final dispatcher = TestWidgetsFlutterBinding.instance.platformDispatcher;
+    dispatcher.accessibilityFeaturesTestValue = FakeAccessibilityFeatures(
+      disableAnimations: true,
+    );
+    addTearDown(dispatcher.clearAccessibilityFeaturesTestValue);
+  });
 
   testWidgets('choices survive a restart; the file is encrypted', (
     tester,
@@ -28,6 +51,7 @@ void main() {
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
+          _noPrompt,
           settingsStoreProvider.overrideWithValue(await SettingsStore.load(db)),
         ],
         child: const UnsApp(),
@@ -49,7 +73,7 @@ void main() {
     await tester.pumpAndSettle();
     await tester.tap(find.text('HANAFI'));
     await tester.pumpAndSettle();
-    for (final label in ['Continue', 'Continue', 'Finish']) {
+    for (final label in ['Continue', 'Allow notifications', 'Finish']) {
       await tester.tap(find.text(label));
       await tester.pumpAndSettle();
     }
@@ -68,7 +92,7 @@ void main() {
     expect(store.readJson(SettingKeys.prayer)!['asr'], 'hanafi');
     await tester.pumpWidget(
       ProviderScope(
-        overrides: [settingsStoreProvider.overrideWithValue(store)],
+        overrides: [_noPrompt, settingsStoreProvider.overrideWithValue(store)],
         child: const UnsApp(),
       ),
     );

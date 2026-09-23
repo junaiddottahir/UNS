@@ -83,6 +83,22 @@ change.
   - Drift code is generated: `dart run build_runner build` after changing
     tables (`app_database.g.dart` is committed).
 
+- Prototype fidelity pass (2026-09-23, at the user's request): screens
+  that were placeholders now match the prototype.
+  - Step 3: "Alert me for" prayer pills and Sound (Adhan / Alert /
+    Silent), saved as per-prayer alert modes; "Allow notifications" asks
+    for permission (flutter_local_notifications) and continues either way.
+    Scheduling is still unit 4.
+  - Step 4: reciter pills (Mishary Alafasy, Abdul Basit, Al-Sudais), saved.
+    Sample playback waits for Quran audio (unit 8).
+  - Home: Qibla and Tasbih shortcuts, greeting + "How are you feeling
+    today?" with the pulsing voice button (pulse stops with Reduce
+    Motion), and the floating tab bar (Home, Shama, Tasbih, Profile).
+    Shama, Tasbih, Profile and Qibla show a "Coming in a later update"
+    placeholder until their units.
+  - 48 unit/widget tests; iOS persistence integration test passes;
+    screenshots checked against the prototype.
+
 ## In Progress
 
 - None yet.
@@ -162,6 +178,9 @@ Each line is one unit; app and backend units are kept separate.
   if the phone is set to it). Confirm.
 - New copy to review: "Prayer times can't be calculated for {place}
   today…" (polar day/night) and the method names in the method picker.
+- Alert defaults follow the prototype (adhan for Fajr–Maghrib, Isha
+  off). Confirm, or default all five on?
+- Placeholder copy "Coming in a later update." on unbuilt tabs.
 - Recent locations in the location picker (prototype): storage exists now;
   add when polishing Profile/settings, or as a small follow-up.
 - Self-harm phrase list: who writes and reviews the English and Arabic

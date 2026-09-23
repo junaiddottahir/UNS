@@ -49,7 +49,7 @@ class PrimaryButton extends StatelessWidget {
             else if (icon != null)
               Icon(icon, size: 16),
             if (loading || icon != null) const SizedBox(width: 8),
-            Text(label),
+            Flexible(child: Text(label, overflow: TextOverflow.ellipsis)),
           ],
         ),
       ),

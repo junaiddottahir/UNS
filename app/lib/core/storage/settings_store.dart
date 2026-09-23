@@ -10,6 +10,8 @@ abstract final class SettingKeys {
   static const location = 'location';
   static const prayer = 'prayer';
   static const onboardingComplete = 'onboarding_complete';
+  static const alerts = 'alerts';
+  static const reciter = 'reciter';
 }
 
 /// Settings loaded into memory at startup, so providers can read them

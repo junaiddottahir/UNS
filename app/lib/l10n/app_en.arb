@@ -172,5 +172,25 @@
         "type": "String"
       }
     }
-  }
+  },
+  "alertMeFor": "Alert me for",
+  "soundLabel": "Sound",
+  "soundAdhan": "Adhan",
+  "soundAlert": "Alert",
+  "soundSilent": "Silent",
+  "soundOff": "Off",
+  "allowNotifications": "Allow notifications",
+  "reciterLabel": "Reciter",
+  "reciterAlafasy": "Mishary Alafasy",
+  "reciterAbdulBasit": "Abdul Basit",
+  "reciterSudais": "Al-Sudais",
+  "qibla": "Qibla",
+  "tasbih": "Tasbih",
+  "moodPrompt": "How are you feeling today?",
+  "moodVoice": "Tell us how you feel",
+  "tabHome": "Home",
+  "tabShama": "Shama",
+  "tabTasbih": "Tasbih",
+  "tabProfile": "Profile",
+  "comingSoon": "Coming in a later update."
 }

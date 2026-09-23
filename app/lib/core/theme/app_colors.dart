@@ -22,6 +22,7 @@ abstract final class AppColors {
   static const pillFill = Color(0x1AFFFFFF);
   static const pillEdge = Color(0x29FFFFFF);
   static const pillSelected = Color(0xF0F3EDE8);
+  static const tabBar = Color(0x803A2016);
 
   /// Primary call-to-action: cream pill with dark text.
   static const ctaBackground = textPrimary;
