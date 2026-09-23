@@ -162,7 +162,9 @@ Each line is one unit; app and backend units are kept separate.
   packages `$rc_monthly`, `$rc_annual`, `$rc_lifetime`. Verified with the
   app's test key. Real App Store / Play products (same identifiers,
   regional prices) still to be created when those accounts exist.
-- Project folder is not a git repo yet.
+- Git: pushed to https://github.com/junaiddottahir/UNS (branch `main`).
+  Not committed on purpose: `Uns Prototype.html` and all font files
+  (licensed; see .gitignore), `app/config/*.json` keys, backend `.venv`.
 - Supabase project "Uns": ref `yjyegwckgrxwtoqygsrm`, URL
   `https://yjyegwckgrxwtoqygsrm.supabase.co`, region ap-northeast-1
   (Tokyo), Postgres 17. Created 2026-09-23; `public` schema empty. Schema
