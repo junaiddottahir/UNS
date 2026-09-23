@@ -9,7 +9,8 @@ change.
 
 ## Current Goal
 
-- Unit 18: app — settings and tasbih sync for signed-in users.
+- Unit 19: app — session quota (3/week) + paywall + RevenueCat store
+  purchases + restore.
 
 ## Completed
 
@@ -397,6 +398,22 @@ change.
   - 185 unit/widget tests; live: Supabase Auth reached from the
     simulator (wrong password reported correctly). A full sign-up needs
     a real inbox.
+
+- Unit 18 (2026-09-24): settings and tasbih sync.
+  - While signed in, sync runs at sign-in, on return to the app, and 3 s
+    after a change to prayer settings, alerts, reciter or today's
+    tasbih. Best effort; failures retry at the next trigger.
+  - Settings: the phone stamps when synced settings change; newest wins
+    both ways (same rule as the server); the phone only sends when it
+    changed since it last agreed with the account, so pulled settings
+    aren't echoed back. Pulled settings refresh the screens.
+  - Tasbih: the phone sends its daily totals (latest 400 days) and
+    raises its own days to the account's (higher count per day).
+  - Nothing else leaves the phone; nothing syncs while signed out.
+  - 191 unit/widget tests (new phone gets account settings, newer side
+    wins both ways, tasbih merges both ways, changes go up, offline
+    retries, signed out does nothing). Live end-to-end needs a real
+    account (see unit 17).
 
 ## In Progress
 

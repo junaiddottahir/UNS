@@ -53,4 +53,22 @@ class TasbihStore {
               for (final r in rows) DailyTotal(dateOf(r.day), r.count),
             ],
           );
+
+  /// Every day with a count, for sync.
+  Future<List<DailyTotal>> allDays() async => [
+    for (final r in await _db.select(_db.tasbihDays).get())
+      if (r.count > 0) DailyTotal(dateOf(r.day), r.count),
+  ];
+
+  /// Raises [date]'s total to [count] if it's higher (from another phone).
+  Future<void> raiseTo(DateTime date, int count) => _db
+      .into(_db.tasbihDays)
+      .insert(
+        TasbihDaysCompanion.insert(day: keyFor(date), count: count),
+        onConflict: DoUpdate(
+          (old) => TasbihDaysCompanion.custom(
+            count: const CustomExpression<int>('MAX(count, excluded.count)'),
+          ),
+        ),
+      );
 }

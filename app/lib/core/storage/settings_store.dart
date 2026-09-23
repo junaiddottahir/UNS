@@ -14,6 +14,15 @@ abstract final class SettingKeys {
   static const reciter = 'reciter';
   static const library = 'library';
   static const accountOffered = 'account_offered';
+
+  /// When the synced settings (below) last changed on this phone.
+  static const syncedChangedAt = 'synced_changed_at';
+
+  /// The change time last agreed with the account (after a sync).
+  static const syncedAgreedAt = 'synced_agreed_at';
+
+  /// The settings that sync to a signed-in account (architecture.md).
+  static const synced = {prayer, alerts, reciter};
 }
 
 /// Settings loaded into memory at startup, so providers can read them
@@ -44,8 +53,28 @@ class SettingsStore {
   bool readBool(String key) => _values[key] == 'true';
 
   /// Stores [value] now in memory; the database write completes later.
-  void writeJson(String key, Map<String, Object?> value) =>
-      _write(key, jsonEncode(value));
+  /// For a synced key this also stamps the change time — [syncedAt] when
+  /// the value came from the account, so it isn't sent straight back.
+  void writeJson(String key, Map<String, Object?> value, {DateTime? syncedAt}) {
+    _write(key, jsonEncode(value));
+    if (SettingKeys.synced.contains(key)) {
+      _write(
+        SettingKeys.syncedChangedAt,
+        (syncedAt ?? DateTime.now()).toUtc().toIso8601String(),
+      );
+    }
+  }
+
+  /// When synced settings last changed here, or null if never.
+  DateTime? get syncedChangedAt =>
+      DateTime.tryParse(_values[SettingKeys.syncedChangedAt] ?? '');
+
+  /// The change time both the phone and the account last held.
+  DateTime? get syncedAgreedAt =>
+      DateTime.tryParse(_values[SettingKeys.syncedAgreedAt] ?? '');
+
+  void markSyncedAgreed(DateTime at) =>
+      _write(SettingKeys.syncedAgreedAt, at.toUtc().toIso8601String());
 
   void writeBool(String key, bool value) => _write(key, '$value');
 

@@ -20,6 +20,7 @@ import 'package:uns/core/storage/database_key.dart';
 import 'package:uns/core/storage/voice_note_vault.dart';
 import 'package:uns/features/journal/voice_note.dart';
 import 'package:uns/core/storage/settings_store.dart';
+import 'package:uns/features/account/account_sync.dart';
 import 'package:uns/features/alerts/alert_providers.dart';
 import 'package:uns/features/alerts/notification_permission.dart';
 import 'package:uns/features/location/city.dart';
@@ -418,11 +419,52 @@ class FakeAuth implements AuthService {
   }
 }
 
-/// Records account API calls.
+/// The backend for one account, in memory: newest settings win, higher
+/// tasbih count per day wins (same rules as the server).
 class FakeAccountApi implements AccountApi {
   FakeAccountApi({this.fails = false});
-  final bool fails;
+  bool fails;
   final calls = <String>[];
+  Map<String, Object?>? settings;
+  DateTime? settingsAt;
+  final tasbih = <String, int>{};
+
+  Map<String, Object?> _settingsOut() => {
+    'settings': settings,
+    'updated_at': settingsAt?.toIso8601String(),
+  };
+
+  @override
+  Future<Map<String, Object?>> getSettings() async {
+    await send('GET', '/v1/me/settings');
+    return _settingsOut();
+  }
+
+  @override
+  Future<Map<String, Object?>> putSettings(
+    Map<String, Object?> incoming,
+    DateTime changedAt,
+  ) async {
+    await send('PUT', '/v1/me/settings');
+    if (settingsAt == null || changedAt.isAfter(settingsAt!)) {
+      settings = incoming;
+      settingsAt = changedAt;
+    }
+    return _settingsOut();
+  }
+
+  @override
+  Future<List<Object?>> putTasbih(List<Map<String, Object?>> days) async {
+    await send('PUT', '/v1/me/tasbih');
+    for (final d in days) {
+      final day = d['day']! as String;
+      final count = d['count']! as int;
+      if (count > (tasbih[day] ?? 0)) tasbih[day] = count;
+    }
+    return [
+      for (final e in tasbih.entries) {'day': e.key, 'count': e.value},
+    ];
+  }
 
   @override
   String get baseUrl => 'http://fake';
@@ -540,6 +582,7 @@ Future<ProviderContainer> pumpApp(
       notePlayerProvider.overrideWithValue(notePlayer ?? FakeNotePlayer()),
       authServiceProvider.overrideWithValue(auth ?? const NoAuthService()),
       accountApiProvider.overrideWithValue(accountApi ?? FakeAccountApi()),
+      syncDelayProvider.overrideWithValue(Duration.zero),
     ],
   );
   addTearDown(container.dispose);

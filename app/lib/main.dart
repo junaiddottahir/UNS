@@ -12,6 +12,7 @@ import 'core/router/app_router.dart';
 import 'core/storage/app_database.dart';
 import 'core/storage/settings_store.dart';
 import 'core/theme/app_theme.dart';
+import 'features/account/account_sync.dart';
 import 'features/alerts/alert_providers.dart';
 import 'l10n/app_localizations.dart';
 
@@ -71,6 +72,8 @@ class _UnsAppState extends ConsumerState<UnsApp> {
   Widget build(BuildContext context) {
     // Keeps scheduled prayer alerts current from launch.
     ref.watch(alertSyncProvider);
+    // Signed in: settings and tasbih history follow the account.
+    ref.watch(syncDriverProvider);
     // Premium follows the account: RevenueCat's user is the Supabase user.
     ref.listen(accountProvider.select((a) => a.value?.id), (_, id) {
       PurchasesService.identify(id);

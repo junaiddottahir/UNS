@@ -145,7 +145,7 @@ void main() {
     expect(find.textContaining('journal and everything else'), findsOne);
     await tester.tap(find.text('Delete'));
     await tester.pumpAndSettle();
-    expect(api.calls, ['DELETE /v1/me']);
+    expect(api.calls.last, 'DELETE /v1/me');
     expect(find.text('Account deleted'), findsOneWidget);
     expect(find.text('Save your journey'), findsOneWidget);
     expect(auth.current, isNull);

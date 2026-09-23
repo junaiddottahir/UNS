@@ -45,6 +45,27 @@ class AccountApi {
 
   /// Deletes the account and everything synced with it.
   Future<void> deleteAccount() => send('DELETE', '/v1/me');
+
+  Future<Map<String, Object?>> putSettings(
+    Map<String, Object?> settings,
+    DateTime changedAt,
+  ) async => (await send(
+    'PUT',
+    '/v1/me/settings',
+    body: {
+      'settings': settings,
+      'updated_at': changedAt.toUtc().toIso8601String(),
+    },
+  )) as Map<String, Object?>;
+
+  Future<Map<String, Object?>> getSettings() async =>
+      (await send('GET', '/v1/me/settings')) as Map<String, Object?>;
+
+  /// Sends daily totals; returns the account's full history.
+  Future<List<Object?>> putTasbih(List<Map<String, Object?>> days) async =>
+      ((await send('PUT', '/v1/me/tasbih', body: {'days': days}))
+              as Map<String, Object?>)['days']
+          as List<Object?>;
 }
 
 final accountApiProvider = Provider<AccountApi>(
