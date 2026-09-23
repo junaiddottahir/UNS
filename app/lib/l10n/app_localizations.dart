@@ -304,11 +304,239 @@ abstract class AppLocalizations {
   /// **'Finish'**
   String get finish;
 
-  /// No description provided for @homeGreeting.
+  /// No description provided for @prayerFajr.
   ///
   /// In en, this message translates to:
-  /// **'Assalamu alaykum'**
-  String get homeGreeting;
+  /// **'Fajr'**
+  String get prayerFajr;
+
+  /// No description provided for @prayerDhuhr.
+  ///
+  /// In en, this message translates to:
+  /// **'Dhuhr'**
+  String get prayerDhuhr;
+
+  /// No description provided for @prayerAsr.
+  ///
+  /// In en, this message translates to:
+  /// **'Asr'**
+  String get prayerAsr;
+
+  /// No description provided for @prayerMaghrib.
+  ///
+  /// In en, this message translates to:
+  /// **'Maghrib'**
+  String get prayerMaghrib;
+
+  /// No description provided for @prayerIsha.
+  ///
+  /// In en, this message translates to:
+  /// **'Isha'**
+  String get prayerIsha;
+
+  /// No description provided for @asrLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Asr'**
+  String get asrLabel;
+
+  /// No description provided for @asrStandard.
+  ///
+  /// In en, this message translates to:
+  /// **'Standard'**
+  String get asrStandard;
+
+  /// No description provided for @asrHanafi.
+  ///
+  /// In en, this message translates to:
+  /// **'Hanafi'**
+  String get asrHanafi;
+
+  /// No description provided for @highLatitudeLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'High latitude'**
+  String get highLatitudeLabel;
+
+  /// No description provided for @highLatitudeMiddle.
+  ///
+  /// In en, this message translates to:
+  /// **'Middle of night'**
+  String get highLatitudeMiddle;
+
+  /// No description provided for @highLatitudeSeventh.
+  ///
+  /// In en, this message translates to:
+  /// **'1/7th'**
+  String get highLatitudeSeventh;
+
+  /// No description provided for @highLatitudeAngle.
+  ///
+  /// In en, this message translates to:
+  /// **'Angle'**
+  String get highLatitudeAngle;
+
+  /// No description provided for @methodLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Method'**
+  String get methodLabel;
+
+  /// No description provided for @methodTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Calculation method'**
+  String get methodTitle;
+
+  /// No description provided for @methodMwl.
+  ///
+  /// In en, this message translates to:
+  /// **'Muslim World League'**
+  String get methodMwl;
+
+  /// No description provided for @methodUmmAlQura.
+  ///
+  /// In en, this message translates to:
+  /// **'Umm al-Qura, Makkah'**
+  String get methodUmmAlQura;
+
+  /// No description provided for @methodIsna.
+  ///
+  /// In en, this message translates to:
+  /// **'ISNA (North America)'**
+  String get methodIsna;
+
+  /// No description provided for @methodEgyptian.
+  ///
+  /// In en, this message translates to:
+  /// **'Egyptian General Authority'**
+  String get methodEgyptian;
+
+  /// No description provided for @methodKarachi.
+  ///
+  /// In en, this message translates to:
+  /// **'University of Islamic Sciences, Karachi'**
+  String get methodKarachi;
+
+  /// No description provided for @methodDubai.
+  ///
+  /// In en, this message translates to:
+  /// **'Dubai'**
+  String get methodDubai;
+
+  /// No description provided for @methodQatar.
+  ///
+  /// In en, this message translates to:
+  /// **'Qatar'**
+  String get methodQatar;
+
+  /// No description provided for @methodKuwait.
+  ///
+  /// In en, this message translates to:
+  /// **'Kuwait'**
+  String get methodKuwait;
+
+  /// No description provided for @methodMoonsighting.
+  ///
+  /// In en, this message translates to:
+  /// **'Moonsighting Committee'**
+  String get methodMoonsighting;
+
+  /// No description provided for @methodSingapore.
+  ///
+  /// In en, this message translates to:
+  /// **'Singapore'**
+  String get methodSingapore;
+
+  /// No description provided for @methodTurkey.
+  ///
+  /// In en, this message translates to:
+  /// **'Diyanet, Türkiye'**
+  String get methodTurkey;
+
+  /// No description provided for @methodTehran.
+  ///
+  /// In en, this message translates to:
+  /// **'University of Tehran'**
+  String get methodTehran;
+
+  /// No description provided for @methodSuggested.
+  ///
+  /// In en, this message translates to:
+  /// **'Suggested for {country}'**
+  String methodSuggested(String country);
+
+  /// No description provided for @methodSummary.
+  ///
+  /// In en, this message translates to:
+  /// **'{method} · {asr} Asr'**
+  String methodSummary(String method, String asr);
+
+  /// No description provided for @prayerSettingsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Prayer settings'**
+  String get prayerSettingsTitle;
+
+  /// No description provided for @locationLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Location'**
+  String get locationLabel;
+
+  /// No description provided for @currentLocation.
+  ///
+  /// In en, this message translates to:
+  /// **'Current location'**
+  String get currentLocation;
+
+  /// No description provided for @nextPrayer.
+  ///
+  /// In en, this message translates to:
+  /// **'Next prayer'**
+  String get nextPrayer;
+
+  /// No description provided for @nextPrayerAt.
+  ///
+  /// In en, this message translates to:
+  /// **'{time} · in {duration}'**
+  String nextPrayerAt(String time, String duration);
+
+  /// No description provided for @nextPrayerTag.
+  ///
+  /// In en, this message translates to:
+  /// **'Next · {duration}'**
+  String nextPrayerTag(String duration);
+
+  /// No description provided for @durationHoursMinutes.
+  ///
+  /// In en, this message translates to:
+  /// **'{hours}h {minutes}m'**
+  String durationHoursMinutes(int hours, int minutes);
+
+  /// No description provided for @durationMinutes.
+  ///
+  /// In en, this message translates to:
+  /// **'{minutes}m'**
+  String durationMinutes(int minutes);
+
+  /// No description provided for @dateAndPlace.
+  ///
+  /// In en, this message translates to:
+  /// **'{date} · {place}'**
+  String dateAndPlace(String date, String place);
+
+  /// No description provided for @prayerTimesUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Prayer times can\'t be calculated for {place} today, because the sun doesn\'t rise or set there. Choose a city further from the pole.'**
+  String prayerTimesUnavailable(String place);
+
+  /// No description provided for @methodLine.
+  ///
+  /// In en, this message translates to:
+  /// **'Method · {method}'**
+  String methodLine(String method);
 }
 
 class _AppLocalizationsDelegate

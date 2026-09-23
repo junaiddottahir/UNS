@@ -47,7 +47,13 @@ Error and success colors are not defined in the prototype — open question.
 ## Component Library
 
 Custom widgets on top of Material 3 with the theme above. Shared widgets live
-in `app/lib/core/widgets/`.
+in `app/lib/core/widgets/`: `PrimaryButton`, `OrbButton`, `TextLink`
+(buttons), `StepTopBar` / `BackTopBar`, `AmbientBackground`, and the glass
+set — `GlassCard`, `GlassRow`, `OptionPills` (the prototype's `.card.glass`,
+`.row`, `.opts`).
+
+Home and today's times use the prototype's per-prayer backgrounds
+(`assets/images/bg_<prayer>.jpg`) for the next prayer.
 
 ## Layout Patterns
 

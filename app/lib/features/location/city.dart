@@ -32,6 +32,51 @@ class City {
   /// Disambiguating detail, e.g. "New South Wales, Australia".
   String get detail =>
       [region, countryName].where((s) => s.isNotEmpty).join(', ');
+
+  Map<String, Object?> toJson() => {
+    'name': name,
+    'region': region,
+    'cc': countryCode,
+    'country': countryName,
+    'lat': latitude,
+    'lng': longitude,
+    'tz': timeZone,
+    'pop': population,
+  };
+
+  /// Null when [json] isn't a stored city.
+  static City? fromJson(Map<String, Object?> json) {
+    final (name, region, cc, country, lat, lng, tz, pop) = (
+      json['name'],
+      json['region'],
+      json['cc'],
+      json['country'],
+      json['lat'],
+      json['lng'],
+      json['tz'],
+      json['pop'],
+    );
+    if (name is! String ||
+        region is! String ||
+        cc is! String ||
+        country is! String ||
+        lat is! num ||
+        lng is! num ||
+        tz is! String ||
+        pop is! int) {
+      return null;
+    }
+    return City(
+      name: name,
+      region: region,
+      countryCode: cc,
+      countryName: country,
+      latitude: lat.toDouble(),
+      longitude: lng.toDouble(),
+      timeZone: tz,
+      population: pop,
+    );
+  }
 }
 
 /// Where the user's location came from.
@@ -61,4 +106,34 @@ class UserLocation {
     longitude: city.longitude,
     source: LocationSource.manual,
   );
+
+  Map<String, Object?> toJson() => {
+    'city': city.toJson(),
+    'lat': latitude,
+    'lng': longitude,
+    'source': source.name,
+  };
+
+  /// Null when [json] isn't a stored location.
+  static UserLocation? fromJson(Map<String, Object?> json) {
+    final (cityJson, lat, lng, source) = (
+      json['city'],
+      json['lat'],
+      json['lng'],
+      json['source'],
+    );
+    final city = cityJson is Map<String, Object?>
+        ? City.fromJson(cityJson)
+        : null;
+    final src = LocationSource.values.asNameMap()[source];
+    if (city == null || lat is! num || lng is! num || src == null) {
+      return null;
+    }
+    return UserLocation(
+      city: city,
+      latitude: lat.toDouble(),
+      longitude: lng.toDouble(),
+      source: src,
+    );
+  }
 }

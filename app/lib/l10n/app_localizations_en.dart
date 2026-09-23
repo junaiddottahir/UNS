@@ -128,5 +128,137 @@ class AppLocalizationsEn extends AppLocalizations {
   String get finish => 'Finish';
 
   @override
-  String get homeGreeting => 'Assalamu alaykum';
+  String get prayerFajr => 'Fajr';
+
+  @override
+  String get prayerDhuhr => 'Dhuhr';
+
+  @override
+  String get prayerAsr => 'Asr';
+
+  @override
+  String get prayerMaghrib => 'Maghrib';
+
+  @override
+  String get prayerIsha => 'Isha';
+
+  @override
+  String get asrLabel => 'Asr';
+
+  @override
+  String get asrStandard => 'Standard';
+
+  @override
+  String get asrHanafi => 'Hanafi';
+
+  @override
+  String get highLatitudeLabel => 'High latitude';
+
+  @override
+  String get highLatitudeMiddle => 'Middle of night';
+
+  @override
+  String get highLatitudeSeventh => '1/7th';
+
+  @override
+  String get highLatitudeAngle => 'Angle';
+
+  @override
+  String get methodLabel => 'Method';
+
+  @override
+  String get methodTitle => 'Calculation method';
+
+  @override
+  String get methodMwl => 'Muslim World League';
+
+  @override
+  String get methodUmmAlQura => 'Umm al-Qura, Makkah';
+
+  @override
+  String get methodIsna => 'ISNA (North America)';
+
+  @override
+  String get methodEgyptian => 'Egyptian General Authority';
+
+  @override
+  String get methodKarachi => 'University of Islamic Sciences, Karachi';
+
+  @override
+  String get methodDubai => 'Dubai';
+
+  @override
+  String get methodQatar => 'Qatar';
+
+  @override
+  String get methodKuwait => 'Kuwait';
+
+  @override
+  String get methodMoonsighting => 'Moonsighting Committee';
+
+  @override
+  String get methodSingapore => 'Singapore';
+
+  @override
+  String get methodTurkey => 'Diyanet, Türkiye';
+
+  @override
+  String get methodTehran => 'University of Tehran';
+
+  @override
+  String methodSuggested(String country) {
+    return 'Suggested for $country';
+  }
+
+  @override
+  String methodSummary(String method, String asr) {
+    return '$method · $asr Asr';
+  }
+
+  @override
+  String get prayerSettingsTitle => 'Prayer settings';
+
+  @override
+  String get locationLabel => 'Location';
+
+  @override
+  String get currentLocation => 'Current location';
+
+  @override
+  String get nextPrayer => 'Next prayer';
+
+  @override
+  String nextPrayerAt(String time, String duration) {
+    return '$time · in $duration';
+  }
+
+  @override
+  String nextPrayerTag(String duration) {
+    return 'Next · $duration';
+  }
+
+  @override
+  String durationHoursMinutes(int hours, int minutes) {
+    return '${hours}h ${minutes}m';
+  }
+
+  @override
+  String durationMinutes(int minutes) {
+    return '${minutes}m';
+  }
+
+  @override
+  String dateAndPlace(String date, String place) {
+    return '$date · $place';
+  }
+
+  @override
+  String prayerTimesUnavailable(String place) {
+    return 'Prayer times can\'t be calculated for $place today, because the sun doesn\'t rise or set there. Choose a city further from the pole.';
+  }
+
+  @override
+  String methodLine(String method) {
+    return 'Method · $method';
+  }
 }

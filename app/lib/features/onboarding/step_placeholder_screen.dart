@@ -5,8 +5,8 @@ import '../../core/widgets/ambient_background.dart';
 import '../../core/widgets/buttons.dart';
 import '../../core/widgets/step_top_bar.dart';
 
-/// Frame for onboarding steps 2–4 until their units are built
-/// (prayer times: unit 2, notifications: unit 4, reciter: unit 8).
+/// Frame for onboarding steps 3–4 until their units are built
+/// (notifications: unit 4, reciter: unit 8).
 class StepPlaceholderScreen extends StatelessWidget {
   const StepPlaceholderScreen({
     super.key,

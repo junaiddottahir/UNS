@@ -7,7 +7,8 @@
 | Mobile app       | Flutter (Dart), iOS + Android               | All UI, all wellness data, prayer/qibla math, playback      |
 | State / routing  | Riverpod, go_router                         | App state and navigation                                    |
 | Prayer math      | `adhan` Dart package                        | On-device prayer times and qibla bearing                    |
-| Local storage    | Drift (SQLite) + SQLCipher, secure storage  | Encrypted journal, tasbih history, settings, verse cache    |
+| Time zones       | `timezone` package (bundled IANA database)  | Show prayer times in the chosen city's local time           |
+| Local storage    | Drift (SQLite) + SQLite3MultipleCiphers, secure storage | Encrypted journal, tasbih history, settings, verse cache    |
 | Notifications    | flutter_local_notifications                 | Scheduled prayer alerts and adhan                           |
 | Audio playback   | just_audio                                  | Recitation playback from cached per-ayah MP3s               |
 | Speech to text   | `speech_to_text`, on-device mode            | Voice mood input → text, on the phone                       |
@@ -38,6 +39,10 @@
 - `backend/app/data/` — the approved verse library as versioned data
   (verse references + category + tag only, never verse text).
 - `backend/migrations/` — SQL migrations for the Supabase Postgres schema.
+- `app/lib/features/prayer/` — prayer calculation (`PrayerSchedule` wraps
+  `adhan`), settings, country → method suggestion, and the times/settings
+  screens. Times are computed in the city's IANA zone (from
+  `cities.json`), never the phone's zone.
 - `app/assets/data/cities.json` — bundled GeoNames city list for manual
   city search and labelling a device position with a city name, offline.
   Built by `tools/cities/build_cities.py`; never edit by hand.
@@ -46,7 +51,10 @@
 
 ## Storage Model
 
-- **Device (encrypted SQLite)**: journal entries, mood before/after, session
+- **Device (encrypted SQLite)** — `uns.db`; key in Keychain / Android
+  secure storage, not backed up (a missing or wrong key means a fresh
+  database); settings in a key → JSON `settings` table. Holds: journal
+  entries, mood before/after, session
   history and weekly quota, tasbih counts and custom dhikr, settings,
   location. Journal and mood are never uploaded.
 - **Device (encrypted files)**: voice-note reflections.

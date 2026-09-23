@@ -15,8 +15,12 @@
   "stepOf": "{step} of {total}",
   "@stepOf": {
     "placeholders": {
-      "step": { "type": "int" },
-      "total": { "type": "int" }
+      "step": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
     }
   },
   "back": "Back",
@@ -36,14 +40,18 @@
   "citySearchEmpty": "No cities match \"{query}\".",
   "@citySearchEmpty": {
     "placeholders": {
-      "query": { "type": "String" }
+      "query": {
+        "type": "String"
+      }
     }
   },
   "prayerStepTitle": "Your prayer times",
   "prayerStepBody": "{place}, today. Updates as you choose.",
   "@prayerStepBody": {
     "placeholders": {
-      "place": { "type": "String" }
+      "place": {
+        "type": "String"
+      }
     }
   },
   "notificationsStepTitle": "Never miss a prayer",
@@ -51,5 +59,118 @@
   "reciterStepTitle": "How you'll hear the Quran",
   "reciterStepBody": "Tap a reciter to hear a sample.",
   "finish": "Finish",
-  "homeGreeting": "Assalamu alaykum"
+  "prayerFajr": "Fajr",
+  "prayerDhuhr": "Dhuhr",
+  "prayerAsr": "Asr",
+  "prayerMaghrib": "Maghrib",
+  "prayerIsha": "Isha",
+  "asrLabel": "Asr",
+  "asrStandard": "Standard",
+  "asrHanafi": "Hanafi",
+  "highLatitudeLabel": "High latitude",
+  "highLatitudeMiddle": "Middle of night",
+  "highLatitudeSeventh": "1/7th",
+  "highLatitudeAngle": "Angle",
+  "methodLabel": "Method",
+  "methodTitle": "Calculation method",
+  "methodMwl": "Muslim World League",
+  "methodUmmAlQura": "Umm al-Qura, Makkah",
+  "methodIsna": "ISNA (North America)",
+  "methodEgyptian": "Egyptian General Authority",
+  "methodKarachi": "University of Islamic Sciences, Karachi",
+  "methodDubai": "Dubai",
+  "methodQatar": "Qatar",
+  "methodKuwait": "Kuwait",
+  "methodMoonsighting": "Moonsighting Committee",
+  "methodSingapore": "Singapore",
+  "methodTurkey": "Diyanet, Türkiye",
+  "methodTehran": "University of Tehran",
+  "methodSuggested": "Suggested for {country}",
+  "@methodSuggested": {
+    "placeholders": {
+      "country": {
+        "type": "String"
+      }
+    }
+  },
+  "methodSummary": "{method} · {asr} Asr",
+  "@methodSummary": {
+    "placeholders": {
+      "method": {
+        "type": "String"
+      },
+      "asr": {
+        "type": "String"
+      }
+    }
+  },
+  "prayerSettingsTitle": "Prayer settings",
+  "locationLabel": "Location",
+  "currentLocation": "Current location",
+  "nextPrayer": "Next prayer",
+  "nextPrayerAt": "{time} · in {duration}",
+  "@nextPrayerAt": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      },
+      "duration": {
+        "type": "String"
+      }
+    }
+  },
+  "nextPrayerTag": "Next · {duration}",
+  "@nextPrayerTag": {
+    "placeholders": {
+      "duration": {
+        "type": "String"
+      }
+    }
+  },
+  "durationHoursMinutes": "{hours}h {minutes}m",
+  "@durationHoursMinutes": {
+    "placeholders": {
+      "hours": {
+        "type": "int"
+      },
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "durationMinutes": "{minutes}m",
+  "@durationMinutes": {
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "dateAndPlace": "{date} · {place}",
+  "@dateAndPlace": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      },
+      "place": {
+        "type": "String"
+      }
+    }
+  },
+  "prayerTimesUnavailable": "Prayer times can't be calculated for {place} today, because the sun doesn't rise or set there. Choose a city further from the pole.",
+  "@prayerTimesUnavailable": {
+    "placeholders": {
+      "place": {
+        "type": "String"
+      }
+    }
+  },
+  "methodLine": "Method · {method}",
+  "@methodLine": {
+    "placeholders": {
+      "method": {
+        "type": "String"
+      }
+    }
+  }
 }

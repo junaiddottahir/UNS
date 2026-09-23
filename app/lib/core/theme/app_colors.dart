@@ -16,6 +16,13 @@ abstract final class AppColors {
   static const borderDefault = Color(0x1AF3EDE8);
   static const track = Color(0x38F3EDE8);
 
+  /// Frosted "glass" panels and option pills over background photos.
+  static const glassFill = Color(0x14FFFFFF);
+  static const glassEdge = Color(0x24FFFFFF);
+  static const pillFill = Color(0x1AFFFFFF);
+  static const pillEdge = Color(0x29FFFFFF);
+  static const pillSelected = Color(0xF0F3EDE8);
+
   /// Primary call-to-action: cream pill with dark text.
   static const ctaBackground = textPrimary;
   static const ctaForeground = bgSurface;

@@ -1,6 +1,8 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:integration_test/integration_test.dart';
+import 'package:uns/core/storage/app_database.dart';
+import 'package:uns/core/storage/settings_store.dart';
 import 'package:uns/main.dart';
 
 /// Runs on an iOS simulator with the position set to Sydney:
@@ -12,8 +14,16 @@ import 'package:uns/main.dart';
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
-  testWidgets('real device location resolves to Sydney', (tester) async {
-    await tester.pumpWidget(const ProviderScope(child: UnsApp()));
+  testWidgets('real device location → Sydney times → home', (tester) async {
+    final db = await AppDatabase.open();
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          settingsStoreProvider.overrideWithValue(await SettingsStore.load(db)),
+        ],
+        child: const UnsApp(),
+      ),
+    );
     await tester.pumpAndSettle();
 
     await tester.tap(find.text('Begin'));
@@ -29,5 +39,13 @@ void main() {
     }
     await tester.pumpAndSettle();
     expect(find.text('Sydney, today. Updates as you choose.'), findsOneWidget);
+    expect(find.text('METHOD · MUSLIM WORLD LEAGUE'), findsOneWidget);
+
+    for (var i = 0; i < 3; i++) {
+      await tester.tap(find.text(i < 2 ? 'Continue' : 'Finish'));
+      await tester.pumpAndSettle();
+    }
+    expect(find.text('NEXT PRAYER'), findsOneWidget);
+    expect(find.textContaining('SYDNEY'), findsOneWidget);
   });
 }

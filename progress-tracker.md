@@ -9,8 +9,8 @@ change.
 
 ## Current Goal
 
-- Unit 2: on-device prayer times (`adhan`), onboarding step 2, home screen
-  with next-prayer countdown.
+- Unit 4: prayer notifications (per-prayer mode, pre-reminder, check-in),
+  onboarding step 3.
 
 ## Completed
 
@@ -36,8 +36,52 @@ change.
   - go_router routes, gen-l10n (English ARB), prototype backgrounds + logo.
   - 16 unit/widget tests; iOS integration test passed on the simulator with
     real location (Sydney).
-  - Known gap: location is held in memory, so restarting the app shows
-    onboarding again until unit 3 adds storage.
+  - (Location is saved since unit 3.)
+
+- Unit 2 (2026-09-23): prayer times on device.
+  - `adhan` computes the five prayers on the phone. Times are shown in the
+    chosen city's own time zone (`timezone` package, full IANA database,
+    loaded on first use), so a city abroad shows its local times.
+  - Method is suggested from the city's country (`method_suggestion.dart`)
+    until the user picks one; Asr (standard / Hanafi) and high-latitude
+    rule (middle of night / 1/7th / angle) settings.
+  - Onboarding step 2 (Asr pills, today's times, method link), home (date ·
+    city header, next-prayer hero with countdown on that prayer's
+    background), today's times list, prayer settings, method picker,
+    location picker (search + current location).
+  - Countdown updates on each minute boundary; after Isha it counts to
+    tomorrow's Fajr. Where the sun doesn't rise or set (polar day/night)
+    the screens say times can't be calculated instead of crashing.
+  - Verified against api.aladhan.com for Sydney (MWL), Makkah (Umm
+    al-Qura), New York (ISNA), Karachi (Karachi, Hanafi): every prayer
+    within 2 minutes (the adhan library adds a +1 min Dhuhr margin).
+  - 36 unit/widget tests; iOS integration test (real location → Sydney →
+    home) and a screenshot walkthrough on the simulator.
+  - Not in this unit: qibla/tasbih shortcuts and mood card on home (units 5,
+    6, 9), alert icons and the Alerts row (unit 4), recent locations
+    (needs storage, unit 3).
+
+- Unit 3 (2026-09-23): encrypted local database + settings persistence.
+  - Drift database `uns.db` in the app support folder, encrypted with
+    SQLite3MultipleCiphers (`sqlite3` package build hook, `source:
+    sqlite3mc` in pubspec). Opening refuses to run on a SQLite build
+    without encryption.
+  - 256-bit random key in the Keychain / Android secure storage
+    (`first_unlock_this_device`: not in backups, readable after first
+    unlock for background notification work). If the key is missing or
+    wrong (e.g. files restored to a new phone), the database is recreated
+    empty instead of crashing.
+  - `settings` table (key → JSON). `SettingsStore` loads it at startup
+    and writes changes through. Saved: location, prayer settings,
+    onboarding complete.
+  - Returning users open straight to home; unfinished onboarding restarts
+    at welcome.
+  - 46 unit/widget tests (incl. raw file bytes have no SQLite header and
+    no readable city name, wrong key can't open, lost key → fresh DB);
+    iOS integration test: onboard → close → reopen → home with saved
+    choices, file encrypted on the simulator.
+  - Drift code is generated: `dart run build_runner build` after changing
+    tables (`app_database.g.dart` is committed).
 
 ## In Progress
 
@@ -107,6 +151,19 @@ Each line is one unit; app and backend units are kept separate.
   the Test Store; confirm before creating real store products. Regional
   prices for Pakistan, Indonesia, Egypt (~30–40% of US) still to set.
 - Replace the default `000` helpline with per-country numbers later.
+- Country → method suggestions (`app/lib/features/prayer/method_suggestion.dart`)
+  follow the adhan library's regional guidance (e.g. UK → Moonsighting
+  Committee, US/CA → ISNA, Malaysia/Indonesia → Singapore). Scholar to
+  confirm.
+- Default high-latitude rule is "middle of night" (from the prototype);
+  adhan recommends 1/7th above 48°. Keep, or switch automatically by
+  latitude?
+- Prayer times use 12-hour time without AM/PM, as in the prototype (24-hour
+  if the phone is set to it). Confirm.
+- New copy to review: "Prayer times can't be calculated for {place}
+  today…" (polar day/night) and the method names in the method picker.
+- Recent locations in the location picker (prototype): storage exists now;
+  add when polishing Profile/settings, or as a small follow-up.
 - Self-harm phrase list: who writes and reviews the English and Arabic
   phrases.
 - Scholar still to confirm the Arabic and English editions (from scope).
@@ -143,6 +200,9 @@ Each line is one unit; app and backend units are kept separate.
   renewals and restore; its user ID is the Supabase user ID when signed in.
   No purchase data in our backend.
 - 2026-09-23 — Athletics is licensed for app use.
+- 2026-09-23 — Encryption uses SQLite3MultipleCiphers (via `sqlite3`
+  3.x build hooks) instead of SQLCipher: `sqlcipher_flutter_libs` is
+  end-of-life, and sqlite3mc needs no OpenSSL on Android.
 
 ## Session Notes
 

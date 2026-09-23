@@ -4,13 +4,22 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'core/purchases/purchases_service.dart';
 import 'core/router/app_router.dart';
+import 'core/storage/app_database.dart';
+import 'core/storage/settings_store.dart';
 import 'core/theme/app_theme.dart';
 import 'l10n/app_localizations.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await PurchasesService.configure();
-  runApp(const ProviderScope(child: UnsApp()));
+  final db = await AppDatabase.open();
+  final settings = await SettingsStore.load(db);
+  runApp(
+    ProviderScope(
+      overrides: [settingsStoreProvider.overrideWithValue(settings)],
+      child: const UnsApp(),
+    ),
+  );
 }
 
 class UnsApp extends ConsumerWidget {

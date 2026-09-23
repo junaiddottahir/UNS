@@ -41,6 +41,37 @@ abstract final class AppText {
     letterSpacing: 1.6,
     color: AppColors.textSubtle,
   );
+  static const title2 = TextStyle(
+    fontSize: 28,
+    height: 1.1,
+    fontWeight: FontWeight.w400,
+    letterSpacing: -0.56,
+    color: AppColors.textPrimary,
+  );
+  static const hero = TextStyle(
+    fontSize: 68,
+    height: 0.95,
+    fontWeight: FontWeight.w400,
+    letterSpacing: -2.04,
+    color: AppColors.textPrimary,
+  );
+  static const timesStrip = TextStyle(
+    fontSize: 13.5,
+    color: AppColors.textPrimary,
+    fontFeatures: [FontFeature.tabularFigures()],
+  );
+  static const heroSub = TextStyle(
+    fontSize: 15,
+    color: Color(0xBFF3EDE8),
+    fontFeatures: [FontFeature.tabularFigures()],
+  );
+  static const row = TextStyle(fontSize: 16, color: AppColors.textPrimary);
+  static const rowValue = TextStyle(fontSize: 14, color: Color(0x8CF3EDE8));
+  static const pill = TextStyle(
+    fontSize: 11,
+    fontWeight: FontWeight.w500,
+    letterSpacing: 1.76,
+  );
   static const link = TextStyle(fontSize: 15, color: Color(0xCCF3EDE8));
   static const input = TextStyle(fontSize: 24, color: AppColors.textPrimary);
   static const button = TextStyle(fontSize: 16, fontWeight: FontWeight.w500);

@@ -8,8 +8,8 @@ import '../../core/widgets/ambient_background.dart';
 import '../../core/widgets/buttons.dart';
 import '../../core/widgets/step_top_bar.dart';
 import '../../l10n/app_localizations.dart';
-import '../location/city.dart';
 import '../location/device_locator.dart';
+import '../location/location_problem_text.dart';
 import '../location/location_providers.dart';
 
 /// Onboarding step 1: device location, with a manual city fallback.
@@ -30,48 +30,21 @@ class _LocationScreenState extends ConsumerState<LocationScreen> {
       _problem = null;
     });
 
-    final result = await ref.read(deviceLocatorProvider).locate();
+    final result = await ref.read(userLocationProvider.notifier).useDevice();
     if (!mounted) return;
 
-    if (result is DeviceLocationFound) {
-      final cities = await ref.read(cityRepositoryProvider.future);
-      final city = cities.nearest(result.latitude, result.longitude);
-      ref
-          .read(userLocationProvider.notifier)
-          .set(
-            UserLocation(
-              city: city,
-              latitude: result.latitude,
-              longitude: result.longitude,
-              source: LocationSource.device,
-            ),
-          );
-      if (!mounted) return;
-      setState(() => _locating = false);
-      context.push(Routes.prayerStep);
-    } else {
-      setState(() {
-        _locating = false;
-        _problem = result;
-      });
-    }
+    setState(() {
+      _locating = false;
+      _problem = result is DeviceLocationFound ? null : result;
+    });
+    if (result is DeviceLocationFound) context.push(Routes.prayerStep);
   }
-
-  String? _problemText(AppLocalizations l10n) => switch (_problem) {
-    DeviceLocationDenied(permanently: true) => l10n.locationDeniedForever,
-    DeviceLocationDenied() => l10n.locationDenied,
-    DeviceLocationServiceOff() => l10n.locationServiceOff,
-    DeviceLocationFailed() => l10n.locationFailed,
-    DeviceLocationFound() || null => null,
-  };
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
-    final problem = _problemText(l10n);
-    final canOpenSettings =
-        _problem is DeviceLocationDenied &&
-        (_problem as DeviceLocationDenied).permanently;
+    final problem = locationProblemText(l10n, _problem);
+    final canOpenSettings = needsSettings(_problem);
 
     return Scaffold(
       body: AmbientBackground(

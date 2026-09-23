@@ -5,12 +5,11 @@ import '../../l10n/app_localizations.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_theme.dart';
 
-/// Back arrow on the left, "n of 4" on the right.
-class StepTopBar extends StatelessWidget {
-  const StepTopBar({super.key, required this.step, this.total = 4});
+/// Back arrow on the start side, an optional widget on the end side.
+class BackTopBar extends StatelessWidget {
+  const BackTopBar({super.key, this.trailing});
 
-  final int step;
-  final int total;
+  final Widget? trailing;
 
   @override
   Widget build(BuildContext context) {
@@ -29,14 +28,30 @@ class StepTopBar extends StatelessWidget {
               tooltip: l10n.back,
             ),
             const Spacer(),
-            Padding(
-              padding: const EdgeInsetsDirectional.only(end: 12),
-              child: Text(
-                l10n.stepOf(step, total).toUpperCase(),
-                style: AppText.label,
-              ),
-            ),
+            ?trailing,
           ],
+        ),
+      ),
+    );
+  }
+}
+
+/// Back arrow on the left, "n of 4" on the right.
+class StepTopBar extends StatelessWidget {
+  const StepTopBar({super.key, required this.step, this.total = 4});
+
+  final int step;
+  final int total;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    return BackTopBar(
+      trailing: Padding(
+        padding: const EdgeInsetsDirectional.only(end: 12),
+        child: Text(
+          l10n.stepOf(step, total).toUpperCase(),
+          style: AppText.label,
         ),
       ),
     );

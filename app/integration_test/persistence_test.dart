@@ -1,0 +1,80 @@
+import 'dart:convert';
+import 'dart:io';
+
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:integration_test/integration_test.dart';
+import 'package:path/path.dart' as p;
+import 'package:path_provider/path_provider.dart';
+import 'package:uns/core/storage/app_database.dart';
+import 'package:uns/core/storage/settings_store.dart';
+import 'package:uns/main.dart';
+
+/// Real Keychain and encrypted SQLite on the device:
+///   flutter test integration_test/persistence_test.dart -d SIMULATOR_ID
+void main() {
+  IntegrationTestWidgetsFlutterBinding.ensureInitialized();
+
+  testWidgets('choices survive a restart; the file is encrypted', (
+    tester,
+  ) async {
+    final dir = await getApplicationSupportDirectory();
+    final file = File(p.join(dir.path, AppDatabase.fileName));
+    if (file.existsSync()) file.deleteSync();
+
+    // First launch: onboard with a manual city.
+    var db = await AppDatabase.open();
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          settingsStoreProvider.overrideWithValue(await SettingsStore.load(db)),
+        ],
+        child: const UnsApp(),
+      ),
+    );
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Begin'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Skip'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Choose a city'));
+    await tester.pumpAndSettle();
+    await tester.enterText(find.byType(TextField), 'makkah');
+    for (var i = 0; i < 40; i++) {
+      await tester.pump(const Duration(milliseconds: 250));
+      if (find.text('Mecca Region, Saudi Arabia').evaluate().isNotEmpty) break;
+    }
+    await tester.tap(find.text('Mecca Region, Saudi Arabia').first);
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('HANAFI'));
+    await tester.pumpAndSettle();
+    for (final label in ['Continue', 'Continue', 'Finish']) {
+      await tester.tap(find.text(label));
+      await tester.pumpAndSettle();
+    }
+    expect(find.text('NEXT PRAYER'), findsOneWidget);
+
+    // "Restart": drop the app, close and reopen the database.
+    await tester.pumpWidget(const SizedBox());
+    await db.close();
+
+    final bytes = file.readAsBytesSync();
+    expect(latin1.decode(bytes.sublist(0, 15)), isNot('SQLite format 3'));
+    expect(latin1.decode(bytes).contains('Makkah'), isFalse);
+
+    db = await AppDatabase.open();
+    final store = await SettingsStore.load(db);
+    expect(store.readJson(SettingKeys.prayer)!['asr'], 'hanafi');
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [settingsStoreProvider.overrideWithValue(store)],
+        child: const UnsApp(),
+      ),
+    );
+    await tester.pumpAndSettle();
+    expect(find.text('NEXT PRAYER'), findsOneWidget);
+    expect(find.textContaining('MAKKAH'), findsOneWidget);
+    await db.close();
+  });
+}
