@@ -179,14 +179,19 @@ void main() {
 
     expect(find.text('ALERT ME FOR'), findsOneWidget);
     expect(find.text('SOUND'), findsOneWidget);
-    await tester.tap(find.text('ISHA'));
+    // Nothing is on until the user chooses.
+    expect(
+      Prayer.values.where(container.read(alertSettingsProvider).isOn),
+      isEmpty,
+    );
     await tester.tap(find.text('FAJR'));
+    await tester.tap(find.text('ISHA'));
     await tester.tap(find.text('SILENT'));
     await tester.pumpAndSettle();
     final alerts = container.read(alertSettingsProvider);
+    expect(alerts.modeOf(Prayer.fajr), AlertMode.silent);
     expect(alerts.modeOf(Prayer.isha), AlertMode.silent);
-    expect(alerts.modeOf(Prayer.fajr), AlertMode.off);
-    expect(alerts.modeOf(Prayer.dhuhr), AlertMode.silent);
+    expect(alerts.modeOf(Prayer.dhuhr), AlertMode.off);
 
     // A "no" still moves on: notifications never block onboarding.
     await tester.tap(find.text('Allow notifications'));

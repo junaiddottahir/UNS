@@ -3,49 +3,50 @@ import '../prayer/prayer_schedule.dart';
 /// How a prayer announces itself. Scheduling arrives with unit 4.
 enum AlertMode { off, silent, notification, adhan }
 
-/// Per-prayer alert choices.
+/// Per-prayer alert choices. Nothing alerts until the user turns it on.
 class AlertSettings {
-  const AlertSettings(this.modes);
+  const AlertSettings({this.modes = const {}, this.sound = AlertMode.adhan})
+    : assert(sound != AlertMode.off);
 
-  /// Prototype defaults: adhan for all but Isha.
-  static const defaults = AlertSettings({
-    Prayer.fajr: AlertMode.adhan,
-    Prayer.dhuhr: AlertMode.adhan,
-    Prayer.asr: AlertMode.adhan,
-    Prayer.maghrib: AlertMode.adhan,
-    Prayer.isha: AlertMode.off,
-  });
+  static const defaults = AlertSettings();
 
   final Map<Prayer, AlertMode> modes;
+
+  /// The onboarding "Sound" choice, given to prayers as they're turned on.
+  final AlertMode sound;
 
   AlertMode modeOf(Prayer p) => modes[p] ?? AlertMode.off;
 
   bool isOn(Prayer p) => modeOf(p) != AlertMode.off;
 
-  /// The sound shared by the prayers that are on (the onboarding "Sound"
-  /// choice); adhan when none are on.
-  AlertMode get sound => Prayer.values
-      .map(modeOf)
-      .firstWhere((m) => m != AlertMode.off, orElse: () => AlertMode.adhan);
+  /// Turns [p] on with [sound], or off.
+  AlertSettings toggle(Prayer p) => AlertSettings(
+    modes: {...modes, p: isOn(p) ? AlertMode.off : sound},
+    sound: sound,
+  );
 
-  /// Turns [p] on with the current sound, or off.
-  AlertSettings toggle(Prayer p) {
-    final current = sound;
-    return AlertSettings({...modes, p: isOn(p) ? AlertMode.off : current});
-  }
-
-  /// Gives every prayer that is on the same [mode].
-  AlertSettings withSound(AlertMode mode) => AlertSettings({
-    for (final p in Prayer.values) p: isOn(p) ? mode : AlertMode.off,
-  });
+  /// Sets the sound and gives it to every prayer that is on.
+  AlertSettings withSound(AlertMode mode) => AlertSettings(
+    modes: {for (final p in Prayer.values) p: isOn(p) ? mode : AlertMode.off},
+    sound: mode,
+  );
 
   Map<String, Object?> toJson() => {
-    for (final p in Prayer.values) p.name: modeOf(p).name,
+    'sound': sound.name,
+    'modes': {for (final p in Prayer.values) p.name: modeOf(p).name},
   };
 
-  /// Unknown or missing prayers fall back to the defaults.
-  factory AlertSettings.fromJson(Map<String, Object?> json) => AlertSettings({
-    for (final p in Prayer.values)
-      p: AlertMode.values.asNameMap()[json[p.name]] ?? defaults.modeOf(p),
-  });
+  /// Unknown or missing values fall back to off / adhan.
+  factory AlertSettings.fromJson(Map<String, Object?> json) {
+    final modes = json['modes'];
+    final sound = AlertMode.values.asNameMap()[json['sound']];
+    return AlertSettings(
+      modes: {
+        if (modes is Map<String, Object?>)
+          for (final p in Prayer.values)
+            p: AlertMode.values.asNameMap()[modes[p.name]] ?? AlertMode.off,
+      },
+      sound: sound == null || sound == AlertMode.off ? AlertMode.adhan : sound,
+    );
+  }
 }

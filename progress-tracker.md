@@ -86,7 +86,7 @@ change.
 - Prototype fidelity pass (2026-09-23, at the user's request): screens
   that were placeholders now match the prototype.
   - Step 3: "Alert me for" prayer pills and Sound (Adhan / Alert /
-    Silent), saved as per-prayer alert modes; "Allow notifications" asks
+    Silent), saved as per-prayer alert modes, none on by default; "Allow notifications" asks
     for permission (flutter_local_notifications) and continues either way.
     Scheduling is still unit 4.
   - Step 4: reciter pills (Mishary Alafasy, Abdul Basit, Al-Sudais), saved.
@@ -178,8 +178,6 @@ Each line is one unit; app and backend units are kept separate.
   if the phone is set to it). Confirm.
 - New copy to review: "Prayer times can't be calculated for {place}
   today…" (polar day/night) and the method names in the method picker.
-- Alert defaults follow the prototype (adhan for Fajr–Maghrib, Isha
-  off). Confirm, or default all five on?
 - Placeholder copy "Coming in a later update." on unbuilt tabs.
 - Recent locations in the location picker (prototype): storage exists now;
   add when polishing Profile/settings, or as a small follow-up.
@@ -219,6 +217,8 @@ Each line is one unit; app and backend units are kept separate.
   renewals and restore; its user ID is the Supabase user ID when signed in.
   No purchase data in our backend.
 - 2026-09-23 — Athletics is licensed for app use.
+- 2026-09-23 — No prayer alerts are on by default; the user turns on the
+  ones they want (sound preselected as Adhan, stored separately).
 - 2026-09-23 — Encryption uses SQLite3MultipleCiphers (via `sqlite3`
   3.x build hooks) instead of SQLCipher: `sqlcipher_flutter_libs` is
   end-of-life, and sqlite3mc needs no OpenSSL on Android.
