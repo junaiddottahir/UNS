@@ -882,4 +882,38 @@ class AppLocalizationsEn extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String get startRecording => 'Start recording';
+
+  @override
+  String get pauseRecording => 'Pause';
+
+  @override
+  String get resumeRecording => 'Resume';
+
+  @override
+  String get discardRecording => 'Discard';
+
+  @override
+  String get saveRecording => 'Save';
+
+  @override
+  String get micNeeded =>
+      'Allow the microphone for Uns in Settings to record a reflection.';
+
+  @override
+  String voiceReflection(String length) {
+    return 'Voice reflection · $length';
+  }
+
+  @override
+  String get playVoiceNote => 'Play voice reflection';
+
+  @override
+  String get stopVoiceNote => 'Stop';
+
+  @override
+  String get voiceNoteMissing =>
+      'This voice reflection can\'t be opened on this phone.';
 }

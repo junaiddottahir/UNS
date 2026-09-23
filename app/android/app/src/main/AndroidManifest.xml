@@ -1,6 +1,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <!-- City-level location for prayer times and qibla. -->
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <!-- Voice-note reflections, recorded and kept on the phone. -->
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <!-- Prayer alerts: show, keep after reboot, and fire on time. -->
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />

@@ -552,5 +552,22 @@
         "type": "int"
       }
     }
-  }
+  },
+  "startRecording": "Start recording",
+  "pauseRecording": "Pause",
+  "resumeRecording": "Resume",
+  "discardRecording": "Discard",
+  "saveRecording": "Save",
+  "micNeeded": "Allow the microphone for Uns in Settings to record a reflection.",
+  "voiceReflection": "Voice reflection · {length}",
+  "@voiceReflection": {
+    "placeholders": {
+      "length": {
+        "type": "String"
+      }
+    }
+  },
+  "playVoiceNote": "Play voice reflection",
+  "stopVoiceNote": "Stop",
+  "voiceNoteMissing": "This voice reflection can't be opened on this phone."
 }

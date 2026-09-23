@@ -330,7 +330,11 @@ class ShamaSessionNotifier extends Notifier<SessionState?> {
 
   /// Saves the session to the journal (mood after, optional reflection)
   /// and clears it.
-  Future<void> save({String? reflection}) async {
+  Future<void> save({
+    String? reflection,
+    String? voiceNote,
+    int? voiceSeconds,
+  }) async {
     final s = state;
     final id = s?.sessionId;
     if (id != null) {
@@ -343,6 +347,8 @@ class ShamaSessionNotifier extends Notifier<SessionState?> {
             reflection: reflection == null || reflection.trim().isEmpty
                 ? null
                 : reflection.trim(),
+            voiceNote: voiceNote,
+            voiceSeconds: voiceSeconds,
           );
     }
     state = null;

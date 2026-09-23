@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import '../../core/quran/verse_ref.dart';
 import '../../core/router/routes.dart';
 import '../../core/storage/app_database.dart';
+import '../../core/storage/voice_note_vault.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_theme.dart';
 import '../../core/widgets/ambient_background.dart';
@@ -18,6 +19,7 @@ import '../shama/shama_labels.dart';
 import '../shama/shama_session.dart';
 import 'journal_labels.dart';
 import 'journal_providers.dart';
+import 'voice_note.dart';
 
 /// One journal entry: moods, the reflection, and its verses to replay.
 class EntryScreen extends ConsumerWidget {
@@ -93,15 +95,20 @@ class EntryScreen extends ConsumerWidget {
                       ],
                     ),
                     const SizedBox(height: 28),
-                    Text(
-                      e.reflection ?? l10n.noReflection,
-                      style: const TextStyle(
-                        fontSize: 20,
-                        height: 1.45,
-                        letterSpacing: -0.2,
-                        color: AppColors.textPrimary,
+                    if (e.voiceNote case final note?) ...[
+                      _VoiceNoteCard(name: note, seconds: e.voiceSeconds ?? 0),
+                      const SizedBox(height: 20),
+                    ],
+                    if (e.reflection != null || e.voiceNote == null)
+                      Text(
+                        e.reflection ?? l10n.noReflection,
+                        style: const TextStyle(
+                          fontSize: 20,
+                          height: 1.45,
+                          letterSpacing: -0.2,
+                          color: AppColors.textPrimary,
+                        ),
                       ),
-                    ),
                   ],
                 ),
               ),
@@ -169,6 +176,55 @@ class _MoodChip extends StatelessWidget {
             color: selected ? AppColors.ctaForeground : AppColors.textPrimary,
           ),
         ),
+      ),
+    );
+  }
+}
+
+/// Plays a voice reflection, decrypted in memory.
+class _VoiceNoteCard extends ConsumerStatefulWidget {
+  const _VoiceNoteCard({required this.name, required this.seconds});
+
+  final String name;
+  final int seconds;
+
+  @override
+  ConsumerState<_VoiceNoteCard> createState() => _VoiceNoteCardState();
+}
+
+class _VoiceNoteCardState extends ConsumerState<_VoiceNoteCard> {
+  bool _playing = false;
+  bool _missing = false;
+
+  Future<void> _toggle() async {
+    final player = ref.read(notePlayerProvider);
+    if (_playing) {
+      await player.stop();
+      setState(() => _playing = false);
+      return;
+    }
+    try {
+      final audio = await ref.read(voiceNoteVaultProvider).open(widget.name);
+      setState(() => _playing = true);
+      await player.play(audio);
+    } on Exception {
+      setState(() => _missing = true);
+    } finally {
+      if (mounted) setState(() => _playing = false);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    if (_missing) return Text(l10n.voiceNoteMissing, style: AppText.body);
+    return GlassCard(
+      child: GlassRow(
+        leading: Icons.mic_none,
+        label: Text(l10n.voiceReflection(clockText(widget.seconds))),
+        trailing: _playing ? Icons.stop_rounded : Icons.play_arrow_rounded,
+        divider: false,
+        onTap: _toggle,
       ),
     );
   }

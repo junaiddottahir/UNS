@@ -14,9 +14,13 @@ abstract interface class DatabaseKeyStore {
 /// The key is tied to this device: it isn't included in backups, so a
 /// database file restored elsewhere can't be opened.
 class SecureDatabaseKeyStore implements DatabaseKeyStore {
-  const SecureDatabaseKeyStore();
+  /// [name] picks the Keychain entry; each purpose has its own key.
+  const SecureDatabaseKeyStore({this.name = 'uns.db.key'});
 
-  static const _name = 'uns.db.key';
+  /// The key for encrypted voice-note files.
+  static const voiceNotes = SecureDatabaseKeyStore(name: 'uns.voice.key');
+
+  final String name;
   static const _storage = FlutterSecureStorage(
     // Readable after first unlock, so later background work (scheduling
     // prayer notifications) can open the database.
@@ -26,11 +30,10 @@ class SecureDatabaseKeyStore implements DatabaseKeyStore {
   );
 
   @override
-  Future<String?> read() => _storage.read(key: _name);
+  Future<String?> read() => _storage.read(key: name);
 
   @override
-  Future<void> write(String hexKey) =>
-      _storage.write(key: _name, value: hexKey);
+  Future<void> write(String hexKey) => _storage.write(key: name, value: hexKey);
 }
 
 /// A new random 256-bit key as hex.

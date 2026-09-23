@@ -22,6 +22,7 @@ abstract final class Routes {
   static const shamaAfter = '/shama/after';
   static const support = '/support';
   static const shamaWrite = '/shama/write';
+  static const shamaRecord = '/shama/record';
   static const journal = '/journal';
 
   /// One journal entry, e.g. `/journal/12`.

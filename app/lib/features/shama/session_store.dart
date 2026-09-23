@@ -36,11 +36,15 @@ class SessionStore {
     required DateTime at,
     String? moodAfter,
     String? reflection,
+    String? voiceNote,
+    int? voiceSeconds,
   }) => (_db.update(_db.sessions)..where((s) => s.id.equals(id))).write(
     SessionsCompanion(
       endedAt: Value(at),
       moodAfter: Value(moodAfter),
       reflection: Value(reflection),
+      voiceNote: Value(voiceNote),
+      voiceSeconds: Value(voiceSeconds),
     ),
   );
 

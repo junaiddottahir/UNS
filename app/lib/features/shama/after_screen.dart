@@ -90,6 +90,14 @@ class _AfterScreenState extends ConsumerState<AfterScreen> {
                         onTap: () => context.push(Routes.shamaWrite),
                       ),
                     ),
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: _GlassButton(
+                        icon: Icons.mic_none,
+                        label: l10n.record,
+                        onTap: () => context.push(Routes.shamaRecord),
+                      ),
+                    ),
                   ],
                 ),
                 const SizedBox(height: 14),

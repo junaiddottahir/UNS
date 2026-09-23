@@ -1641,6 +1641,66 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{count, plural, =0{No entries} =1{1 entry} other{{count} entries}}'**
   String journalCount(int count);
+
+  /// No description provided for @startRecording.
+  ///
+  /// In en, this message translates to:
+  /// **'Start recording'**
+  String get startRecording;
+
+  /// No description provided for @pauseRecording.
+  ///
+  /// In en, this message translates to:
+  /// **'Pause'**
+  String get pauseRecording;
+
+  /// No description provided for @resumeRecording.
+  ///
+  /// In en, this message translates to:
+  /// **'Resume'**
+  String get resumeRecording;
+
+  /// No description provided for @discardRecording.
+  ///
+  /// In en, this message translates to:
+  /// **'Discard'**
+  String get discardRecording;
+
+  /// No description provided for @saveRecording.
+  ///
+  /// In en, this message translates to:
+  /// **'Save'**
+  String get saveRecording;
+
+  /// No description provided for @micNeeded.
+  ///
+  /// In en, this message translates to:
+  /// **'Allow the microphone for Uns in Settings to record a reflection.'**
+  String get micNeeded;
+
+  /// No description provided for @voiceReflection.
+  ///
+  /// In en, this message translates to:
+  /// **'Voice reflection · {length}'**
+  String voiceReflection(String length);
+
+  /// No description provided for @playVoiceNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Play voice reflection'**
+  String get playVoiceNote;
+
+  /// No description provided for @stopVoiceNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Stop'**
+  String get stopVoiceNote;
+
+  /// No description provided for @voiceNoteMissing.
+  ///
+  /// In en, this message translates to:
+  /// **'This voice reflection can\'t be opened on this phone.'**
+  String get voiceNoteMissing;
 }
 
 class _AppLocalizationsDelegate

@@ -14,6 +14,9 @@ import 'package:uns/core/quran/recitation_client.dart';
 import 'package:uns/core/quran/verse_ref.dart';
 import 'package:uns/core/safety/safety_check.dart';
 import 'package:uns/core/storage/app_database.dart';
+import 'package:uns/core/storage/database_key.dart';
+import 'package:uns/core/storage/voice_note_vault.dart';
+import 'package:uns/features/journal/voice_note.dart';
 import 'package:uns/core/storage/settings_store.dart';
 import 'package:uns/features/alerts/alert_providers.dart';
 import 'package:uns/features/alerts/notification_permission.dart';
@@ -279,6 +282,71 @@ class FakeVoiceInput implements VoiceInput {
   Future<void> cancel() async => cancels++;
 }
 
+/// A recorder that "records" fixed bytes; [allowed] is the mic permission.
+class FakeVoiceRecorder implements VoiceRecorder {
+  FakeVoiceRecorder({this.allowed = true});
+  final bool allowed;
+  final _levels = StreamController<double>.broadcast();
+  int discards = 0;
+
+  @override
+  Future<bool> ensurePermission() async => allowed;
+
+  @override
+  Future<void> start() async {}
+
+  @override
+  Future<void> pause() async {}
+
+  @override
+  Future<void> resume() async {}
+
+  @override
+  Future<File?> stop() async => File('/tmp/fake-note.m4a');
+
+  @override
+  Future<void> discard() async => discards++;
+
+  @override
+  Stream<double> get levels => _levels.stream;
+
+  @override
+  Future<void> dispose() async {}
+}
+
+/// Keeps "encrypted" notes in memory, keyed by name.
+class FakeVault extends VoiceNoteVault {
+  FakeVault() : super(_NoKeys(), () async => Directory(''));
+  final notes = <String, Uint8List>{};
+
+  @override
+  Future<String> store(File recording, {required String name}) async {
+    notes[name] = Uint8List.fromList([1, 2, 3]);
+    return name;
+  }
+
+  @override
+  Future<Uint8List> open(String name) async =>
+      notes[name] ?? (throw Exception('missing'));
+}
+
+class _NoKeys implements DatabaseKeyStore {
+  @override
+  Future<String?> read() async => null;
+  @override
+  Future<void> write(String hexKey) async {}
+}
+
+class FakeNotePlayer implements NotePlayer {
+  final played = <Uint8List>[];
+
+  @override
+  Future<void> play(Uint8List audio) async => played.add(audio);
+
+  @override
+  Future<void> stop() async {}
+}
+
 /// A library of real references, for tests only (not a verse selection).
 VerseLibrary testLibrary({bool placeholder = false}) => VerseLibrary(
   version: 't',
@@ -324,6 +392,9 @@ Future<ProviderContainer> pumpApp(
   Dialer? dialer,
   ClassifyClient? classify,
   VoiceInput? voice,
+  VoiceRecorder? recorder,
+  VoiceNoteVault? vault,
+  NotePlayer? notePlayer,
 }) async {
   // Assets load inside each test's fake clock; a load cached by an earlier
   // test would never complete in this one.
@@ -371,6 +442,9 @@ Future<ProviderContainer> pumpApp(
       if (dialer != null) dialerProvider.overrideWithValue(dialer),
       classifyClientProvider.overrideWithValue(classify ?? FakeClassify()),
       voiceInputProvider.overrideWithValue(voice ?? FakeVoiceInput()),
+      voiceRecorderProvider.overrideWithValue(recorder ?? FakeVoiceRecorder()),
+      voiceNoteVaultProvider.overrideWithValue(vault ?? FakeVault()),
+      notePlayerProvider.overrideWithValue(notePlayer ?? FakeNotePlayer()),
     ],
   );
   addTearDown(container.dispose);

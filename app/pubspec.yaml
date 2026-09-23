@@ -9,6 +9,7 @@ environment:
 dependencies:
   adhan: ^2.0.0+1
   audio_session: ^0.2.4
+  cryptography: ^2.9.0
   drift: ^2.35.0
   flutter:
     sdk: flutter
@@ -28,6 +29,7 @@ dependencies:
   path: ^1.9.1
   path_provider: ^2.1.6
   purchases_flutter: ^10.13.1
+  record: ^7.1.1
   speech_to_text: ^7.5.0
   sqlite3: ^3.6.0
   timezone: ^0.11.1

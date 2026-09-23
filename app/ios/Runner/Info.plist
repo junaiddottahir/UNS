@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>NSMicrophoneUsageDescription</key>
-	<string>Uns listens when you choose to say how you feel. Your voice stays on this phone.</string>
+	<string>Uns uses the microphone when you choose to say how you feel or record a reflection. Your voice stays on this phone.</string>
 	<key>NSSpeechRecognitionUsageDescription</key>
 	<string>Uns turns your spoken words into text on this phone, so it can suggest verses. Your voice is never sent anywhere.</string>
 	<!-- Keep recitation playing when the screen locks. -->

@@ -828,6 +828,28 @@ class $SessionsTable extends Sessions with TableInfo<$SessionsTable, Session> {
     type: DriftSqlType.string,
     requiredDuringInsert: false,
   );
+  static const VerificationMeta _voiceNoteMeta = const VerificationMeta(
+    'voiceNote',
+  );
+  @override
+  late final GeneratedColumn<String> voiceNote = GeneratedColumn<String>(
+    'voice_note',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _voiceSecondsMeta = const VerificationMeta(
+    'voiceSeconds',
+  );
+  @override
+  late final GeneratedColumn<int> voiceSeconds = GeneratedColumn<int>(
+    'voice_seconds',
+    aliasedName,
+    true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+  );
   @override
   List<GeneratedColumn> get $columns => [
     id,
@@ -839,6 +861,8 @@ class $SessionsTable extends Sessions with TableInfo<$SessionsTable, Session> {
     moodAfter,
     endedAt,
     reflection,
+    voiceNote,
+    voiceSeconds,
   ];
   @override
   String get aliasedName => _alias ?? actualTableName;
@@ -911,6 +935,21 @@ class $SessionsTable extends Sessions with TableInfo<$SessionsTable, Session> {
         reflection.isAcceptableOrUnknown(data['reflection']!, _reflectionMeta),
       );
     }
+    if (data.containsKey('voice_note')) {
+      context.handle(
+        _voiceNoteMeta,
+        voiceNote.isAcceptableOrUnknown(data['voice_note']!, _voiceNoteMeta),
+      );
+    }
+    if (data.containsKey('voice_seconds')) {
+      context.handle(
+        _voiceSecondsMeta,
+        voiceSeconds.isAcceptableOrUnknown(
+          data['voice_seconds']!,
+          _voiceSecondsMeta,
+        ),
+      );
+    }
     return context;
   }
 
@@ -956,6 +995,14 @@ class $SessionsTable extends Sessions with TableInfo<$SessionsTable, Session> {
         DriftSqlType.string,
         data['${effectivePrefix}reflection'],
       ),
+      voiceNote: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}voice_note'],
+      ),
+      voiceSeconds: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}voice_seconds'],
+      ),
     );
   }
 
@@ -981,6 +1028,11 @@ class Session extends DataClass implements Insertable<Session> {
 
   /// The written reflection, if any (journal). Never processed by AI.
   final String? reflection;
+
+  /// A voice-note reflection: its encrypted file in the vault, and length.
+  /// Never transcribed.
+  final String? voiceNote;
+  final int? voiceSeconds;
   const Session({
     required this.id,
     required this.startedAt,
@@ -991,6 +1043,8 @@ class Session extends DataClass implements Insertable<Session> {
     this.moodAfter,
     this.endedAt,
     this.reflection,
+    this.voiceNote,
+    this.voiceSeconds,
   });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
@@ -1009,6 +1063,12 @@ class Session extends DataClass implements Insertable<Session> {
     }
     if (!nullToAbsent || reflection != null) {
       map['reflection'] = Variable<String>(reflection);
+    }
+    if (!nullToAbsent || voiceNote != null) {
+      map['voice_note'] = Variable<String>(voiceNote);
+    }
+    if (!nullToAbsent || voiceSeconds != null) {
+      map['voice_seconds'] = Variable<int>(voiceSeconds);
     }
     return map;
   }
@@ -1030,6 +1090,12 @@ class Session extends DataClass implements Insertable<Session> {
       reflection: reflection == null && nullToAbsent
           ? const Value.absent()
           : Value(reflection),
+      voiceNote: voiceNote == null && nullToAbsent
+          ? const Value.absent()
+          : Value(voiceNote),
+      voiceSeconds: voiceSeconds == null && nullToAbsent
+          ? const Value.absent()
+          : Value(voiceSeconds),
     );
   }
 
@@ -1048,6 +1114,8 @@ class Session extends DataClass implements Insertable<Session> {
       moodAfter: serializer.fromJson<String?>(json['moodAfter']),
       endedAt: serializer.fromJson<DateTime?>(json['endedAt']),
       reflection: serializer.fromJson<String?>(json['reflection']),
+      voiceNote: serializer.fromJson<String?>(json['voiceNote']),
+      voiceSeconds: serializer.fromJson<int?>(json['voiceSeconds']),
     );
   }
   @override
@@ -1063,6 +1131,8 @@ class Session extends DataClass implements Insertable<Session> {
       'moodAfter': serializer.toJson<String?>(moodAfter),
       'endedAt': serializer.toJson<DateTime?>(endedAt),
       'reflection': serializer.toJson<String?>(reflection),
+      'voiceNote': serializer.toJson<String?>(voiceNote),
+      'voiceSeconds': serializer.toJson<int?>(voiceSeconds),
     };
   }
 
@@ -1076,6 +1146,8 @@ class Session extends DataClass implements Insertable<Session> {
     Value<String?> moodAfter = const Value.absent(),
     Value<DateTime?> endedAt = const Value.absent(),
     Value<String?> reflection = const Value.absent(),
+    Value<String?> voiceNote = const Value.absent(),
+    Value<int?> voiceSeconds = const Value.absent(),
   }) => Session(
     id: id ?? this.id,
     startedAt: startedAt ?? this.startedAt,
@@ -1086,6 +1158,8 @@ class Session extends DataClass implements Insertable<Session> {
     moodAfter: moodAfter.present ? moodAfter.value : this.moodAfter,
     endedAt: endedAt.present ? endedAt.value : this.endedAt,
     reflection: reflection.present ? reflection.value : this.reflection,
+    voiceNote: voiceNote.present ? voiceNote.value : this.voiceNote,
+    voiceSeconds: voiceSeconds.present ? voiceSeconds.value : this.voiceSeconds,
   );
   Session copyWithCompanion(SessionsCompanion data) {
     return Session(
@@ -1100,6 +1174,10 @@ class Session extends DataClass implements Insertable<Session> {
       reflection: data.reflection.present
           ? data.reflection.value
           : this.reflection,
+      voiceNote: data.voiceNote.present ? data.voiceNote.value : this.voiceNote,
+      voiceSeconds: data.voiceSeconds.present
+          ? data.voiceSeconds.value
+          : this.voiceSeconds,
     );
   }
 
@@ -1114,7 +1192,9 @@ class Session extends DataClass implements Insertable<Session> {
           ..write('verses: $verses, ')
           ..write('moodAfter: $moodAfter, ')
           ..write('endedAt: $endedAt, ')
-          ..write('reflection: $reflection')
+          ..write('reflection: $reflection, ')
+          ..write('voiceNote: $voiceNote, ')
+          ..write('voiceSeconds: $voiceSeconds')
           ..write(')'))
         .toString();
   }
@@ -1130,6 +1210,8 @@ class Session extends DataClass implements Insertable<Session> {
     moodAfter,
     endedAt,
     reflection,
+    voiceNote,
+    voiceSeconds,
   );
   @override
   bool operator ==(Object other) =>
@@ -1143,7 +1225,9 @@ class Session extends DataClass implements Insertable<Session> {
           other.verses == this.verses &&
           other.moodAfter == this.moodAfter &&
           other.endedAt == this.endedAt &&
-          other.reflection == this.reflection);
+          other.reflection == this.reflection &&
+          other.voiceNote == this.voiceNote &&
+          other.voiceSeconds == this.voiceSeconds);
 }
 
 class SessionsCompanion extends UpdateCompanion<Session> {
@@ -1156,6 +1240,8 @@ class SessionsCompanion extends UpdateCompanion<Session> {
   final Value<String?> moodAfter;
   final Value<DateTime?> endedAt;
   final Value<String?> reflection;
+  final Value<String?> voiceNote;
+  final Value<int?> voiceSeconds;
   const SessionsCompanion({
     this.id = const Value.absent(),
     this.startedAt = const Value.absent(),
@@ -1166,6 +1252,8 @@ class SessionsCompanion extends UpdateCompanion<Session> {
     this.moodAfter = const Value.absent(),
     this.endedAt = const Value.absent(),
     this.reflection = const Value.absent(),
+    this.voiceNote = const Value.absent(),
+    this.voiceSeconds = const Value.absent(),
   });
   SessionsCompanion.insert({
     this.id = const Value.absent(),
@@ -1177,6 +1265,8 @@ class SessionsCompanion extends UpdateCompanion<Session> {
     this.moodAfter = const Value.absent(),
     this.endedAt = const Value.absent(),
     this.reflection = const Value.absent(),
+    this.voiceNote = const Value.absent(),
+    this.voiceSeconds = const Value.absent(),
   }) : startedAt = Value(startedAt),
        emotion = Value(emotion),
        help = Value(help),
@@ -1191,6 +1281,8 @@ class SessionsCompanion extends UpdateCompanion<Session> {
     Expression<String>? moodAfter,
     Expression<DateTime>? endedAt,
     Expression<String>? reflection,
+    Expression<String>? voiceNote,
+    Expression<int>? voiceSeconds,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
@@ -1202,6 +1294,8 @@ class SessionsCompanion extends UpdateCompanion<Session> {
       if (moodAfter != null) 'mood_after': moodAfter,
       if (endedAt != null) 'ended_at': endedAt,
       if (reflection != null) 'reflection': reflection,
+      if (voiceNote != null) 'voice_note': voiceNote,
+      if (voiceSeconds != null) 'voice_seconds': voiceSeconds,
     });
   }
 
@@ -1215,6 +1309,8 @@ class SessionsCompanion extends UpdateCompanion<Session> {
     Value<String?>? moodAfter,
     Value<DateTime?>? endedAt,
     Value<String?>? reflection,
+    Value<String?>? voiceNote,
+    Value<int?>? voiceSeconds,
   }) {
     return SessionsCompanion(
       id: id ?? this.id,
@@ -1226,6 +1322,8 @@ class SessionsCompanion extends UpdateCompanion<Session> {
       moodAfter: moodAfter ?? this.moodAfter,
       endedAt: endedAt ?? this.endedAt,
       reflection: reflection ?? this.reflection,
+      voiceNote: voiceNote ?? this.voiceNote,
+      voiceSeconds: voiceSeconds ?? this.voiceSeconds,
     );
   }
 
@@ -1259,6 +1357,12 @@ class SessionsCompanion extends UpdateCompanion<Session> {
     if (reflection.present) {
       map['reflection'] = Variable<String>(reflection.value);
     }
+    if (voiceNote.present) {
+      map['voice_note'] = Variable<String>(voiceNote.value);
+    }
+    if (voiceSeconds.present) {
+      map['voice_seconds'] = Variable<int>(voiceSeconds.value);
+    }
     return map;
   }
 
@@ -1273,7 +1377,9 @@ class SessionsCompanion extends UpdateCompanion<Session> {
           ..write('verses: $verses, ')
           ..write('moodAfter: $moodAfter, ')
           ..write('endedAt: $endedAt, ')
-          ..write('reflection: $reflection')
+          ..write('reflection: $reflection, ')
+          ..write('voiceNote: $voiceNote, ')
+          ..write('voiceSeconds: $voiceSeconds')
           ..write(')'))
         .toString();
   }
@@ -1772,6 +1878,8 @@ typedef $$SessionsTableCreateCompanionBuilder = SessionsCompanion Function({
   Value<String?> moodAfter,
   Value<DateTime?> endedAt,
   Value<String?> reflection,
+  Value<String?> voiceNote,
+  Value<int?> voiceSeconds,
 });
 typedef $$SessionsTableUpdateCompanionBuilder = SessionsCompanion Function({
   Value<int> id,
@@ -1783,6 +1891,8 @@ typedef $$SessionsTableUpdateCompanionBuilder = SessionsCompanion Function({
   Value<String?> moodAfter,
   Value<DateTime?> endedAt,
   Value<String?> reflection,
+  Value<String?> voiceNote,
+  Value<int?> voiceSeconds,
 });
 
 class $$SessionsTableFilterComposer
@@ -1836,6 +1946,16 @@ class $$SessionsTableFilterComposer
 
   ColumnFilters<String> get reflection => $composableBuilder(
     column: $table.reflection,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get voiceNote => $composableBuilder(
+    column: $table.voiceNote,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get voiceSeconds => $composableBuilder(
+    column: $table.voiceSeconds,
     builder: (column) => ColumnFilters(column),
   );
 }
@@ -1893,6 +2013,16 @@ class $$SessionsTableOrderingComposer
     column: $table.reflection,
     builder: (column) => ColumnOrderings(column),
   );
+
+  ColumnOrderings<String> get voiceNote => $composableBuilder(
+    column: $table.voiceNote,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get voiceSeconds => $composableBuilder(
+    column: $table.voiceSeconds,
+    builder: (column) => ColumnOrderings(column),
+  );
 }
 
 class $$SessionsTableAnnotationComposer
@@ -1930,6 +2060,14 @@ class $$SessionsTableAnnotationComposer
 
   GeneratedColumn<String> get reflection => $composableBuilder(
     column: $table.reflection,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get voiceNote =>
+      $composableBuilder(column: $table.voiceNote, builder: (column) => column);
+
+  GeneratedColumn<int> get voiceSeconds => $composableBuilder(
+    column: $table.voiceSeconds,
     builder: (column) => column,
   );
 }
@@ -1971,6 +2109,8 @@ class $$SessionsTableTableManager
                 Value<String?> moodAfter = const Value.absent(),
                 Value<DateTime?> endedAt = const Value.absent(),
                 Value<String?> reflection = const Value.absent(),
+                Value<String?> voiceNote = const Value.absent(),
+                Value<int?> voiceSeconds = const Value.absent(),
               }) => SessionsCompanion(
                 id: id,
                 startedAt: startedAt,
@@ -1981,6 +2121,8 @@ class $$SessionsTableTableManager
                 moodAfter: moodAfter,
                 endedAt: endedAt,
                 reflection: reflection,
+                voiceNote: voiceNote,
+                voiceSeconds: voiceSeconds,
               ),
           createCompanionCallback:
               ({
@@ -1993,6 +2135,8 @@ class $$SessionsTableTableManager
                 Value<String?> moodAfter = const Value.absent(),
                 Value<DateTime?> endedAt = const Value.absent(),
                 Value<String?> reflection = const Value.absent(),
+                Value<String?> voiceNote = const Value.absent(),
+                Value<int?> voiceSeconds = const Value.absent(),
               }) => SessionsCompanion.insert(
                 id: id,
                 startedAt: startedAt,
@@ -2003,6 +2147,8 @@ class $$SessionsTableTableManager
                 moodAfter: moodAfter,
                 endedAt: endedAt,
                 reflection: reflection,
+                voiceNote: voiceNote,
+                voiceSeconds: voiceSeconds,
               ),
           withReferenceMapper: (p0) => p0
               .map(

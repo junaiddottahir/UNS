@@ -158,9 +158,11 @@ void main() {
     final v4 = AppDatabase(NativeDatabase(file));
     await v4.customSelect('SELECT 1').get(); // create at the current schema
     await v4.close();
-    // Roll the file back to what unit 9 shipped: no reflection column.
+    // Roll the file back to what unit 9 shipped: no reflection or voice.
     sqlite3.open(file.path)
       ..execute('ALTER TABLE sessions DROP COLUMN reflection;')
+      ..execute('ALTER TABLE sessions DROP COLUMN voice_note;')
+      ..execute('ALTER TABLE sessions DROP COLUMN voice_seconds;')
       ..execute(
         "INSERT INTO sessions (started_at, emotion, help, minutes, verses) "
         "VALUES (0, 'hope', 'comfort', 5, '1:1');",
@@ -173,5 +175,29 @@ void main() {
     final row = await upgraded.select(upgraded.sessions).getSingle();
     expect(row.reflection, isNull);
     expect(row.emotion, 'hope');
+  });
+
+  test('upgrading a version 5 database adds voice notes', () async {
+    final dir = Directory.systemTemp.createTempSync('uns_v5');
+    addTearDown(() => dir.deleteSync(recursive: true));
+    final file = File('${dir.path}/v5.db');
+    final current = AppDatabase(NativeDatabase(file));
+    await current.customSelect('SELECT 1').get();
+    await current.close();
+    sqlite3.open(file.path)
+      ..execute('ALTER TABLE sessions DROP COLUMN voice_note;')
+      ..execute('ALTER TABLE sessions DROP COLUMN voice_seconds;')
+      ..execute(
+        "INSERT INTO sessions (started_at, emotion, help, minutes, reflection) "
+        "VALUES (0, 'hope', 'comfort', 5, 'kept');",
+      )
+      ..execute('PRAGMA user_version = 5;')
+      ..close();
+
+    final upgraded = AppDatabase(NativeDatabase(file));
+    addTearDown(upgraded.close);
+    final row = await upgraded.select(upgraded.sessions).getSingle();
+    expect(row.reflection, 'kept');
+    expect(row.voiceNote, isNull);
   });
 }

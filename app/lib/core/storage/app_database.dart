@@ -60,6 +60,11 @@ class Sessions extends Table {
 
   /// The written reflection, if any (journal). Never processed by AI.
   TextColumn get reflection => text().nullable()();
+
+  /// A voice-note reflection: its encrypted file in the vault, and length.
+  /// Never transcribed.
+  TextColumn get voiceNote => text().nullable()();
+  IntColumn get voiceSeconds => integer().nullable()();
 }
 
 /// The encrypted on-device database. Holds every piece of user data; later
@@ -69,7 +74,7 @@ class AppDatabase extends _$AppDatabase {
   AppDatabase(super.executor);
 
   @override
-  int get schemaVersion => 5;
+  int get schemaVersion => 6;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -78,6 +83,10 @@ class AppDatabase extends _$AppDatabase {
       if (from < 3) await m.createTable(verseTexts);
       if (from < 4) await m.createTable(sessions);
       if (from == 4) await m.addColumn(sessions, sessions.reflection);
+      if (from >= 4 && from < 6) {
+        await m.addColumn(sessions, sessions.voiceNote);
+        await m.addColumn(sessions, sessions.voiceSeconds);
+      }
     },
   );
 

@@ -12,6 +12,7 @@ import '../../l10n/app_localizations.dart';
 import '../prayer/prayer_providers.dart';
 import 'journal_labels.dart';
 import 'journal_providers.dart';
+import 'voice_note.dart';
 
 /// Every finished session, newest first, with the start of any
 /// reflection. Stays on this phone.
@@ -61,11 +62,16 @@ class JournalScreen extends ConsumerWidget {
                         itemBuilder: (context, i) {
                           final e = entries[i];
                           final body = e.reflection;
-                          final preview = body == null
-                              ? l10n.sessionOnly
-                              : body.length > 60
-                              ? '${body.substring(0, 60)}…'
-                              : body;
+                          final voice = e.voiceNote != null;
+                          final preview = body != null
+                              ? (body.length > 60
+                                    ? '${body.substring(0, 60)}…'
+                                    : body)
+                              : voice
+                              ? l10n.voiceReflection(
+                                  clockText(e.voiceSeconds ?? 0),
+                                )
+                              : l10n.sessionOnly;
                           return GlassCard(
                             child: InkWell(
                               onTap: () =>
@@ -103,13 +109,17 @@ class JournalScreen extends ConsumerWidget {
                                     ),
                                     const SizedBox(height: 10),
                                     Opacity(
-                                      opacity: body == null ? 0.55 : 1,
+                                      opacity: body == null && !voice
+                                          ? 0.55
+                                          : 1,
                                       child: Row(
                                         children: [
                                           Icon(
-                                            body == null
-                                                ? Icons.menu_book_outlined
-                                                : Icons.edit_outlined,
+                                            body != null
+                                                ? Icons.edit_outlined
+                                                : voice
+                                                ? Icons.mic_none
+                                                : Icons.menu_book_outlined,
                                             size: 16,
                                             color: AppColors.textMuted,
                                           ),

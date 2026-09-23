@@ -9,8 +9,8 @@ change.
 
 ## Current Goal
 
-- Unit 15: app — voice-note reflections (record, encrypted storage,
-  playback).
+- Unit 16: backend — Supabase schema, JWT verification, settings/tasbih
+  sync endpoints, account deletion.
 
 ## Completed
 
@@ -321,6 +321,26 @@ change.
   - Fixed on the way: toast, journal card header and the write screen's
     footer overflowed with long text (would also hit translations).
   - 168 unit/widget tests; simulator screenshots of journal and entry.
+
+- Unit 15 (2026-09-24): voice-note reflections.
+  - After a session: Record → "Today's prompt", big timer, wave, "Only on
+    this phone", discard / record-pause / save (prototype). Max 5 min.
+  - `record` (AAC). On save the recording is encrypted with AES-256-GCM
+    (`cryptography`) under its own 256-bit Keychain key
+    (`uns.voice.key`, this device only), written atomically to
+    `<app support>/voice_notes/`, and the plain file is deleted.
+  - Playback decrypts into memory only (just_audio StreamAudioSource),
+    never to disk; format sniffed so iOS accepts it. A note that can't
+    be decrypted (key lost) says so.
+  - Journal: "Voice reflection · 0:48" with a mic icon; entry has a play
+    button. Voice notes are never transcribed or checked (architecture).
+  - Schema v6 (`voice_note`, `voice_seconds`) with v4/v5 upgrades tested.
+  - iOS mic usage text covers recording; Android `RECORD_AUDIO`.
+  - Fixed on the way: awaiting a stream-cancel stalled Discard in tests
+    (no need to wait), iOS refused in-memory audio with the wrong type.
+  - 180 unit/widget tests; iOS integration test: real Keychain key,
+    encrypted file on disk, exact decrypt, playback from memory.
+    Recording itself needs a device (mic permission).
 
 ## In Progress
 
