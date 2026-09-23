@@ -1041,6 +1041,120 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{count} of {target}, tap to count'**
   String tasbihCount(int count, int target);
+
+  /// No description provided for @sampleFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t play the sample. Check your connection and try again.'**
+  String get sampleFailed;
+
+  /// No description provided for @ourSources.
+  ///
+  /// In en, this message translates to:
+  /// **'Our sources'**
+  String get ourSources;
+
+  /// No description provided for @sourcesIntro.
+  ///
+  /// In en, this message translates to:
+  /// **'Every verse comes from these sources, unchanged. We never generate or explain the Quran with AI.'**
+  String get sourcesIntro;
+
+  /// No description provided for @sourceArabic.
+  ///
+  /// In en, this message translates to:
+  /// **'Arabic'**
+  String get sourceArabic;
+
+  /// No description provided for @sourceArabicValue.
+  ///
+  /// In en, this message translates to:
+  /// **'Uthmani · Hafs'**
+  String get sourceArabicValue;
+
+  /// No description provided for @sourceTranslation.
+  ///
+  /// In en, this message translates to:
+  /// **'Translation'**
+  String get sourceTranslation;
+
+  /// No description provided for @sourceTranslationValue.
+  ///
+  /// In en, this message translates to:
+  /// **'Sahih International'**
+  String get sourceTranslationValue;
+
+  /// No description provided for @sourceRecitation.
+  ///
+  /// In en, this message translates to:
+  /// **'Recitation'**
+  String get sourceRecitation;
+
+  /// No description provided for @sourceRecitationValue.
+  ///
+  /// In en, this message translates to:
+  /// **'UmmahAPI'**
+  String get sourceRecitationValue;
+
+  /// No description provided for @sourceText.
+  ///
+  /// In en, this message translates to:
+  /// **'Text'**
+  String get sourceText;
+
+  /// No description provided for @sourceTextValue.
+  ///
+  /// In en, this message translates to:
+  /// **'fawazahmed0 Quran API'**
+  String get sourceTextValue;
+
+  /// No description provided for @sourceReciter.
+  ///
+  /// In en, this message translates to:
+  /// **'Reciter'**
+  String get sourceReciter;
+
+  /// No description provided for @verseSelection.
+  ///
+  /// In en, this message translates to:
+  /// **'Verse selection'**
+  String get verseSelection;
+
+  /// No description provided for @verseSelectionBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Every verse is reviewed and approved by a qualified scholar.'**
+  String get verseSelectionBody;
+
+  /// No description provided for @otherData.
+  ///
+  /// In en, this message translates to:
+  /// **'Other data'**
+  String get otherData;
+
+  /// No description provided for @sourceCities.
+  ///
+  /// In en, this message translates to:
+  /// **'Cities'**
+  String get sourceCities;
+
+  /// No description provided for @sourceCitiesValue.
+  ///
+  /// In en, this message translates to:
+  /// **'GeoNames · CC BY 4.0'**
+  String get sourceCitiesValue;
+
+  /// No description provided for @sourceCompass.
+  ///
+  /// In en, this message translates to:
+  /// **'Compass'**
+  String get sourceCompass;
+
+  /// No description provided for @sourceCompassValue.
+  ///
+  /// In en, this message translates to:
+  /// **'NOAA · WMM-2025'**
+  String get sourceCompassValue;
 }
 
 class _AppLocalizationsDelegate

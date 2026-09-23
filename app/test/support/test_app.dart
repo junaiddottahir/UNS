@@ -1,9 +1,15 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:drift/native.dart';
+import 'package:http/http.dart' show BaseClient, BaseRequest, StreamedResponse;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:uns/core/quran/quran_providers.dart';
+import 'package:uns/core/quran/quran_repository.dart';
+import 'package:uns/core/quran/recitation_client.dart';
+import 'package:uns/core/quran/verse_ref.dart';
 import 'package:uns/core/storage/app_database.dart';
 import 'package:uns/core/storage/settings_store.dart';
 import 'package:uns/features/alerts/alert_providers.dart';
@@ -15,6 +21,7 @@ import 'package:uns/features/location/location_providers.dart';
 import 'package:uns/features/prayer/prayer_providers.dart';
 import 'package:uns/features/qibla/compass_source.dart';
 import 'package:uns/features/qibla/qibla_providers.dart';
+import 'package:uns/features/reciter/reciter_sample.dart';
 import 'package:uns/main.dart';
 
 const sydney = City(
@@ -109,6 +116,49 @@ class FakeCompass implements CompassSource {
       locationRequests++;
 }
 
+/// Records what it was asked to play; playback "ends" when [finish] runs.
+class FakeSamplePlayer implements SamplePlayer {
+  final played = <String>[];
+  int stops = 0;
+  Completer<void>? _playing;
+
+  @override
+  Future<void> play(File file) {
+    played.add(file.path);
+    return (_playing = Completer<void>()).future;
+  }
+
+  void finish() => _playing?.complete();
+
+  @override
+  Future<void> stop() async {
+    stops++;
+    if (!(_playing?.isCompleted ?? true)) _playing!.complete();
+  }
+
+  @override
+  Future<void> dispose() async {}
+}
+
+/// Hands back a fake file per reciter, or fails when [offline].
+class FakeRecitations extends RecitationRepository {
+  FakeRecitations({this.offline = false})
+    : super(RecitationClient(_NoHttp()), _NoHttp(), () async => Directory(''));
+  final bool offline;
+
+  @override
+  Future<File> audio(ReciterSource reciter, VerseRef ref) async {
+    if (offline) throw Exception('offline');
+    return File('/audio/${reciter.id}/${ref.paddedKey}.mp3');
+  }
+}
+
+class _NoHttp extends BaseClient {
+  @override
+  Future<StreamedResponse> send(BaseRequest request) =>
+      throw UnsupportedError('no network in tests');
+}
+
 /// A settings store on an in-memory database.
 Future<SettingsStore> memoryStore() async {
   final db = AppDatabase(NativeDatabase.memory());
@@ -127,6 +177,8 @@ Future<ProviderContainer> pumpApp(
   AlertScheduler? scheduler,
   CompassSource? compass,
   AppDatabase? database,
+  SamplePlayer? player,
+  RecitationRepository? recitations,
 }) async {
   // Reduced motion, so the pulsing mood button lets frames settle.
   tester.platformDispatcher.accessibilityFeaturesTestValue =
@@ -157,6 +209,10 @@ Future<ProviderContainer> pumpApp(
         scheduler ?? FakeAlertScheduler(),
       ),
       compassSourceProvider.overrideWithValue(compass ?? FakeCompass()),
+      samplePlayerProvider.overrideWithValue(player ?? FakeSamplePlayer()),
+      recitationRepositoryProvider.overrideWithValue(
+        recitations ?? FakeRecitations(),
+      ),
     ],
   );
   addTearDown(container.dispose);

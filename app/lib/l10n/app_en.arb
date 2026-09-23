@@ -345,5 +345,24 @@
         "type": "int"
       }
     }
-  }
+  },
+  "sampleFailed": "Couldn't play the sample. Check your connection and try again.",
+  "ourSources": "Our sources",
+  "sourcesIntro": "Every verse comes from these sources, unchanged. We never generate or explain the Quran with AI.",
+  "sourceArabic": "Arabic",
+  "sourceArabicValue": "Uthmani · Hafs",
+  "sourceTranslation": "Translation",
+  "sourceTranslationValue": "Sahih International",
+  "sourceRecitation": "Recitation",
+  "sourceRecitationValue": "UmmahAPI",
+  "sourceText": "Text",
+  "sourceTextValue": "fawazahmed0 Quran API",
+  "sourceReciter": "Reciter",
+  "verseSelection": "Verse selection",
+  "verseSelectionBody": "Every verse is reviewed and approved by a qualified scholar.",
+  "otherData": "Other data",
+  "sourceCities": "Cities",
+  "sourceCitiesValue": "GeoNames · CC BY 4.0",
+  "sourceCompass": "Compass",
+  "sourceCompassValue": "NOAA · WMM-2025"
 }

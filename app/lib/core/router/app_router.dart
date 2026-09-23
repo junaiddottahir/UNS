@@ -17,8 +17,10 @@ import '../../features/prayer/method_screen.dart';
 import '../../features/prayer/prayer_schedule.dart';
 import '../../features/prayer/prayer_settings_screen.dart';
 import '../../features/prayer/prayer_times_screen.dart';
+import '../../features/profile/profile_screen.dart';
 import '../../features/qibla/calibration_screen.dart';
 import '../../features/qibla/qibla_screen.dart';
+import '../../features/sources/sources_screen.dart';
 import '../../features/tasbih/counter_screen.dart';
 import '../../features/tasbih/history_screen.dart';
 import '../../features/tasbih/tasbih_screen.dart';
@@ -67,15 +69,11 @@ final appRouterProvider = Provider<GoRouter>((ref) {
                 ComingSoonScreen(title: AppLocalizations.of(context).tabShama),
           ),
           _branch(Routes.tasbih, (_) => const TasbihScreen()),
-          _branch(
-            Routes.profile,
-            (context) => ComingSoonScreen(
-              title: AppLocalizations.of(context).tabProfile,
-            ),
-          ),
+          _branch(Routes.profile, (_) => const ProfileScreen()),
         ],
       ),
       GoRoute(path: Routes.qibla, builder: (_, _) => const QiblaScreen()),
+      GoRoute(path: Routes.sources, builder: (_, _) => const SourcesScreen()),
       GoRoute(
         path: Routes.tasbihCounter,
         builder: (_, _) => const CounterScreen(),

@@ -10,4 +10,19 @@ abstract final class AppConfig {
 
   /// Shown on the support resources screen. Per-country numbers come later.
   static const helplineNumber = '000';
+
+  /// Quran text (fawazahmed0 Quran API) and the editions shown. Pending the
+  /// scholar's confirmation of the editions (see progress-tracker.md).
+  static const quranTextBaseUrl =
+      'https://cdn.jsdelivr.net/gh/fawazahmed0/quran-api@1';
+  static const arabicEdition = 'ara-quranuthmanihaf'; // Uthmani, Hafs
+  static const translationEdition = 'eng-ummmuhammad'; // Saheeh International
+
+  /// Per-ayah recitation links (UmmahAPI → EveryAyah MP3s).
+  static const recitationBaseUrl = 'https://ummahapi.com/api/quran';
+
+  /// Verse played as a reciter sample in onboarding. Pending the scholar's
+  /// confirmation.
+  static const reciterSampleSurah = 1;
+  static const reciterSampleAyah = 1;
 }

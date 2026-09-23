@@ -29,19 +29,32 @@ class TasbihDays extends Table {
   Set<Column> get primaryKey => {day};
 }
 
+/// Verse text exactly as fetched from the Quran API, per edition, so
+/// sessions work offline.
+class VerseTexts extends Table {
+  TextColumn get edition => text()();
+  IntColumn get surah => integer()();
+  IntColumn get ayah => integer()();
+  TextColumn get body => text()();
+
+  @override
+  Set<Column> get primaryKey => {edition, surah, ayah};
+}
+
 /// The encrypted on-device database. Holds every piece of user data; later
 /// units add journal and session tables.
-@DriftDatabase(tables: [Settings, TasbihDays])
+@DriftDatabase(tables: [Settings, TasbihDays, VerseTexts])
 class AppDatabase extends _$AppDatabase {
   AppDatabase(super.executor);
 
   @override
-  int get schemaVersion => 2;
+  int get schemaVersion => 3;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
     onUpgrade: (m, from, to) async {
       if (from < 2) await m.createTable(tasbihDays);
+      if (from < 3) await m.createTable(verseTexts);
     },
   );
 

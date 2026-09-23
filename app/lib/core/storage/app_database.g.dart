@@ -416,16 +416,326 @@ class TasbihDaysCompanion extends UpdateCompanion<TasbihDay> {
   }
 }
 
+class $VerseTextsTable extends VerseTexts
+    with TableInfo<$VerseTextsTable, VerseText> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $VerseTextsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _editionMeta = const VerificationMeta(
+    'edition',
+  );
+  @override
+  late final GeneratedColumn<String> edition = GeneratedColumn<String>(
+    'edition',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _surahMeta = const VerificationMeta('surah');
+  @override
+  late final GeneratedColumn<int> surah = GeneratedColumn<int>(
+    'surah',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _ayahMeta = const VerificationMeta('ayah');
+  @override
+  late final GeneratedColumn<int> ayah = GeneratedColumn<int>(
+    'ayah',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _bodyMeta = const VerificationMeta('body');
+  @override
+  late final GeneratedColumn<String> body = GeneratedColumn<String>(
+    'body',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [edition, surah, ayah, body];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'verse_texts';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<VerseText> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('edition')) {
+      context.handle(
+        _editionMeta,
+        edition.isAcceptableOrUnknown(data['edition']!, _editionMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_editionMeta);
+    }
+    if (data.containsKey('surah')) {
+      context.handle(
+        _surahMeta,
+        surah.isAcceptableOrUnknown(data['surah']!, _surahMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_surahMeta);
+    }
+    if (data.containsKey('ayah')) {
+      context.handle(
+        _ayahMeta,
+        ayah.isAcceptableOrUnknown(data['ayah']!, _ayahMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_ayahMeta);
+    }
+    if (data.containsKey('body')) {
+      context.handle(
+        _bodyMeta,
+        body.isAcceptableOrUnknown(data['body']!, _bodyMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_bodyMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {edition, surah, ayah};
+  @override
+  VerseText map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return VerseText(
+      edition: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}edition'],
+      )!,
+      surah: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}surah'],
+      )!,
+      ayah: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}ayah'],
+      )!,
+      body: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}body'],
+      )!,
+    );
+  }
+
+  @override
+  $VerseTextsTable createAlias(String alias) {
+    return $VerseTextsTable(attachedDatabase, alias);
+  }
+}
+
+class VerseText extends DataClass implements Insertable<VerseText> {
+  final String edition;
+  final int surah;
+  final int ayah;
+  final String body;
+  const VerseText({
+    required this.edition,
+    required this.surah,
+    required this.ayah,
+    required this.body,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['edition'] = Variable<String>(edition);
+    map['surah'] = Variable<int>(surah);
+    map['ayah'] = Variable<int>(ayah);
+    map['body'] = Variable<String>(body);
+    return map;
+  }
+
+  VerseTextsCompanion toCompanion(bool nullToAbsent) {
+    return VerseTextsCompanion(
+      edition: Value(edition),
+      surah: Value(surah),
+      ayah: Value(ayah),
+      body: Value(body),
+    );
+  }
+
+  factory VerseText.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return VerseText(
+      edition: serializer.fromJson<String>(json['edition']),
+      surah: serializer.fromJson<int>(json['surah']),
+      ayah: serializer.fromJson<int>(json['ayah']),
+      body: serializer.fromJson<String>(json['body']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'edition': serializer.toJson<String>(edition),
+      'surah': serializer.toJson<int>(surah),
+      'ayah': serializer.toJson<int>(ayah),
+      'body': serializer.toJson<String>(body),
+    };
+  }
+
+  VerseText copyWith({String? edition, int? surah, int? ayah, String? body}) =>
+      VerseText(
+        edition: edition ?? this.edition,
+        surah: surah ?? this.surah,
+        ayah: ayah ?? this.ayah,
+        body: body ?? this.body,
+      );
+  VerseText copyWithCompanion(VerseTextsCompanion data) {
+    return VerseText(
+      edition: data.edition.present ? data.edition.value : this.edition,
+      surah: data.surah.present ? data.surah.value : this.surah,
+      ayah: data.ayah.present ? data.ayah.value : this.ayah,
+      body: data.body.present ? data.body.value : this.body,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('VerseText(')
+          ..write('edition: $edition, ')
+          ..write('surah: $surah, ')
+          ..write('ayah: $ayah, ')
+          ..write('body: $body')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(edition, surah, ayah, body);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is VerseText &&
+          other.edition == this.edition &&
+          other.surah == this.surah &&
+          other.ayah == this.ayah &&
+          other.body == this.body);
+}
+
+class VerseTextsCompanion extends UpdateCompanion<VerseText> {
+  final Value<String> edition;
+  final Value<int> surah;
+  final Value<int> ayah;
+  final Value<String> body;
+  final Value<int> rowid;
+  const VerseTextsCompanion({
+    this.edition = const Value.absent(),
+    this.surah = const Value.absent(),
+    this.ayah = const Value.absent(),
+    this.body = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  VerseTextsCompanion.insert({
+    required String edition,
+    required int surah,
+    required int ayah,
+    required String body,
+    this.rowid = const Value.absent(),
+  }) : edition = Value(edition),
+       surah = Value(surah),
+       ayah = Value(ayah),
+       body = Value(body);
+  static Insertable<VerseText> custom({
+    Expression<String>? edition,
+    Expression<int>? surah,
+    Expression<int>? ayah,
+    Expression<String>? body,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (edition != null) 'edition': edition,
+      if (surah != null) 'surah': surah,
+      if (ayah != null) 'ayah': ayah,
+      if (body != null) 'body': body,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  VerseTextsCompanion copyWith({
+    Value<String>? edition,
+    Value<int>? surah,
+    Value<int>? ayah,
+    Value<String>? body,
+    Value<int>? rowid,
+  }) {
+    return VerseTextsCompanion(
+      edition: edition ?? this.edition,
+      surah: surah ?? this.surah,
+      ayah: ayah ?? this.ayah,
+      body: body ?? this.body,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (edition.present) {
+      map['edition'] = Variable<String>(edition.value);
+    }
+    if (surah.present) {
+      map['surah'] = Variable<int>(surah.value);
+    }
+    if (ayah.present) {
+      map['ayah'] = Variable<int>(ayah.value);
+    }
+    if (body.present) {
+      map['body'] = Variable<String>(body.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('VerseTextsCompanion(')
+          ..write('edition: $edition, ')
+          ..write('surah: $surah, ')
+          ..write('ayah: $ayah, ')
+          ..write('body: $body, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
   $AppDatabaseManager get managers => $AppDatabaseManager(this);
   late final $SettingsTable settings = $SettingsTable(this);
   late final $TasbihDaysTable tasbihDays = $TasbihDaysTable(this);
+  late final $VerseTextsTable verseTexts = $VerseTextsTable(this);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
   @override
-  List<DatabaseSchemaEntity> get allSchemaEntities => [settings, tasbihDays];
+  List<DatabaseSchemaEntity> get allSchemaEntities => [
+    settings,
+    tasbihDays,
+    verseTexts,
+  ];
 }
 
 typedef $$SettingsTableCreateCompanionBuilder = SettingsCompanion Function({
@@ -704,6 +1014,191 @@ typedef $$TasbihDaysTableProcessedTableManager =
       TasbihDay,
       PrefetchHooks Function()
     >;
+typedef $$VerseTextsTableCreateCompanionBuilder = VerseTextsCompanion Function({
+  required String edition,
+  required int surah,
+  required int ayah,
+  required String body,
+  Value<int> rowid,
+});
+typedef $$VerseTextsTableUpdateCompanionBuilder = VerseTextsCompanion Function({
+  Value<String> edition,
+  Value<int> surah,
+  Value<int> ayah,
+  Value<String> body,
+  Value<int> rowid,
+});
+
+class $$VerseTextsTableFilterComposer
+    extends Composer<_$AppDatabase, $VerseTextsTable> {
+  $$VerseTextsTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get edition => $composableBuilder(
+    column: $table.edition,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get surah => $composableBuilder(
+    column: $table.surah,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get ayah => $composableBuilder(
+    column: $table.ayah,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get body => $composableBuilder(
+    column: $table.body,
+    builder: (column) => ColumnFilters(column),
+  );
+}
+
+class $$VerseTextsTableOrderingComposer
+    extends Composer<_$AppDatabase, $VerseTextsTable> {
+  $$VerseTextsTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get edition => $composableBuilder(
+    column: $table.edition,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get surah => $composableBuilder(
+    column: $table.surah,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get ayah => $composableBuilder(
+    column: $table.ayah,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get body => $composableBuilder(
+    column: $table.body,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$VerseTextsTableAnnotationComposer
+    extends Composer<_$AppDatabase, $VerseTextsTable> {
+  $$VerseTextsTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get edition =>
+      $composableBuilder(column: $table.edition, builder: (column) => column);
+
+  GeneratedColumn<int> get surah =>
+      $composableBuilder(column: $table.surah, builder: (column) => column);
+
+  GeneratedColumn<int> get ayah =>
+      $composableBuilder(column: $table.ayah, builder: (column) => column);
+
+  GeneratedColumn<String> get body =>
+      $composableBuilder(column: $table.body, builder: (column) => column);
+}
+
+class $$VerseTextsTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $VerseTextsTable,
+          VerseText,
+          $$VerseTextsTableFilterComposer,
+          $$VerseTextsTableOrderingComposer,
+          $$VerseTextsTableAnnotationComposer,
+          $$VerseTextsTableCreateCompanionBuilder,
+          $$VerseTextsTableUpdateCompanionBuilder,
+          (
+            VerseText,
+            BaseReferences<_$AppDatabase, $VerseTextsTable, VerseText>,
+          ),
+          VerseText,
+          PrefetchHooks Function()
+        > {
+  $$VerseTextsTableTableManager(_$AppDatabase db, $VerseTextsTable table)
+    : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$VerseTextsTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$VerseTextsTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$VerseTextsTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<String> edition = const Value.absent(),
+                Value<int> surah = const Value.absent(),
+                Value<int> ayah = const Value.absent(),
+                Value<String> body = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => VerseTextsCompanion(
+                edition: edition,
+                surah: surah,
+                ayah: ayah,
+                body: body,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String edition,
+                required int surah,
+                required int ayah,
+                required String body,
+                Value<int> rowid = const Value.absent(),
+              }) => VerseTextsCompanion.insert(
+                edition: edition,
+                surah: surah,
+                ayah: ayah,
+                body: body,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) => (
+                  e.readTable<$VerseTextsTable, VerseText>(table),
+                  BaseReferences<_$AppDatabase, $VerseTextsTable, VerseText>(
+                    db,
+                    table,
+                    e,
+                  ),
+                ),
+              )
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$VerseTextsTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $VerseTextsTable,
+      VerseText,
+      $$VerseTextsTableFilterComposer,
+      $$VerseTextsTableOrderingComposer,
+      $$VerseTextsTableAnnotationComposer,
+      $$VerseTextsTableCreateCompanionBuilder,
+      $$VerseTextsTableUpdateCompanionBuilder,
+      (VerseText, BaseReferences<_$AppDatabase, $VerseTextsTable, VerseText>),
+      VerseText,
+      PrefetchHooks Function()
+    >;
 
 class $AppDatabaseManager {
   final _$AppDatabase _db;
@@ -712,4 +1207,6 @@ class $AppDatabaseManager {
       $$SettingsTableTableManager(_db, _db.settings);
   $$TasbihDaysTableTableManager get tasbihDays =>
       $$TasbihDaysTableTableManager(_db, _db.tasbihDays);
+  $$VerseTextsTableTableManager get verseTexts =>
+      $$VerseTextsTableTableManager(_db, _db.verseTexts);
 }

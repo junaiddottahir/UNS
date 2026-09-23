@@ -538,4 +538,64 @@ class AppLocalizationsEn extends AppLocalizations {
   String tasbihCount(int count, int target) {
     return '$count of $target, tap to count';
   }
+
+  @override
+  String get sampleFailed =>
+      'Couldn\'t play the sample. Check your connection and try again.';
+
+  @override
+  String get ourSources => 'Our sources';
+
+  @override
+  String get sourcesIntro =>
+      'Every verse comes from these sources, unchanged. We never generate or explain the Quran with AI.';
+
+  @override
+  String get sourceArabic => 'Arabic';
+
+  @override
+  String get sourceArabicValue => 'Uthmani · Hafs';
+
+  @override
+  String get sourceTranslation => 'Translation';
+
+  @override
+  String get sourceTranslationValue => 'Sahih International';
+
+  @override
+  String get sourceRecitation => 'Recitation';
+
+  @override
+  String get sourceRecitationValue => 'UmmahAPI';
+
+  @override
+  String get sourceText => 'Text';
+
+  @override
+  String get sourceTextValue => 'fawazahmed0 Quran API';
+
+  @override
+  String get sourceReciter => 'Reciter';
+
+  @override
+  String get verseSelection => 'Verse selection';
+
+  @override
+  String get verseSelectionBody =>
+      'Every verse is reviewed and approved by a qualified scholar.';
+
+  @override
+  String get otherData => 'Other data';
+
+  @override
+  String get sourceCities => 'Cities';
+
+  @override
+  String get sourceCitiesValue => 'GeoNames · CC BY 4.0';
+
+  @override
+  String get sourceCompass => 'Compass';
+
+  @override
+  String get sourceCompassValue => 'NOAA · WMM-2025';
 }

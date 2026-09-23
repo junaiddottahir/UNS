@@ -9,8 +9,7 @@ change.
 
 ## Current Goal
 
-- Unit 8: app — Quran text + audio clients with on-device cache;
-  "Our sources".
+- Unit 9: app — Shama session via emotion chips (on-device) + playback.
 
 ## Completed
 
@@ -174,6 +173,27 @@ change.
     `If-None-Match` → 304. Errors use `{"error": {"code", "message"}}`.
   - 14 pytest tests; ruff clean; checked against a running server.
 
+- Unit 8 (2026-09-23): Quran text + audio clients, cache, Our sources.
+  - Text: fawazahmed0 Quran API, editions `ara-quranuthmanihaf`
+    (Uthmani Hafs, King Fahd Complex v13) and `eng-ummmuhammad`
+    (Saheeh International, via Tanzil). Responses are checked (right
+    verse, non-empty) and stored byte-for-byte in the encrypted database
+    (`verse_texts`, schema v3); later reads work offline.
+  - Audio: UmmahAPI `/api/quran/audio/{s}/{a}` → EveryAyah per-ayah
+    MP3s. Reciters: Alafasy = 1, Al-Sudais = 2, Abdul Basit (Murattal) =
+    3, each checked by name in case UmmahAPI renumbers; https only;
+    written to `<app support>/recitations/<id>/<sssaaa>.mp3` via a temp
+    file so partial downloads never count.
+  - Step 4 now plays a sample (just_audio) on tap; tap again stops;
+    offline shows a message and still selects.
+  - "Our sources" (prototype) + reciter, GeoNames and WMM credits;
+    reached from a minimal Profile tab (Prayer settings, Our sources).
+  - Fixed on the way: leaving step 4 read a provider during disposal
+    (throws in debug).
+  - 100 unit/widget tests; iOS integration test against the real APIs:
+    text fetched and served offline from the encrypted cache; all three
+    reciters' samples download and load.
+
 ## In Progress
 
 - None yet.
@@ -282,6 +302,13 @@ Each line is one unit; app and backend units are kept separate.
 - Self-harm phrase list: who writes and reviews the English and Arabic
   phrases.
 - Scholar still to confirm the Arabic and English editions (from scope).
+  In use: `ara-quranuthmanihaf` and `eng-ummmuhammad` (AppConfig).
+- Reciter sample verse is 1:1 (AppConfig), my placeholder choice; the
+  scholar should confirm or pick another.
+- The Uthmani text needs a font that renders it properly (the API notes
+  the Quran Complex Uthmanic Hafs font); see "Arabic Quran font choice".
+- "Our sources" says every verse is scholar-approved; true once the real
+  library replaces the placeholder (sessions can't run before then).
 
 ## Architecture Decisions
 

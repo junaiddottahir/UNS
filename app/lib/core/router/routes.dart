@@ -14,6 +14,7 @@ abstract final class Routes {
   static const tasbihCounter = '/tasbih/count';
   static const tasbihHistory = '/tasbih/history';
   static const plans = '/plans';
+  static const sources = '/sources';
   static const qiblaCalibrate = '/qibla/calibrate';
   static const prayerTimes = '/prayer/times';
   static const prayerSettings = '/prayer/settings';
