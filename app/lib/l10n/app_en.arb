@@ -1,0 +1,55 @@
+{
+  "@@locale": "en",
+  "appTitle": "Uns",
+  "welcomeGreeting": "Assalamu alaykum",
+  "welcomeHeadline": "Quiet the mind, remember Allah and live with presence.",
+  "welcomeBegin": "Begin",
+  "introSkip": "Skip",
+  "introNext": "Next",
+  "intro1Title": "Pray on time, anywhere",
+  "intro1Body": "Accurate times, adhan and qibla.",
+  "intro2Title": "Verses for how you feel",
+  "intro2Body": "Chosen and reviewed by a scholar.",
+  "intro3Title": "Private and always yours",
+  "intro3Body": "Stays on your phone. No ads, ever.",
+  "stepOf": "{step} of {total}",
+  "@stepOf": {
+    "placeholders": {
+      "step": { "type": "int" },
+      "total": { "type": "int" }
+    }
+  },
+  "back": "Back",
+  "continueLabel": "Continue",
+  "locationTitle": "Where are you?",
+  "locationBody": "To calculate prayer times and qibla on your phone.",
+  "locationUseMine": "Use my location",
+  "locationFinding": "Finding you…",
+  "locationChooseCity": "Choose a city",
+  "locationDenied": "Location access is off. You can choose your city instead.",
+  "locationDeniedForever": "Location access is turned off for Uns. Turn it on in Settings, or choose your city.",
+  "locationServiceOff": "Location services are off on this phone. Turn them on, or choose your city.",
+  "locationFailed": "We couldn't find your location. Try again, or choose your city.",
+  "locationOpenSettings": "Open Settings",
+  "citySearchTitle": "Choose a city",
+  "citySearchHint": "Search for your city",
+  "citySearchEmpty": "No cities match \"{query}\".",
+  "@citySearchEmpty": {
+    "placeholders": {
+      "query": { "type": "String" }
+    }
+  },
+  "prayerStepTitle": "Your prayer times",
+  "prayerStepBody": "{place}, today. Updates as you choose.",
+  "@prayerStepBody": {
+    "placeholders": {
+      "place": { "type": "String" }
+    }
+  },
+  "notificationsStepTitle": "Never miss a prayer",
+  "notificationsStepBody": "Choose which prayers alert you, and how.",
+  "reciterStepTitle": "How you'll hear the Quran",
+  "reciterStepBody": "Tap a reciter to hear a sample.",
+  "finish": "Finish",
+  "homeGreeting": "Assalamu alaykum"
+}

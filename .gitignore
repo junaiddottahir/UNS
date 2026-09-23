@@ -1,0 +1,17 @@
+# OS / editors
+.DS_Store
+.idea/
+.vscode/
+
+# Prototype bundle: embeds font files we can't redistribute
+/Uns Prototype.html
+
+# Python
+__pycache__/
+.venv/
+
+# Licensed font files: never commit while the repo is public
+*.otf
+*.ttf
+*.woff
+*.woff2
