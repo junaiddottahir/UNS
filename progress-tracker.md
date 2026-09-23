@@ -9,7 +9,7 @@ change.
 
 ## Current Goal
 
-- Unit 5: qibla compass + calibration prompt.
+- Unit 6: tasbih counter + daily history.
 
 ## Completed
 
@@ -121,6 +121,24 @@ change.
     registered with iOS on launch (24–28 for Fajr+reminder and
     Maghrib+check-in over 7 days), and a scheduled alert fires on time.
 
+- Unit 5 (2026-09-23): qibla compass.
+  - Bearing from `adhan` (great circle to the Kaaba), on the phone from
+    the saved location; matches an independent great-circle formula to
+    0.01° for six cities (Sydney 277.5°, London 119°).
+  - Live dial (prototype): turns with the world, Kaaba at the qibla
+    bearing, N at north; status "You're facing the qibla" (±5°), "Turn
+    slightly left/right" (≤30°), "Turn left/right".
+  - Heading via `flutter_compass`. iOS reports true north (needs
+    location access; the screen asks, or links to Settings). Android
+    reports magnetic north, corrected with the World Magnetic Model
+    (`geomag`, WMM-2025, offline) at the user's position.
+  - Calibration: Calibrate pill → "Move your phone in a figure-8" with
+    live accuracy; low accuracy also shows a hint on the qibla screen.
+  - No compass (e.g. simulator, or no reading within 3 s): shows "Face
+    278° from north" with the dial as a still map.
+  - 76 unit/widget tests; simulator screenshots checked (real device
+    compass untested: the simulator has none).
+
 ## In Progress
 
 - None yet.
@@ -214,6 +232,11 @@ Each line is one unit; app and backend units are kept separate.
   Asr?", body "4:21 AM · Sydney", "Notifications are off for Uns…".
 - Recent locations in the location picker (prototype): storage exists now;
   add when polishing Profile/settings, or as a small follow-up.
+- Qibla copy to review: "Turn slightly left/right", "Compass accuracy is
+  low…", "The compass isn't available on this phone. Face {n}° from
+  north.", "Allow location access so the compass can find true north."
+- Qibla should be tried on a real iPhone and Android phone (heading,
+  calibration, true-north correction) before release.
 - Self-harm phrase list: who writes and reviews the English and Arabic
   phrases.
 - Scholar still to confirm the Arabic and English editions (from scope).

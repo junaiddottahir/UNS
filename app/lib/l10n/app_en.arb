@@ -259,5 +259,56 @@
     }
   },
   "notificationsOff": "Notifications are off for Uns, so alerts won't appear.",
-  "turnOnNotifications": "Turn on notifications"
+  "turnOnNotifications": "Turn on notifications",
+  "qiblaDirection": "Qibla direction",
+  "compassN": "N",
+  "compassNE": "NE",
+  "compassE": "E",
+  "compassSE": "SE",
+  "compassS": "S",
+  "compassSW": "SW",
+  "compassW": "W",
+  "compassNW": "NW",
+  "degrees": "{value}°",
+  "@degrees": {
+    "placeholders": {
+      "value": {
+        "type": "int"
+      }
+    }
+  },
+  "facingQibla": "You're facing the qibla",
+  "turnSlightlyLeft": "Turn slightly left",
+  "turnSlightlyRight": "Turn slightly right",
+  "turnLeft": "Turn left",
+  "turnRight": "Turn right",
+  "calibrate": "Calibrate",
+  "calibrateTitle": "Move your phone in a figure-8",
+  "calibrateBody": "Away from metal and magnets.",
+  "accuracyLine": "Accuracy · {level}",
+  "@accuracyLine": {
+    "placeholders": {
+      "level": {
+        "type": "String"
+      }
+    }
+  },
+  "accuracyHigh": "high",
+  "accuracyMedium": "medium",
+  "accuracyLow": "low",
+  "accuracyUnknown": "checking",
+  "done": "Done",
+  "close": "Close",
+  "compassLowAccuracy": "Compass accuracy is low. Calibrate for a better reading.",
+  "compassUnavailable": "The compass isn't available on this phone. Face {degrees}° from north.",
+  "@compassUnavailable": {
+    "placeholders": {
+      "degrees": {
+        "type": "int"
+      }
+    }
+  },
+  "compassNeedsLocation": "Allow location access so the compass can find true north.",
+  "allowLocation": "Allow location",
+  "kaaba": "Kaaba"
 }

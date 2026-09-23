@@ -7,6 +7,7 @@
 | Mobile app       | Flutter (Dart), iOS + Android               | All UI, all wellness data, prayer/qibla math, playback      |
 | State / routing  | Riverpod, go_router                         | App state and navigation                                    |
 | Prayer math      | `adhan` Dart package                        | On-device prayer times and qibla bearing                    |
+| Compass          | `flutter_compass` + `geomag` (WMM-2025)     | Heading for the qibla dial; magnetic → true north on Android |
 | Time zones       | `timezone` package (bundled IANA database)  | Show prayer times in the chosen city's local time           |
 | Local storage    | Drift (SQLite) + SQLite3MultipleCiphers, secure storage | Encrypted journal, tasbih history, settings, verse cache    |
 | Notifications    | flutter_local_notifications                 | Scheduled prayer alerts and adhan                           |

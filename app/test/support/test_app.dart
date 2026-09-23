@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:drift/native.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -11,6 +13,8 @@ import 'package:uns/features/location/city_repository.dart';
 import 'package:uns/features/location/device_locator.dart';
 import 'package:uns/features/location/location_providers.dart';
 import 'package:uns/features/prayer/prayer_providers.dart';
+import 'package:uns/features/qibla/compass_source.dart';
+import 'package:uns/features/qibla/qibla_providers.dart';
 import 'package:uns/main.dart';
 
 const sydney = City(
@@ -91,6 +95,20 @@ class FakeAlertScheduler implements AlertScheduler {
       pending = notifications;
 }
 
+/// A compass the test drives by adding states.
+class FakeCompass implements CompassSource {
+  final states = StreamController<CompassState>.broadcast();
+  int locationRequests = 0;
+
+  @override
+  Stream<CompassState> watch(double latitude, double longitude) =>
+      states.stream;
+
+  @override
+  Future<void> allowLocation({required bool openSettings}) async =>
+      locationRequests++;
+}
+
 /// A settings store on an in-memory database.
 Future<SettingsStore> memoryStore() async {
   final db = AppDatabase(NativeDatabase.memory());
@@ -107,6 +125,7 @@ Future<ProviderContainer> pumpApp(
   SettingsStore? settings,
   NotificationPermission? notifications,
   AlertScheduler? scheduler,
+  CompassSource? compass,
 }) async {
   // Reduced motion, so the pulsing mood button lets frames settle.
   tester.platformDispatcher.accessibilityFeaturesTestValue =
@@ -133,6 +152,7 @@ Future<ProviderContainer> pumpApp(
       alertSchedulerProvider.overrideWithValue(
         scheduler ?? FakeAlertScheduler(),
       ),
+      compassSourceProvider.overrideWithValue(compass ?? FakeCompass()),
     ],
   );
   addTearDown(container.dispose);

@@ -145,7 +145,7 @@ void main() {
 
     await tester.tap(find.text('QIBLA'));
     await tester.pumpAndSettle();
-    expect(find.text('Qibla'), findsOneWidget);
+    expect(find.text('QIBLA DIRECTION'), findsOneWidget);
     await tester.tap(find.byTooltip('Back'));
     await tester.pumpAndSettle();
 

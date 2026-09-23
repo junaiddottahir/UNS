@@ -71,6 +71,13 @@ abstract final class AppText {
     letterSpacing: -0.23,
     color: AppColors.textPrimary,
   );
+  static const bearing = TextStyle(
+    fontSize: 56,
+    height: 1,
+    fontWeight: FontWeight.w300,
+    letterSpacing: -1.12,
+    color: AppColors.textPrimary,
+  );
   static const row = TextStyle(fontSize: 16, color: AppColors.textPrimary);
   static const rowValue = TextStyle(fontSize: 14, color: Color(0x8CF3EDE8));
   static const pill = TextStyle(

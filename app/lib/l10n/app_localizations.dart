@@ -753,6 +753,186 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Turn on notifications'**
   String get turnOnNotifications;
+
+  /// No description provided for @qiblaDirection.
+  ///
+  /// In en, this message translates to:
+  /// **'Qibla direction'**
+  String get qiblaDirection;
+
+  /// No description provided for @compassN.
+  ///
+  /// In en, this message translates to:
+  /// **'N'**
+  String get compassN;
+
+  /// No description provided for @compassNE.
+  ///
+  /// In en, this message translates to:
+  /// **'NE'**
+  String get compassNE;
+
+  /// No description provided for @compassE.
+  ///
+  /// In en, this message translates to:
+  /// **'E'**
+  String get compassE;
+
+  /// No description provided for @compassSE.
+  ///
+  /// In en, this message translates to:
+  /// **'SE'**
+  String get compassSE;
+
+  /// No description provided for @compassS.
+  ///
+  /// In en, this message translates to:
+  /// **'S'**
+  String get compassS;
+
+  /// No description provided for @compassSW.
+  ///
+  /// In en, this message translates to:
+  /// **'SW'**
+  String get compassSW;
+
+  /// No description provided for @compassW.
+  ///
+  /// In en, this message translates to:
+  /// **'W'**
+  String get compassW;
+
+  /// No description provided for @compassNW.
+  ///
+  /// In en, this message translates to:
+  /// **'NW'**
+  String get compassNW;
+
+  /// No description provided for @degrees.
+  ///
+  /// In en, this message translates to:
+  /// **'{value}°'**
+  String degrees(int value);
+
+  /// No description provided for @facingQibla.
+  ///
+  /// In en, this message translates to:
+  /// **'You\'re facing the qibla'**
+  String get facingQibla;
+
+  /// No description provided for @turnSlightlyLeft.
+  ///
+  /// In en, this message translates to:
+  /// **'Turn slightly left'**
+  String get turnSlightlyLeft;
+
+  /// No description provided for @turnSlightlyRight.
+  ///
+  /// In en, this message translates to:
+  /// **'Turn slightly right'**
+  String get turnSlightlyRight;
+
+  /// No description provided for @turnLeft.
+  ///
+  /// In en, this message translates to:
+  /// **'Turn left'**
+  String get turnLeft;
+
+  /// No description provided for @turnRight.
+  ///
+  /// In en, this message translates to:
+  /// **'Turn right'**
+  String get turnRight;
+
+  /// No description provided for @calibrate.
+  ///
+  /// In en, this message translates to:
+  /// **'Calibrate'**
+  String get calibrate;
+
+  /// No description provided for @calibrateTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Move your phone in a figure-8'**
+  String get calibrateTitle;
+
+  /// No description provided for @calibrateBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Away from metal and magnets.'**
+  String get calibrateBody;
+
+  /// No description provided for @accuracyLine.
+  ///
+  /// In en, this message translates to:
+  /// **'Accuracy · {level}'**
+  String accuracyLine(String level);
+
+  /// No description provided for @accuracyHigh.
+  ///
+  /// In en, this message translates to:
+  /// **'high'**
+  String get accuracyHigh;
+
+  /// No description provided for @accuracyMedium.
+  ///
+  /// In en, this message translates to:
+  /// **'medium'**
+  String get accuracyMedium;
+
+  /// No description provided for @accuracyLow.
+  ///
+  /// In en, this message translates to:
+  /// **'low'**
+  String get accuracyLow;
+
+  /// No description provided for @accuracyUnknown.
+  ///
+  /// In en, this message translates to:
+  /// **'checking'**
+  String get accuracyUnknown;
+
+  /// No description provided for @done.
+  ///
+  /// In en, this message translates to:
+  /// **'Done'**
+  String get done;
+
+  /// No description provided for @close.
+  ///
+  /// In en, this message translates to:
+  /// **'Close'**
+  String get close;
+
+  /// No description provided for @compassLowAccuracy.
+  ///
+  /// In en, this message translates to:
+  /// **'Compass accuracy is low. Calibrate for a better reading.'**
+  String get compassLowAccuracy;
+
+  /// No description provided for @compassUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'The compass isn\'t available on this phone. Face {degrees}° from north.'**
+  String compassUnavailable(int degrees);
+
+  /// No description provided for @compassNeedsLocation.
+  ///
+  /// In en, this message translates to:
+  /// **'Allow location access so the compass can find true north.'**
+  String get compassNeedsLocation;
+
+  /// No description provided for @allowLocation.
+  ///
+  /// In en, this message translates to:
+  /// **'Allow location'**
+  String get allowLocation;
+
+  /// No description provided for @kaaba.
+  ///
+  /// In en, this message translates to:
+  /// **'Kaaba'**
+  String get kaaba;
 }
 
 class _AppLocalizationsDelegate

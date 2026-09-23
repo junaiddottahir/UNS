@@ -382,4 +382,102 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get turnOnNotifications => 'Turn on notifications';
+
+  @override
+  String get qiblaDirection => 'Qibla direction';
+
+  @override
+  String get compassN => 'N';
+
+  @override
+  String get compassNE => 'NE';
+
+  @override
+  String get compassE => 'E';
+
+  @override
+  String get compassSE => 'SE';
+
+  @override
+  String get compassS => 'S';
+
+  @override
+  String get compassSW => 'SW';
+
+  @override
+  String get compassW => 'W';
+
+  @override
+  String get compassNW => 'NW';
+
+  @override
+  String degrees(int value) {
+    return '$value°';
+  }
+
+  @override
+  String get facingQibla => 'You\'re facing the qibla';
+
+  @override
+  String get turnSlightlyLeft => 'Turn slightly left';
+
+  @override
+  String get turnSlightlyRight => 'Turn slightly right';
+
+  @override
+  String get turnLeft => 'Turn left';
+
+  @override
+  String get turnRight => 'Turn right';
+
+  @override
+  String get calibrate => 'Calibrate';
+
+  @override
+  String get calibrateTitle => 'Move your phone in a figure-8';
+
+  @override
+  String get calibrateBody => 'Away from metal and magnets.';
+
+  @override
+  String accuracyLine(String level) {
+    return 'Accuracy · $level';
+  }
+
+  @override
+  String get accuracyHigh => 'high';
+
+  @override
+  String get accuracyMedium => 'medium';
+
+  @override
+  String get accuracyLow => 'low';
+
+  @override
+  String get accuracyUnknown => 'checking';
+
+  @override
+  String get done => 'Done';
+
+  @override
+  String get close => 'Close';
+
+  @override
+  String get compassLowAccuracy =>
+      'Compass accuracy is low. Calibrate for a better reading.';
+
+  @override
+  String compassUnavailable(int degrees) {
+    return 'The compass isn\'t available on this phone. Face $degrees° from north.';
+  }
+
+  @override
+  String get compassNeedsLocation =>
+      'Allow location access so the compass can find true north.';
+
+  @override
+  String get allowLocation => 'Allow location';
+
+  @override
+  String get kaaba => 'Kaaba';
 }

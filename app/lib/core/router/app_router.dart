@@ -17,6 +17,8 @@ import '../../features/prayer/method_screen.dart';
 import '../../features/prayer/prayer_schedule.dart';
 import '../../features/prayer/prayer_settings_screen.dart';
 import '../../features/prayer/prayer_times_screen.dart';
+import '../../features/qibla/calibration_screen.dart';
+import '../../features/qibla/qibla_screen.dart';
 import '../../l10n/app_localizations.dart';
 import '../storage/settings_store.dart';
 import '../widgets/coming_soon_screen.dart';
@@ -74,12 +76,10 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           ),
         ],
       ),
+      GoRoute(path: Routes.qibla, builder: (_, _) => const QiblaScreen()),
       GoRoute(
-        path: Routes.qibla,
-        builder: (context, _) => ComingSoonScreen(
-          title: AppLocalizations.of(context).qibla,
-          back: true,
-        ),
+        path: Routes.qiblaCalibrate,
+        builder: (_, _) => const CalibrationScreen(),
       ),
       GoRoute(
         path: Routes.prayerTimes,

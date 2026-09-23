@@ -102,6 +102,47 @@ class GlassRow extends StatelessWidget {
   }
 }
 
+/// A pill-shaped action with an icon, e.g. home's Qibla shortcut.
+class ActionPill extends StatelessWidget {
+  const ActionPill({
+    super.key,
+    required this.icon,
+    required this.label,
+    required this.onTap,
+  });
+
+  final IconData icon;
+  final String label;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      color: AppColors.pillFill,
+      shape: const StadiumBorder(side: BorderSide(color: AppColors.pillEdge)),
+      child: InkWell(
+        customBorder: const StadiumBorder(),
+        onTap: onTap,
+        child: Container(
+          height: 44,
+          padding: const EdgeInsets.symmetric(horizontal: 18),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(icon, size: 15, color: AppColors.textPrimary),
+              const SizedBox(width: 9),
+              Text(
+                label.toUpperCase(),
+                style: AppText.pill.copyWith(color: AppColors.textPrimary),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
 /// Single-choice pills, the prototype's `.opts` of `.opt`. The selected
 /// pill shows a check, or [iconOf]'s icon on every pill when given.
 class OptionPills<T> extends StatelessWidget {
