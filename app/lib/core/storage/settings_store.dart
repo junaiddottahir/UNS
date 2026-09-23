@@ -13,6 +13,7 @@ abstract final class SettingKeys {
   static const alerts = 'alerts';
   static const reciter = 'reciter';
   static const library = 'library';
+  static const accountOffered = 'account_offered';
 }
 
 /// Settings loaded into memory at startup, so providers can read them

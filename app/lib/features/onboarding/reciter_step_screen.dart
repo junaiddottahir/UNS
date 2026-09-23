@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../core/auth/auth_service.dart';
 import '../../core/router/routes.dart';
 import '../../core/storage/settings_store.dart';
 import '../../core/theme/app_theme.dart';
@@ -29,10 +30,15 @@ class ReciterStepScreen extends ConsumerWidget {
       body: l10n.reciterStepBody,
       actionLabel: l10n.finish,
       onAction: () {
-        ref
-            .read(settingsStoreProvider)
-            .writeBool(SettingKeys.onboardingComplete, true);
+        final store = ref.read(settingsStoreProvider);
+        store.writeBool(SettingKeys.onboardingComplete, true);
         context.go(Routes.home);
+        // Offer an account once, never as a gate (ui-context.md).
+        if (ref.read(authServiceProvider).available &&
+            !store.readBool(SettingKeys.accountOffered)) {
+          store.writeBool(SettingKeys.accountOffered, true);
+          context.push('${Routes.accountSave}?returnTo=${Routes.home}');
+        }
       },
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

@@ -31,14 +31,14 @@ void main() {
     expect(find.textContaining('approved by a qualified scholar'), findsOne);
   });
 
-  testWidgets('Profile reaches prayer settings', (tester) async {
+  testWidgets('Profile → Prayer reaches prayer settings', (tester) async {
     final container = await pumpApp(tester);
     container
         .read(userLocationProvider.notifier)
         .set(UserLocation.fromCity(sydney));
     container.read(appRouterProvider).go(Routes.profile);
     await tester.pumpAndSettle();
-    await tester.tap(find.text('Prayer settings'));
+    await tester.tap(find.text('Prayer'));
     await tester.pumpAndSettle();
     expect(find.text('HIGH LATITUDE'), findsOneWidget);
   });

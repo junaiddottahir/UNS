@@ -569,5 +569,80 @@
   },
   "playVoiceNote": "Play voice reflection",
   "stopVoiceNote": "Stop",
-  "voiceNoteMissing": "This voice reflection can't be opened on this phone."
+  "voiceNoteMissing": "This voice reflection can't be opened on this phone.",
+  "notNow": "Not now",
+  "saveYourJourney": "Save your journey",
+  "saveJourneyBody": "Sync your prayer settings and tasbih across your devices. Your journal always stays on this phone.",
+  "continueWithApple": "Continue with Apple",
+  "continueWithGoogle": "Continue with Google",
+  "continueWithEmail": "Continue with email",
+  "yourEmail": "Your email",
+  "emailHint": "you@email.com",
+  "next": "Next",
+  "createPassword": "Create a password",
+  "passwordRule": "8 or more characters",
+  "haveAccount": "Already have an account? Sign in",
+  "newHere": "New here? Create an account",
+  "welcomeBack": "Welcome back",
+  "passwordHint": "Password",
+  "forgotPassword": "Forgot password?",
+  "enterCode": "Enter the code",
+  "codeSentTo": "Sent to {email}",
+  "@codeSentTo": {
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
+  "resendIn": "Resend in {time}",
+  "@resendIn": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "resendCode": "Resend code",
+  "codeResent": "New code sent",
+  "newPassword": "Choose a new password",
+  "passwordUpdated": "Password updated",
+  "journeySaved": "Journey saved",
+  "signedInWith": "Signed in with {email}",
+  "@signedInWith": {
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
+  "syncSettings": "Sync your settings across devices",
+  "account": "Account",
+  "signOut": "Sign out",
+  "deleteAccount": "Delete account",
+  "deleteAccountTitle": "Delete your account?",
+  "deleteAccountBody": "This removes your account and the settings and tasbih history synced with it. Your journal and everything else on this phone stay here.",
+  "cancel": "Cancel",
+  "delete": "Delete",
+  "accountDeleted": "Account deleted",
+  "signedOut": "Signed out",
+  "authWrongPassword": "That email and password don't match.",
+  "authEmailTaken": "There's already an account with this email. Sign in instead.",
+  "authWeakPassword": "Choose a stronger password.",
+  "authWrongCode": "That code isn't right, or it has expired.",
+  "authTooManyTries": "Too many tries. Wait a minute, then try again.",
+  "authOffline": "Couldn't connect. Check your connection and try again.",
+  "authNotAvailable": "Accounts aren't available right now.",
+  "authUnknown": "Something went wrong. Please try again.",
+  "deleteFailed": "Couldn't delete the account. Check your connection and try again.",
+  "prayer": "Prayer",
+  "alerts": "Alerts",
+  "recitation": "Recitation",
+  "privacy": "Privacy",
+  "privacyIntro": "Uns is built so what you share stays yours.",
+  "privacyPhone": "On this phone only, encrypted: your journal, voice reflections, moods, sessions and location.",
+  "privacyClassify": "When you type or say how you feel, only those words are sent to be understood — with no name or account — and they aren't kept.",
+  "privacyAccount": "If you sign in: your prayer and alert settings, reciter and tasbih history sync to your account. Nothing else.",
+  "privacyNoAds": "No ads, ever.",
+  "reciterTitle": "Recitation"
 }

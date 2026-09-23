@@ -7,6 +7,8 @@ import 'package:http/http.dart' show BaseClient, BaseRequest, StreamedResponse;
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:uns/core/api/api_client.dart';
+import 'package:uns/core/auth/auth_service.dart';
 import 'package:uns/core/quran/quran_providers.dart';
 import 'package:uns/core/quran/quran_repository.dart';
 import 'package:uns/core/quran/quran_text_client.dart';
@@ -347,6 +349,95 @@ class FakeNotePlayer implements NotePlayer {
   Future<void> stop() async {}
 }
 
+/// Accounts in memory. [codes] is the 6-digit code "emailed" per address.
+class FakeAuth implements AuthService {
+  final _changes = StreamController<Account?>.broadcast();
+  final users = <String, String>{}; // email → password
+  final confirmed = <String>{};
+  final resets = <String>[];
+  Account? _current;
+  String code = '123456';
+
+  @override
+  bool get available => true;
+  @override
+  Account? get current => _current;
+  @override
+  Stream<Account?> get changes => _changes.stream;
+  @override
+  Future<String?> accessToken() async => _current == null ? null : 'token';
+
+  void _signInAs(String email) {
+    _current = Account(id: 'id-$email', email: email, provider: 'email');
+    _changes.add(_current);
+  }
+
+  @override
+  Future<void> signUp(String email, String password) async {
+    if (users.containsKey(email)) {
+      throw const AuthFailure(AuthProblem.emailTaken);
+    }
+    users[email] = password;
+  }
+
+  @override
+  Future<void> confirmSignUp(String email, String code) async {
+    if (code != this.code) throw const AuthFailure(AuthProblem.wrongCode);
+    confirmed.add(email);
+    _signInAs(email);
+  }
+
+  @override
+  Future<void> resendSignUpCode(String email) async {}
+
+  @override
+  Future<void> signIn(String email, String password) async {
+    if (users[email] != password) {
+      throw const AuthFailure(AuthProblem.wrongPassword);
+    }
+    _signInAs(email);
+  }
+
+  @override
+  Future<void> sendPasswordReset(String email) async => resets.add(email);
+
+  @override
+  Future<void> confirmPasswordReset(String email, String code) async {
+    if (code != this.code) throw const AuthFailure(AuthProblem.wrongCode);
+    _signInAs(email);
+  }
+
+  @override
+  Future<void> setNewPassword(String password) async =>
+      users[_current!.email!] = password;
+
+  @override
+  Future<void> signOut() async {
+    _current = null;
+    _changes.add(null);
+  }
+}
+
+/// Records account API calls.
+class FakeAccountApi implements AccountApi {
+  FakeAccountApi({this.fails = false});
+  final bool fails;
+  final calls = <String>[];
+
+  @override
+  String get baseUrl => 'http://fake';
+
+  @override
+  Future<Object?> send(String method, String path, {Object? body}) async {
+    calls.add('$method $path');
+    if (fails) throw const ApiException(503);
+    return null;
+  }
+
+  @override
+  Future<void> deleteAccount() => send('DELETE', '/v1/me');
+}
+
 /// A library of real references, for tests only (not a verse selection).
 VerseLibrary testLibrary({bool placeholder = false}) => VerseLibrary(
   version: 't',
@@ -395,6 +486,8 @@ Future<ProviderContainer> pumpApp(
   VoiceRecorder? recorder,
   VoiceNoteVault? vault,
   NotePlayer? notePlayer,
+  AuthService? auth,
+  AccountApi? accountApi,
 }) async {
   // Assets load inside each test's fake clock; a load cached by an earlier
   // test would never complete in this one.
@@ -445,6 +538,8 @@ Future<ProviderContainer> pumpApp(
       voiceRecorderProvider.overrideWithValue(recorder ?? FakeVoiceRecorder()),
       voiceNoteVaultProvider.overrideWithValue(vault ?? FakeVault()),
       notePlayerProvider.overrideWithValue(notePlayer ?? FakeNotePlayer()),
+      authServiceProvider.overrideWithValue(auth ?? const NoAuthService()),
+      accountApiProvider.overrideWithValue(accountApi ?? FakeAccountApi()),
     ],
   );
   addTearDown(container.dispose);

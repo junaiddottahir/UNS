@@ -1,19 +1,34 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:supabase_flutter/supabase_flutter.dart'
+    show FlutterAuthClientOptions, Supabase;
 
+import 'core/auth/auth_service.dart';
+import 'core/auth/secure_session_storage.dart';
+import 'core/config/app_config.dart';
 import 'core/purchases/purchases_service.dart';
 import 'core/router/app_router.dart';
 import 'core/storage/app_database.dart';
 import 'core/storage/settings_store.dart';
 import 'core/theme/app_theme.dart';
-import 'core/widgets/toast.dart';
 import 'features/alerts/alert_providers.dart';
 import 'l10n/app_localizations.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await PurchasesService.configure();
+  if (AppConfig.supabaseUrl.isNotEmpty) {
+    await Supabase.initialize(
+      url: AppConfig.supabaseUrl,
+      publishableKey: AppConfig.supabasePublishableKey,
+      authOptions: const FlutterAuthClientOptions(
+        localStorage: SecureSessionStorage(),
+        // Email codes are typed in; no magic links to catch.
+        detectSessionInUri: false,
+      ),
+    );
+  }
   final db = await AppDatabase.open();
   final settings = await SettingsStore.load(db);
   runApp(
@@ -56,8 +71,11 @@ class _UnsAppState extends ConsumerState<UnsApp> {
   Widget build(BuildContext context) {
     // Keeps scheduled prayer alerts current from launch.
     ref.watch(alertSyncProvider);
+    // Premium follows the account: RevenueCat's user is the Supabase user.
+    ref.listen(accountProvider.select((a) => a.value?.id), (_, id) {
+      PurchasesService.identify(id);
+    });
     return MaterialApp.router(
-      scaffoldMessengerKey: rootMessengerKey,
       onGenerateTitle: (context) => AppLocalizations.of(context).appTitle,
       debugShowCheckedModeBanner: false,
       theme: buildAppTheme(),

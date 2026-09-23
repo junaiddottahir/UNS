@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../features/alerts/prayer_alert_screen.dart';
 import '../../features/alerts/prayer_alerts_screen.dart';
+import '../../features/auth/auth_screens.dart';
 import '../../features/home/home_screen.dart';
 import '../../features/location/location_providers.dart';
 import '../../features/onboarding/city_search_screen.dart';
@@ -17,7 +18,9 @@ import '../../features/prayer/method_screen.dart';
 import '../../features/prayer/prayer_schedule.dart';
 import '../../features/prayer/prayer_settings_screen.dart';
 import '../../features/prayer/prayer_times_screen.dart';
+import '../../features/profile/privacy_screen.dart';
 import '../../features/profile/profile_screen.dart';
+import '../../features/profile/reciter_settings_screen.dart';
 import '../../features/qibla/calibration_screen.dart';
 import '../../features/qibla/qibla_screen.dart';
 import '../../features/journal/entry_screen.dart';
@@ -39,6 +42,7 @@ import '../../features/tasbih/tasbih_screen.dart';
 import '../../l10n/app_localizations.dart';
 import '../storage/settings_store.dart';
 import '../widgets/coming_soon_screen.dart';
+import '../widgets/toast.dart';
 import '../widgets/tab_shell.dart';
 import 'routes.dart';
 
@@ -50,6 +54,7 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           .readBool(SettingKeys.onboardingComplete) &&
       ref.read(userLocationProvider) != null;
   return GoRouter(
+    navigatorKey: rootNavigatorKey,
     initialLocation: onboarded ? Routes.home : Routes.welcome,
     routes: [
       GoRoute(path: Routes.welcome, builder: (_, _) => const WelcomeScreen()),
@@ -105,6 +110,35 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         builder: (_, _) => const RecordScreen(),
       ),
       GoRoute(path: Routes.journal, builder: (_, _) => const JournalScreen()),
+      GoRoute(
+        path: Routes.accountSave,
+        builder: (_, state) =>
+            SaveJourneyScreen(returnTo: state.uri.queryParameters['returnTo']),
+      ),
+      GoRoute(
+        path: Routes.accountEmail,
+        builder: (_, _) => const EmailScreen(),
+      ),
+      GoRoute(
+        path: Routes.accountPassword,
+        builder: (_, _) => const PasswordScreen(),
+      ),
+      GoRoute(
+        path: Routes.accountCode,
+        builder: (_, state) => CodeScreen(
+          recovery: state.uri.queryParameters['purpose'] == 'recovery',
+        ),
+      ),
+      GoRoute(
+        path: Routes.accountNewPassword,
+        builder: (_, _) => const NewPasswordScreen(),
+      ),
+      GoRoute(path: Routes.account, builder: (_, _) => const AccountScreen()),
+      GoRoute(
+        path: Routes.reciterSettings,
+        builder: (_, _) => const ReciterSettingsScreen(),
+      ),
+      GoRoute(path: Routes.privacy, builder: (_, _) => const PrivacyScreen()),
       GoRoute(
         path: '${Routes.journal}/:id',
         redirect: (_, state) =>

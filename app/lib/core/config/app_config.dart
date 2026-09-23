@@ -17,6 +17,18 @@ abstract final class AppConfig {
     defaultValue: 'http://localhost:8000',
   );
 
+  /// Supabase (optional accounts). The publishable key is public.
+  static const supabaseUrl = String.fromEnvironment('SUPABASE_URL');
+  static const supabasePublishableKey = String.fromEnvironment(
+    'SUPABASE_PUBLISHABLE_KEY',
+  );
+
+  /// Sign in with Apple / Google need developer accounts and provider set-up
+  /// in Supabase first (see progress-tracker.md); their buttons stay hidden
+  /// until these are turned on.
+  static const appleSignInEnabled = bool.fromEnvironment('APPLE_SIGN_IN');
+  static const googleSignInEnabled = bool.fromEnvironment('GOOGLE_SIGN_IN');
+
   /// Quran text (fawazahmed0 Quran API) and the editions shown. Pending the
   /// scholar's confirmation of the editions (see progress-tracker.md).
   static const quranTextBaseUrl =

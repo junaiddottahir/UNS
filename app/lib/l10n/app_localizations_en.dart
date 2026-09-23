@@ -916,4 +916,181 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get voiceNoteMissing =>
       'This voice reflection can\'t be opened on this phone.';
+
+  @override
+  String get notNow => 'Not now';
+
+  @override
+  String get saveYourJourney => 'Save your journey';
+
+  @override
+  String get saveJourneyBody =>
+      'Sync your prayer settings and tasbih across your devices. Your journal always stays on this phone.';
+
+  @override
+  String get continueWithApple => 'Continue with Apple';
+
+  @override
+  String get continueWithGoogle => 'Continue with Google';
+
+  @override
+  String get continueWithEmail => 'Continue with email';
+
+  @override
+  String get yourEmail => 'Your email';
+
+  @override
+  String get emailHint => 'you@email.com';
+
+  @override
+  String get next => 'Next';
+
+  @override
+  String get createPassword => 'Create a password';
+
+  @override
+  String get passwordRule => '8 or more characters';
+
+  @override
+  String get haveAccount => 'Already have an account? Sign in';
+
+  @override
+  String get newHere => 'New here? Create an account';
+
+  @override
+  String get welcomeBack => 'Welcome back';
+
+  @override
+  String get passwordHint => 'Password';
+
+  @override
+  String get forgotPassword => 'Forgot password?';
+
+  @override
+  String get enterCode => 'Enter the code';
+
+  @override
+  String codeSentTo(String email) {
+    return 'Sent to $email';
+  }
+
+  @override
+  String resendIn(String time) {
+    return 'Resend in $time';
+  }
+
+  @override
+  String get resendCode => 'Resend code';
+
+  @override
+  String get codeResent => 'New code sent';
+
+  @override
+  String get newPassword => 'Choose a new password';
+
+  @override
+  String get passwordUpdated => 'Password updated';
+
+  @override
+  String get journeySaved => 'Journey saved';
+
+  @override
+  String signedInWith(String email) {
+    return 'Signed in with $email';
+  }
+
+  @override
+  String get syncSettings => 'Sync your settings across devices';
+
+  @override
+  String get account => 'Account';
+
+  @override
+  String get signOut => 'Sign out';
+
+  @override
+  String get deleteAccount => 'Delete account';
+
+  @override
+  String get deleteAccountTitle => 'Delete your account?';
+
+  @override
+  String get deleteAccountBody =>
+      'This removes your account and the settings and tasbih history synced with it. Your journal and everything else on this phone stay here.';
+
+  @override
+  String get cancel => 'Cancel';
+
+  @override
+  String get delete => 'Delete';
+
+  @override
+  String get accountDeleted => 'Account deleted';
+
+  @override
+  String get signedOut => 'Signed out';
+
+  @override
+  String get authWrongPassword => 'That email and password don\'t match.';
+
+  @override
+  String get authEmailTaken =>
+      'There\'s already an account with this email. Sign in instead.';
+
+  @override
+  String get authWeakPassword => 'Choose a stronger password.';
+
+  @override
+  String get authWrongCode => 'That code isn\'t right, or it has expired.';
+
+  @override
+  String get authTooManyTries =>
+      'Too many tries. Wait a minute, then try again.';
+
+  @override
+  String get authOffline =>
+      'Couldn\'t connect. Check your connection and try again.';
+
+  @override
+  String get authNotAvailable => 'Accounts aren\'t available right now.';
+
+  @override
+  String get authUnknown => 'Something went wrong. Please try again.';
+
+  @override
+  String get deleteFailed =>
+      'Couldn\'t delete the account. Check your connection and try again.';
+
+  @override
+  String get prayer => 'Prayer';
+
+  @override
+  String get alerts => 'Alerts';
+
+  @override
+  String get recitation => 'Recitation';
+
+  @override
+  String get privacy => 'Privacy';
+
+  @override
+  String get privacyIntro => 'Uns is built so what you share stays yours.';
+
+  @override
+  String get privacyPhone =>
+      'On this phone only, encrypted: your journal, voice reflections, moods, sessions and location.';
+
+  @override
+  String get privacyClassify =>
+      'When you type or say how you feel, only those words are sent to be understood — with no name or account — and they aren\'t kept.';
+
+  @override
+  String get privacyAccount =>
+      'If you sign in: your prayer and alert settings, reciter and tasbih history sync to your account. Nothing else.';
+
+  @override
+  String get privacyNoAds => 'No ads, ever.';
+
+  @override
+  String get reciterTitle => 'Recitation';
 }

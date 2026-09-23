@@ -9,8 +9,7 @@ change.
 
 ## Current Goal
 
-- Unit 17: app — auth: sign in / register / forgot password (Apple,
-  Google, email), account card in Profile, sign out, delete account.
+- Unit 18: app — settings and tasbih sync for signed-in users.
 
 ## Completed
 
@@ -369,6 +368,36 @@ change.
     read sees nothing, anonymous write/delete refused (401). Full live
     flow waits for sign-in (unit 17); anonymous sign-in is off.
 
+- Unit 17 (2026-09-24): accounts in the app.
+  - Supabase Auth via `supabase_flutter`; session kept in the Keychain
+    (custom LocalStorage), config from dart-defines (`SUPABASE_URL`,
+    `SUPABASE_PUBLISHABLE_KEY` in `config/dev.json`).
+  - Email flow (prototype): Your email → Create a password (8+) → Enter
+    the 6-digit code (auto-submits, resend after 30 s) → signed in.
+    "Already have an account? Sign in" → Welcome back → Forgot password?
+    → code → Choose a new password. Friendly messages for wrong
+    password, taken email, bad code, rate limits, offline.
+  - "Save your journey" (logo, Not now): offered once after onboarding
+    and from the Profile account card. Copy says settings and tasbih
+    sync and the journal stays on the phone (the prototype's "back up
+    your journal" would contradict the privacy model).
+  - Apple / Google buttons are built behind `APPLE_SIGN_IN` /
+    `GOOGLE_SIGN_IN` flags and stay hidden: they need developer accounts
+    and Supabase provider set-up (see open questions).
+  - Profile (prototype): account card (signed out: "Save your journey /
+    Sync your settings across devices"; signed in: "Journey saved /
+    Signed in with …"), Journal, Premium, Prayer, Alerts, Recitation (new
+    reciter screen with samples), Privacy (new plain-words screen), Our
+    sources. Account screen: Sign out; Delete account (confirm → backend
+    `DELETE /v1/me` → signed out; journal stays).
+  - RevenueCat logs in with the Supabase user ID and out on sign-out.
+  - Fixed on the way: toast rebuilt as a touch-through overlay (the
+    SnackBar blocked taps at the top for 2 s); code screen wiped its own
+    error; own auth failures were being reported as "offline".
+  - 185 unit/widget tests; live: Supabase Auth reached from the
+    simulator (wrong password reported correctly). A full sign-up needs
+    a real inbox.
+
 ## In Progress
 
 - None yet.
@@ -416,8 +445,15 @@ Each line is one unit; app and backend units are kept separate.
   dashboard (Project Settings → Integrations → GitHub).
 - RevenueCat secret key in `backend/.env` so account deletion also
   removes purchase records.
-- Developer accounts needed before units 17–19: Apple Developer (Sign in
-  with Apple, IAP), Google Play Console. (RevenueCat account exists.)
+- Developer accounts needed: Apple Developer (Sign in with Apple, IAP,
+  TestFlight), Google Play Console + a Google Cloud OAuth client (Google
+  sign-in). Then enable the Apple/Google providers in Supabase and turn
+  on `APPLE_SIGN_IN` / `GOOGLE_SIGN_IN`; the Sign in with Apple
+  capability also needs adding to the iOS app.
+- Supabase email templates: "Confirm signup" and "Reset password" must
+  include the 6-digit code (`{{ .Token }}`) — the app asks for a code,
+  not a link. Also set a custom SMTP sender before launch (Supabase's
+  built-in email is rate-limited).
 - Final app ID (bundle ID / package name). Currently the placeholder
   `com.uns.uns`; must be set before registering with Apple, Google and
   RevenueCat.

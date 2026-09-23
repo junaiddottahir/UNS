@@ -24,6 +24,14 @@ abstract final class Routes {
   static const shamaWrite = '/shama/write';
   static const shamaRecord = '/shama/record';
   static const journal = '/journal';
+  static const accountSave = '/account/save';
+  static const accountEmail = '/account/email';
+  static const accountPassword = '/account/password';
+  static const accountCode = '/account/code';
+  static const accountNewPassword = '/account/new-password';
+  static const account = '/account';
+  static const reciterSettings = '/settings/reciter';
+  static const privacy = '/privacy';
 
   /// One journal entry, e.g. `/journal/12`.
   static String journalEntry(int id) => '$journal/$id';

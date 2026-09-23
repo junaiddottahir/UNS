@@ -24,4 +24,19 @@ abstract final class PurchasesService {
     await Purchases.configure(PurchasesConfiguration(key));
     _configured = true;
   }
+
+  /// Links purchases to the signed-in account (its Supabase ID), or back to
+  /// an anonymous ID when signed out.
+  static Future<void> identify(String? userId) async {
+    if (!_configured) return;
+    try {
+      if (userId != null) {
+        await Purchases.logIn(userId);
+      } else if (!await Purchases.isAnonymous) {
+        await Purchases.logOut();
+      }
+    } on Exception catch (e) {
+      debugPrint('RevenueCat identify failed: $e');
+    }
+  }
 }

@@ -1701,6 +1701,330 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'This voice reflection can\'t be opened on this phone.'**
   String get voiceNoteMissing;
+
+  /// No description provided for @notNow.
+  ///
+  /// In en, this message translates to:
+  /// **'Not now'**
+  String get notNow;
+
+  /// No description provided for @saveYourJourney.
+  ///
+  /// In en, this message translates to:
+  /// **'Save your journey'**
+  String get saveYourJourney;
+
+  /// No description provided for @saveJourneyBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Sync your prayer settings and tasbih across your devices. Your journal always stays on this phone.'**
+  String get saveJourneyBody;
+
+  /// No description provided for @continueWithApple.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue with Apple'**
+  String get continueWithApple;
+
+  /// No description provided for @continueWithGoogle.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue with Google'**
+  String get continueWithGoogle;
+
+  /// No description provided for @continueWithEmail.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue with email'**
+  String get continueWithEmail;
+
+  /// No description provided for @yourEmail.
+  ///
+  /// In en, this message translates to:
+  /// **'Your email'**
+  String get yourEmail;
+
+  /// No description provided for @emailHint.
+  ///
+  /// In en, this message translates to:
+  /// **'you@email.com'**
+  String get emailHint;
+
+  /// No description provided for @next.
+  ///
+  /// In en, this message translates to:
+  /// **'Next'**
+  String get next;
+
+  /// No description provided for @createPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Create a password'**
+  String get createPassword;
+
+  /// No description provided for @passwordRule.
+  ///
+  /// In en, this message translates to:
+  /// **'8 or more characters'**
+  String get passwordRule;
+
+  /// No description provided for @haveAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Already have an account? Sign in'**
+  String get haveAccount;
+
+  /// No description provided for @newHere.
+  ///
+  /// In en, this message translates to:
+  /// **'New here? Create an account'**
+  String get newHere;
+
+  /// No description provided for @welcomeBack.
+  ///
+  /// In en, this message translates to:
+  /// **'Welcome back'**
+  String get welcomeBack;
+
+  /// No description provided for @passwordHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Password'**
+  String get passwordHint;
+
+  /// No description provided for @forgotPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Forgot password?'**
+  String get forgotPassword;
+
+  /// No description provided for @enterCode.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter the code'**
+  String get enterCode;
+
+  /// No description provided for @codeSentTo.
+  ///
+  /// In en, this message translates to:
+  /// **'Sent to {email}'**
+  String codeSentTo(String email);
+
+  /// No description provided for @resendIn.
+  ///
+  /// In en, this message translates to:
+  /// **'Resend in {time}'**
+  String resendIn(String time);
+
+  /// No description provided for @resendCode.
+  ///
+  /// In en, this message translates to:
+  /// **'Resend code'**
+  String get resendCode;
+
+  /// No description provided for @codeResent.
+  ///
+  /// In en, this message translates to:
+  /// **'New code sent'**
+  String get codeResent;
+
+  /// No description provided for @newPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose a new password'**
+  String get newPassword;
+
+  /// No description provided for @passwordUpdated.
+  ///
+  /// In en, this message translates to:
+  /// **'Password updated'**
+  String get passwordUpdated;
+
+  /// No description provided for @journeySaved.
+  ///
+  /// In en, this message translates to:
+  /// **'Journey saved'**
+  String get journeySaved;
+
+  /// No description provided for @signedInWith.
+  ///
+  /// In en, this message translates to:
+  /// **'Signed in with {email}'**
+  String signedInWith(String email);
+
+  /// No description provided for @syncSettings.
+  ///
+  /// In en, this message translates to:
+  /// **'Sync your settings across devices'**
+  String get syncSettings;
+
+  /// No description provided for @account.
+  ///
+  /// In en, this message translates to:
+  /// **'Account'**
+  String get account;
+
+  /// No description provided for @signOut.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign out'**
+  String get signOut;
+
+  /// No description provided for @deleteAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete account'**
+  String get deleteAccount;
+
+  /// No description provided for @deleteAccountTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete your account?'**
+  String get deleteAccountTitle;
+
+  /// No description provided for @deleteAccountBody.
+  ///
+  /// In en, this message translates to:
+  /// **'This removes your account and the settings and tasbih history synced with it. Your journal and everything else on this phone stay here.'**
+  String get deleteAccountBody;
+
+  /// No description provided for @cancel.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get cancel;
+
+  /// No description provided for @delete.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete'**
+  String get delete;
+
+  /// No description provided for @accountDeleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Account deleted'**
+  String get accountDeleted;
+
+  /// No description provided for @signedOut.
+  ///
+  /// In en, this message translates to:
+  /// **'Signed out'**
+  String get signedOut;
+
+  /// No description provided for @authWrongPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'That email and password don\'t match.'**
+  String get authWrongPassword;
+
+  /// No description provided for @authEmailTaken.
+  ///
+  /// In en, this message translates to:
+  /// **'There\'s already an account with this email. Sign in instead.'**
+  String get authEmailTaken;
+
+  /// No description provided for @authWeakPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose a stronger password.'**
+  String get authWeakPassword;
+
+  /// No description provided for @authWrongCode.
+  ///
+  /// In en, this message translates to:
+  /// **'That code isn\'t right, or it has expired.'**
+  String get authWrongCode;
+
+  /// No description provided for @authTooManyTries.
+  ///
+  /// In en, this message translates to:
+  /// **'Too many tries. Wait a minute, then try again.'**
+  String get authTooManyTries;
+
+  /// No description provided for @authOffline.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t connect. Check your connection and try again.'**
+  String get authOffline;
+
+  /// No description provided for @authNotAvailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Accounts aren\'t available right now.'**
+  String get authNotAvailable;
+
+  /// No description provided for @authUnknown.
+  ///
+  /// In en, this message translates to:
+  /// **'Something went wrong. Please try again.'**
+  String get authUnknown;
+
+  /// No description provided for @deleteFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t delete the account. Check your connection and try again.'**
+  String get deleteFailed;
+
+  /// No description provided for @prayer.
+  ///
+  /// In en, this message translates to:
+  /// **'Prayer'**
+  String get prayer;
+
+  /// No description provided for @alerts.
+  ///
+  /// In en, this message translates to:
+  /// **'Alerts'**
+  String get alerts;
+
+  /// No description provided for @recitation.
+  ///
+  /// In en, this message translates to:
+  /// **'Recitation'**
+  String get recitation;
+
+  /// No description provided for @privacy.
+  ///
+  /// In en, this message translates to:
+  /// **'Privacy'**
+  String get privacy;
+
+  /// No description provided for @privacyIntro.
+  ///
+  /// In en, this message translates to:
+  /// **'Uns is built so what you share stays yours.'**
+  String get privacyIntro;
+
+  /// No description provided for @privacyPhone.
+  ///
+  /// In en, this message translates to:
+  /// **'On this phone only, encrypted: your journal, voice reflections, moods, sessions and location.'**
+  String get privacyPhone;
+
+  /// No description provided for @privacyClassify.
+  ///
+  /// In en, this message translates to:
+  /// **'When you type or say how you feel, only those words are sent to be understood — with no name or account — and they aren\'t kept.'**
+  String get privacyClassify;
+
+  /// No description provided for @privacyAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'If you sign in: your prayer and alert settings, reciter and tasbih history sync to your account. Nothing else.'**
+  String get privacyAccount;
+
+  /// No description provided for @privacyNoAds.
+  ///
+  /// In en, this message translates to:
+  /// **'No ads, ever.'**
+  String get privacyNoAds;
+
+  /// No description provided for @reciterTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Recitation'**
+  String get reciterTitle;
 }
 
 class _AppLocalizationsDelegate
