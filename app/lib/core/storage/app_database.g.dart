@@ -817,6 +817,17 @@ class $SessionsTable extends Sessions with TableInfo<$SessionsTable, Session> {
     type: DriftSqlType.dateTime,
     requiredDuringInsert: false,
   );
+  static const VerificationMeta _reflectionMeta = const VerificationMeta(
+    'reflection',
+  );
+  @override
+  late final GeneratedColumn<String> reflection = GeneratedColumn<String>(
+    'reflection',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
   @override
   List<GeneratedColumn> get $columns => [
     id,
@@ -827,6 +838,7 @@ class $SessionsTable extends Sessions with TableInfo<$SessionsTable, Session> {
     verses,
     moodAfter,
     endedAt,
+    reflection,
   ];
   @override
   String get aliasedName => _alias ?? actualTableName;
@@ -893,6 +905,12 @@ class $SessionsTable extends Sessions with TableInfo<$SessionsTable, Session> {
         endedAt.isAcceptableOrUnknown(data['ended_at']!, _endedAtMeta),
       );
     }
+    if (data.containsKey('reflection')) {
+      context.handle(
+        _reflectionMeta,
+        reflection.isAcceptableOrUnknown(data['reflection']!, _reflectionMeta),
+      );
+    }
     return context;
   }
 
@@ -934,6 +952,10 @@ class $SessionsTable extends Sessions with TableInfo<$SessionsTable, Session> {
         DriftSqlType.dateTime,
         data['${effectivePrefix}ended_at'],
       ),
+      reflection: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}reflection'],
+      ),
     );
   }
 
@@ -956,6 +978,9 @@ class Session extends DataClass implements Insertable<Session> {
   final String verses;
   final String? moodAfter;
   final DateTime? endedAt;
+
+  /// The written reflection, if any (journal). Never processed by AI.
+  final String? reflection;
   const Session({
     required this.id,
     required this.startedAt,
@@ -965,6 +990,7 @@ class Session extends DataClass implements Insertable<Session> {
     required this.verses,
     this.moodAfter,
     this.endedAt,
+    this.reflection,
   });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
@@ -980,6 +1006,9 @@ class Session extends DataClass implements Insertable<Session> {
     }
     if (!nullToAbsent || endedAt != null) {
       map['ended_at'] = Variable<DateTime>(endedAt);
+    }
+    if (!nullToAbsent || reflection != null) {
+      map['reflection'] = Variable<String>(reflection);
     }
     return map;
   }
@@ -998,6 +1027,9 @@ class Session extends DataClass implements Insertable<Session> {
       endedAt: endedAt == null && nullToAbsent
           ? const Value.absent()
           : Value(endedAt),
+      reflection: reflection == null && nullToAbsent
+          ? const Value.absent()
+          : Value(reflection),
     );
   }
 
@@ -1015,6 +1047,7 @@ class Session extends DataClass implements Insertable<Session> {
       verses: serializer.fromJson<String>(json['verses']),
       moodAfter: serializer.fromJson<String?>(json['moodAfter']),
       endedAt: serializer.fromJson<DateTime?>(json['endedAt']),
+      reflection: serializer.fromJson<String?>(json['reflection']),
     );
   }
   @override
@@ -1029,6 +1062,7 @@ class Session extends DataClass implements Insertable<Session> {
       'verses': serializer.toJson<String>(verses),
       'moodAfter': serializer.toJson<String?>(moodAfter),
       'endedAt': serializer.toJson<DateTime?>(endedAt),
+      'reflection': serializer.toJson<String?>(reflection),
     };
   }
 
@@ -1041,6 +1075,7 @@ class Session extends DataClass implements Insertable<Session> {
     String? verses,
     Value<String?> moodAfter = const Value.absent(),
     Value<DateTime?> endedAt = const Value.absent(),
+    Value<String?> reflection = const Value.absent(),
   }) => Session(
     id: id ?? this.id,
     startedAt: startedAt ?? this.startedAt,
@@ -1050,6 +1085,7 @@ class Session extends DataClass implements Insertable<Session> {
     verses: verses ?? this.verses,
     moodAfter: moodAfter.present ? moodAfter.value : this.moodAfter,
     endedAt: endedAt.present ? endedAt.value : this.endedAt,
+    reflection: reflection.present ? reflection.value : this.reflection,
   );
   Session copyWithCompanion(SessionsCompanion data) {
     return Session(
@@ -1061,6 +1097,9 @@ class Session extends DataClass implements Insertable<Session> {
       verses: data.verses.present ? data.verses.value : this.verses,
       moodAfter: data.moodAfter.present ? data.moodAfter.value : this.moodAfter,
       endedAt: data.endedAt.present ? data.endedAt.value : this.endedAt,
+      reflection: data.reflection.present
+          ? data.reflection.value
+          : this.reflection,
     );
   }
 
@@ -1074,7 +1113,8 @@ class Session extends DataClass implements Insertable<Session> {
           ..write('minutes: $minutes, ')
           ..write('verses: $verses, ')
           ..write('moodAfter: $moodAfter, ')
-          ..write('endedAt: $endedAt')
+          ..write('endedAt: $endedAt, ')
+          ..write('reflection: $reflection')
           ..write(')'))
         .toString();
   }
@@ -1089,6 +1129,7 @@ class Session extends DataClass implements Insertable<Session> {
     verses,
     moodAfter,
     endedAt,
+    reflection,
   );
   @override
   bool operator ==(Object other) =>
@@ -1101,7 +1142,8 @@ class Session extends DataClass implements Insertable<Session> {
           other.minutes == this.minutes &&
           other.verses == this.verses &&
           other.moodAfter == this.moodAfter &&
-          other.endedAt == this.endedAt);
+          other.endedAt == this.endedAt &&
+          other.reflection == this.reflection);
 }
 
 class SessionsCompanion extends UpdateCompanion<Session> {
@@ -1113,6 +1155,7 @@ class SessionsCompanion extends UpdateCompanion<Session> {
   final Value<String> verses;
   final Value<String?> moodAfter;
   final Value<DateTime?> endedAt;
+  final Value<String?> reflection;
   const SessionsCompanion({
     this.id = const Value.absent(),
     this.startedAt = const Value.absent(),
@@ -1122,6 +1165,7 @@ class SessionsCompanion extends UpdateCompanion<Session> {
     this.verses = const Value.absent(),
     this.moodAfter = const Value.absent(),
     this.endedAt = const Value.absent(),
+    this.reflection = const Value.absent(),
   });
   SessionsCompanion.insert({
     this.id = const Value.absent(),
@@ -1132,6 +1176,7 @@ class SessionsCompanion extends UpdateCompanion<Session> {
     this.verses = const Value.absent(),
     this.moodAfter = const Value.absent(),
     this.endedAt = const Value.absent(),
+    this.reflection = const Value.absent(),
   }) : startedAt = Value(startedAt),
        emotion = Value(emotion),
        help = Value(help),
@@ -1145,6 +1190,7 @@ class SessionsCompanion extends UpdateCompanion<Session> {
     Expression<String>? verses,
     Expression<String>? moodAfter,
     Expression<DateTime>? endedAt,
+    Expression<String>? reflection,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
@@ -1155,6 +1201,7 @@ class SessionsCompanion extends UpdateCompanion<Session> {
       if (verses != null) 'verses': verses,
       if (moodAfter != null) 'mood_after': moodAfter,
       if (endedAt != null) 'ended_at': endedAt,
+      if (reflection != null) 'reflection': reflection,
     });
   }
 
@@ -1167,6 +1214,7 @@ class SessionsCompanion extends UpdateCompanion<Session> {
     Value<String>? verses,
     Value<String?>? moodAfter,
     Value<DateTime?>? endedAt,
+    Value<String?>? reflection,
   }) {
     return SessionsCompanion(
       id: id ?? this.id,
@@ -1177,6 +1225,7 @@ class SessionsCompanion extends UpdateCompanion<Session> {
       verses: verses ?? this.verses,
       moodAfter: moodAfter ?? this.moodAfter,
       endedAt: endedAt ?? this.endedAt,
+      reflection: reflection ?? this.reflection,
     );
   }
 
@@ -1207,6 +1256,9 @@ class SessionsCompanion extends UpdateCompanion<Session> {
     if (endedAt.present) {
       map['ended_at'] = Variable<DateTime>(endedAt.value);
     }
+    if (reflection.present) {
+      map['reflection'] = Variable<String>(reflection.value);
+    }
     return map;
   }
 
@@ -1220,7 +1272,8 @@ class SessionsCompanion extends UpdateCompanion<Session> {
           ..write('minutes: $minutes, ')
           ..write('verses: $verses, ')
           ..write('moodAfter: $moodAfter, ')
-          ..write('endedAt: $endedAt')
+          ..write('endedAt: $endedAt, ')
+          ..write('reflection: $reflection')
           ..write(')'))
         .toString();
   }
@@ -1718,6 +1771,7 @@ typedef $$SessionsTableCreateCompanionBuilder = SessionsCompanion Function({
   Value<String> verses,
   Value<String?> moodAfter,
   Value<DateTime?> endedAt,
+  Value<String?> reflection,
 });
 typedef $$SessionsTableUpdateCompanionBuilder = SessionsCompanion Function({
   Value<int> id,
@@ -1728,6 +1782,7 @@ typedef $$SessionsTableUpdateCompanionBuilder = SessionsCompanion Function({
   Value<String> verses,
   Value<String?> moodAfter,
   Value<DateTime?> endedAt,
+  Value<String?> reflection,
 });
 
 class $$SessionsTableFilterComposer
@@ -1776,6 +1831,11 @@ class $$SessionsTableFilterComposer
 
   ColumnFilters<DateTime> get endedAt => $composableBuilder(
     column: $table.endedAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get reflection => $composableBuilder(
+    column: $table.reflection,
     builder: (column) => ColumnFilters(column),
   );
 }
@@ -1828,6 +1888,11 @@ class $$SessionsTableOrderingComposer
     column: $table.endedAt,
     builder: (column) => ColumnOrderings(column),
   );
+
+  ColumnOrderings<String> get reflection => $composableBuilder(
+    column: $table.reflection,
+    builder: (column) => ColumnOrderings(column),
+  );
 }
 
 class $$SessionsTableAnnotationComposer
@@ -1862,6 +1927,11 @@ class $$SessionsTableAnnotationComposer
 
   GeneratedColumn<DateTime> get endedAt =>
       $composableBuilder(column: $table.endedAt, builder: (column) => column);
+
+  GeneratedColumn<String> get reflection => $composableBuilder(
+    column: $table.reflection,
+    builder: (column) => column,
+  );
 }
 
 class $$SessionsTableTableManager
@@ -1900,6 +1970,7 @@ class $$SessionsTableTableManager
                 Value<String> verses = const Value.absent(),
                 Value<String?> moodAfter = const Value.absent(),
                 Value<DateTime?> endedAt = const Value.absent(),
+                Value<String?> reflection = const Value.absent(),
               }) => SessionsCompanion(
                 id: id,
                 startedAt: startedAt,
@@ -1909,6 +1980,7 @@ class $$SessionsTableTableManager
                 verses: verses,
                 moodAfter: moodAfter,
                 endedAt: endedAt,
+                reflection: reflection,
               ),
           createCompanionCallback:
               ({
@@ -1920,6 +1992,7 @@ class $$SessionsTableTableManager
                 Value<String> verses = const Value.absent(),
                 Value<String?> moodAfter = const Value.absent(),
                 Value<DateTime?> endedAt = const Value.absent(),
+                Value<String?> reflection = const Value.absent(),
               }) => SessionsCompanion.insert(
                 id: id,
                 startedAt: startedAt,
@@ -1929,6 +2002,7 @@ class $$SessionsTableTableManager
                 verses: verses,
                 moodAfter: moodAfter,
                 endedAt: endedAt,
+                reflection: reflection,
               ),
           withReferenceMapper: (p0) => p0
               .map(

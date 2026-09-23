@@ -1509,6 +1509,138 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Voice isn\'t available on this phone. You can type instead.'**
   String get voiceUnsupported;
+
+  /// No description provided for @captureReflection.
+  ///
+  /// In en, this message translates to:
+  /// **'Capture a reflection? · Optional'**
+  String get captureReflection;
+
+  /// No description provided for @write.
+  ///
+  /// In en, this message translates to:
+  /// **'Write'**
+  String get write;
+
+  /// No description provided for @record.
+  ///
+  /// In en, this message translates to:
+  /// **'Record'**
+  String get record;
+
+  /// No description provided for @todaysPrompt.
+  ///
+  /// In en, this message translates to:
+  /// **'Today\'s prompt'**
+  String get todaysPrompt;
+
+  /// No description provided for @prompt1.
+  ///
+  /// In en, this message translates to:
+  /// **'Which verse stayed with you, and why?'**
+  String get prompt1;
+
+  /// No description provided for @prompt2.
+  ///
+  /// In en, this message translates to:
+  /// **'What felt lighter after listening?'**
+  String get prompt2;
+
+  /// No description provided for @prompt3.
+  ///
+  /// In en, this message translates to:
+  /// **'What would you like to carry into the rest of today?'**
+  String get prompt3;
+
+  /// No description provided for @prompt4.
+  ///
+  /// In en, this message translates to:
+  /// **'What is on your heart right now?'**
+  String get prompt4;
+
+  /// No description provided for @writeHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Write a few lines…'**
+  String get writeHint;
+
+  /// No description provided for @onlyOnThisPhone.
+  ///
+  /// In en, this message translates to:
+  /// **'Only on this phone'**
+  String get onlyOnThisPhone;
+
+  /// No description provided for @reflectionSaved.
+  ///
+  /// In en, this message translates to:
+  /// **'Reflection saved to your journal'**
+  String get reflectionSaved;
+
+  /// No description provided for @journal.
+  ///
+  /// In en, this message translates to:
+  /// **'Journal'**
+  String get journal;
+
+  /// No description provided for @insights.
+  ///
+  /// In en, this message translates to:
+  /// **'Insights'**
+  String get insights;
+
+  /// No description provided for @journalEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'Sessions you finish appear here, with anything you write.'**
+  String get journalEmpty;
+
+  /// No description provided for @sessionOnly.
+  ///
+  /// In en, this message translates to:
+  /// **'Session only'**
+  String get sessionOnly;
+
+  /// No description provided for @moodsBeforeAfter.
+  ///
+  /// In en, this message translates to:
+  /// **'{before} → {after}'**
+  String moodsBeforeAfter(String before, String after);
+
+  /// No description provided for @todayAt.
+  ///
+  /// In en, this message translates to:
+  /// **'Today {time}'**
+  String todayAt(String time);
+
+  /// No description provided for @entryMinutes.
+  ///
+  /// In en, this message translates to:
+  /// **'{date} · {minutes} min'**
+  String entryMinutes(String date, int minutes);
+
+  /// No description provided for @noReflection.
+  ///
+  /// In en, this message translates to:
+  /// **'No reflection written for this session.'**
+  String get noReflection;
+
+  /// No description provided for @replaySession.
+  ///
+  /// In en, this message translates to:
+  /// **'Replay session'**
+  String get replaySession;
+
+  /// No description provided for @playVerse.
+  ///
+  /// In en, this message translates to:
+  /// **'Play {ref}'**
+  String playVerse(String ref);
+
+  /// No description provided for @journalCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =0{No entries} =1{1 entry} other{{count} entries}}'**
+  String journalCount(int count);
 }
 
 class _AppLocalizationsDelegate

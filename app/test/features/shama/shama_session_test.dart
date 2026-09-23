@@ -166,7 +166,8 @@ void main() {
     await setUpWith();
     await start();
     await session().end();
-    await session().save('calmer');
+    session().setMoodAfter('calmer');
+    await session().save();
     expect(container.read(shamaSessionProvider), isNull);
     final row = await (db.select(db.sessions)).getSingle();
     expect(row.moodAfter, 'calmer');

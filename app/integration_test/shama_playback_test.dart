@@ -87,7 +87,8 @@ void main() {
     expect(s.position, greaterThan(const Duration(seconds: 2)));
 
     await container.read(shamaSessionProvider.notifier).end();
-    await container.read(shamaSessionProvider.notifier).save('same');
+    container.read(shamaSessionProvider.notifier).setMoodAfter('same');
+    await container.read(shamaSessionProvider.notifier).save();
     final row = await db.select(db.sessions).getSingle();
     expect(row.verses, isNotEmpty);
     expect(row.moodAfter, 'same');

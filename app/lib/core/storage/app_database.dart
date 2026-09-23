@@ -42,8 +42,8 @@ class VerseTexts extends Table {
   Set<Column> get primaryKey => {edition, surah, ayah};
 }
 
-/// Shama sessions: what was chosen and played, and the mood after. Never
-/// leaves the device.
+/// Shama sessions and their journal reflections: what was chosen and
+/// played, the mood after, and what the user wrote. Never leaves the device.
 class Sessions extends Table {
   IntColumn get id => integer().autoIncrement()();
   DateTimeColumn get startedAt => dateTime()();
@@ -57,6 +57,9 @@ class Sessions extends Table {
   TextColumn get verses => text().withDefault(const Constant(''))();
   TextColumn get moodAfter => text().nullable()();
   DateTimeColumn get endedAt => dateTime().nullable()();
+
+  /// The written reflection, if any (journal). Never processed by AI.
+  TextColumn get reflection => text().nullable()();
 }
 
 /// The encrypted on-device database. Holds every piece of user data; later
@@ -66,7 +69,7 @@ class AppDatabase extends _$AppDatabase {
   AppDatabase(super.executor);
 
   @override
-  int get schemaVersion => 4;
+  int get schemaVersion => 5;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -74,6 +77,7 @@ class AppDatabase extends _$AppDatabase {
       if (from < 2) await m.createTable(tasbihDays);
       if (from < 3) await m.createTable(verseTexts);
       if (from < 4) await m.createTable(sessions);
+      if (from == 4) await m.addColumn(sessions, sessions.reflection);
     },
   );
 

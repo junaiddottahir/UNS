@@ -798,4 +798,88 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get voiceUnsupported =>
       'Voice isn\'t available on this phone. You can type instead.';
+
+  @override
+  String get captureReflection => 'Capture a reflection? · Optional';
+
+  @override
+  String get write => 'Write';
+
+  @override
+  String get record => 'Record';
+
+  @override
+  String get todaysPrompt => 'Today\'s prompt';
+
+  @override
+  String get prompt1 => 'Which verse stayed with you, and why?';
+
+  @override
+  String get prompt2 => 'What felt lighter after listening?';
+
+  @override
+  String get prompt3 => 'What would you like to carry into the rest of today?';
+
+  @override
+  String get prompt4 => 'What is on your heart right now?';
+
+  @override
+  String get writeHint => 'Write a few lines…';
+
+  @override
+  String get onlyOnThisPhone => 'Only on this phone';
+
+  @override
+  String get reflectionSaved => 'Reflection saved to your journal';
+
+  @override
+  String get journal => 'Journal';
+
+  @override
+  String get insights => 'Insights';
+
+  @override
+  String get journalEmpty =>
+      'Sessions you finish appear here, with anything you write.';
+
+  @override
+  String get sessionOnly => 'Session only';
+
+  @override
+  String moodsBeforeAfter(String before, String after) {
+    return '$before → $after';
+  }
+
+  @override
+  String todayAt(String time) {
+    return 'Today $time';
+  }
+
+  @override
+  String entryMinutes(String date, int minutes) {
+    return '$date · $minutes min';
+  }
+
+  @override
+  String get noReflection => 'No reflection written for this session.';
+
+  @override
+  String get replaySession => 'Replay session';
+
+  @override
+  String playVerse(String ref) {
+    return 'Play $ref';
+  }
+
+  @override
+  String journalCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count entries',
+      one: '1 entry',
+      zero: 'No entries',
+    );
+    return '$_temp0';
+  }
 }

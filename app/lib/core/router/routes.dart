@@ -21,6 +21,11 @@ abstract final class Routes {
   static const shamaPlay = '/shama/play';
   static const shamaAfter = '/shama/after';
   static const support = '/support';
+  static const shamaWrite = '/shama/write';
+  static const journal = '/journal';
+
+  /// One journal entry, e.g. `/journal/12`.
+  static String journalEntry(int id) => '$journal/$id';
   static const qiblaCalibrate = '/qibla/calibrate';
   static const prayerTimes = '/prayer/times';
   static const prayerSettings = '/prayer/settings';

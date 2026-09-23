@@ -64,6 +64,7 @@ class SessionState {
     this.position = Duration.zero,
     this.unavailable,
     this.sessionId,
+    this.moodAfter,
   });
 
   final Emotion emotion;
@@ -85,6 +86,9 @@ class SessionState {
   final Unavailable? unavailable;
   final int? sessionId;
 
+  /// "How do you feel now?" answer, by name.
+  final String? moodAfter;
+
   Duration get length => Duration(minutes: minutes);
   Duration get elapsed => elapsedBefore + position;
   Duration get remaining {
@@ -105,6 +109,7 @@ class SessionState {
     Duration? position,
     Unavailable? unavailable,
     int? sessionId,
+    String? moodAfter,
   }) => SessionState(
     emotion: emotion,
     comfort: comfort,
@@ -118,6 +123,7 @@ class SessionState {
     position: position ?? this.position,
     unavailable: unavailable ?? this.unavailable,
     sessionId: sessionId ?? this.sessionId,
+    moodAfter: moodAfter ?? this.moodAfter,
   );
 }
 
@@ -145,16 +151,27 @@ class ShamaSessionNotifier extends Notifier<SessionState?> {
 
   VersePlayer get _player => ref.read(versePlayerProvider);
 
+  /// Starts a session. With [replay], plays those verses in that order
+  /// (from the journal), keeping only ones still in the approved library.
   Future<void> start({
     required Emotion emotion,
     required bool comfort,
     required int minutes,
+    List<VerseRef>? replay,
   }) async {
     await _halt();
     state = SessionState(emotion: emotion, comfort: comfort, minutes: minutes);
 
     final library = await ref.read(verseLibraryProvider.future);
-    final verses = library == null || library.placeholder
+    final approved = library == null || library.placeholder
+        ? const <VerseRef>{}
+        : {for (final e in library.entries) e.ref};
+    final verses = replay != null
+        ? [
+            for (final r in replay)
+              if (approved.contains(r)) r,
+          ]
+        : library == null || library.placeholder
         ? const <VerseRef>[]
         : library.versesFor(emotion, comfort: comfort);
     if (library == null || verses.isEmpty) {
@@ -167,7 +184,9 @@ class ShamaSessionNotifier extends Notifier<SessionState?> {
       return;
     }
 
-    final queue = [...verses]..shuffle(ref.read(sessionRandomProvider));
+    final queue = replay != null
+        ? verses
+        : ([...verses]..shuffle(ref.read(sessionRandomProvider)));
     final id = await ref
         .read(sessionStoreProvider)
         .start(
@@ -304,13 +323,27 @@ class ShamaSessionNotifier extends Notifier<SessionState?> {
     state = s.copyWith(phase: SessionPhase.finished);
   }
 
-  /// Saves the mood after and clears the session.
-  Future<void> save(String? moodAfter) async {
-    final id = state?.sessionId;
+  void setMoodAfter(String? mood) {
+    final s = state;
+    if (s != null) state = s.copyWith(moodAfter: mood);
+  }
+
+  /// Saves the session to the journal (mood after, optional reflection)
+  /// and clears it.
+  Future<void> save({String? reflection}) async {
+    final s = state;
+    final id = s?.sessionId;
     if (id != null) {
       await ref
           .read(sessionStoreProvider)
-          .finish(id, at: ref.read(nowProvider), moodAfter: moodAfter);
+          .finish(
+            id,
+            at: ref.read(nowProvider),
+            moodAfter: s!.moodAfter,
+            reflection: reflection == null || reflection.trim().isEmpty
+                ? null
+                : reflection.trim(),
+          );
     }
     state = null;
   }

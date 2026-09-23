@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../core/router/routes.dart';
@@ -6,15 +7,17 @@ import '../../core/theme/app_theme.dart';
 import '../../core/widgets/ambient_background.dart';
 import '../../core/widgets/glass.dart';
 import '../../l10n/app_localizations.dart';
+import '../journal/journal_providers.dart';
 
 /// Profile tab. Account, language, premium and privacy arrive with their
-/// units; for now it reaches settings and sources.
-class ProfileScreen extends StatelessWidget {
+/// units; for now it reaches the journal, settings and sources.
+class ProfileScreen extends ConsumerWidget {
   const ProfileScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context);
+    final entries = ref.watch(journalProvider).value?.length ?? 0;
     return Scaffold(
       body: AmbientBackground(
         child: SafeArea(
@@ -36,6 +39,13 @@ class ProfileScreen extends StatelessWidget {
                 child: GlassCard(
                   child: Column(
                     children: [
+                      GlassRow(
+                        leading: Icons.edit_note,
+                        label: Text(l10n.journal),
+                        value: l10n.journalCount(entries),
+                        trailing: Icons.chevron_right,
+                        onTap: () => context.push(Routes.journal),
+                      ),
                       GlassRow(
                         leading: Icons.tune,
                         label: Text(l10n.prayerSettingsTitle),

@@ -20,6 +20,9 @@ import '../../features/prayer/prayer_times_screen.dart';
 import '../../features/profile/profile_screen.dart';
 import '../../features/qibla/calibration_screen.dart';
 import '../../features/qibla/qibla_screen.dart';
+import '../../features/journal/entry_screen.dart';
+import '../../features/journal/journal_screen.dart';
+import '../../features/journal/write_screen.dart';
 import '../../features/library/verse_library.dart';
 import '../../features/shama/after_screen.dart';
 import '../../features/shama/help_screen.dart';
@@ -95,6 +98,17 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       GoRoute(path: Routes.shamaVoice, builder: (_, _) => const VoiceScreen()),
       GoRoute(path: Routes.shamaAfter, builder: (_, _) => const AfterScreen()),
       GoRoute(path: Routes.support, builder: (_, _) => const SupportScreen()),
+      GoRoute(path: Routes.shamaWrite, builder: (_, _) => const WriteScreen()),
+      GoRoute(path: Routes.journal, builder: (_, _) => const JournalScreen()),
+      GoRoute(
+        path: '${Routes.journal}/:id',
+        redirect: (_, state) =>
+            int.tryParse(state.pathParameters['id'] ?? '') == null
+            ? Routes.journal
+            : null,
+        builder: (_, state) =>
+            EntryScreen(id: int.parse(state.pathParameters['id']!)),
+      ),
       GoRoute(
         path: Routes.tasbihCounter,
         builder: (_, _) => const CounterScreen(),

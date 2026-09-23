@@ -381,3 +381,21 @@ Future<ProviderContainer> pumpApp(
   await tester.pumpAndSettle();
   return container;
 }
+
+/// A provider container with the same fakes as [pumpApp], for tests that
+/// don't need widgets.
+Future<ProviderContainer> containerFor(
+  AppDatabase db, {
+  FakeVersePlayer? player,
+}) async => ProviderContainer(
+  overrides: [
+    appDatabaseProvider.overrideWithValue(db),
+    settingsStoreProvider.overrideWithValue(await SettingsStore.load(db)),
+    nowProvider.overrideWith(() => FixedClock(testNow)),
+    versePlayerProvider.overrideWithValue(player ?? FakeVersePlayer()),
+    verseLibraryProvider.overrideWith((ref) async => testLibrary()),
+    sessionRandomProvider.overrideWithValue(Random(1)),
+    quranRepositoryProvider.overrideWithValue(FakeQuran()),
+    recitationRepositoryProvider.overrideWithValue(FakeRecitations()),
+  ],
+);

@@ -36,11 +36,14 @@ void showToast(String message) {
               children: [
                 const Icon(Icons.check, size: 15, color: AppColors.textPrimary),
                 const SizedBox(width: 8),
-                Text(
-                  message,
-                  style: const TextStyle(
-                    fontSize: 14,
-                    color: AppColors.textPrimary,
+                // Long messages (or translations) wrap instead of overflowing.
+                Flexible(
+                  child: Text(
+                    message,
+                    style: const TextStyle(
+                      fontSize: 14,
+                      color: AppColors.textPrimary,
+                    ),
                   ),
                 ),
               ],

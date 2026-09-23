@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../core/router/routes.dart';
+import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_theme.dart';
 import '../../core/widgets/ambient_background.dart';
 import '../../core/widgets/buttons.dart';
@@ -27,7 +28,7 @@ class _AfterScreenState extends ConsumerState<AfterScreen> {
 
   Future<void> _done() async {
     final l10n = AppLocalizations.of(context);
-    await ref.read(shamaSessionProvider.notifier).save(_mood?.name);
+    await ref.read(shamaSessionProvider.notifier).save();
     ref.read(moodChatProvider.notifier).reset();
     if (!mounted) return;
     context.go(Routes.home);
@@ -67,15 +68,67 @@ class _AfterScreenState extends ConsumerState<AfterScreen> {
                   labelOf: (m) => l10n.afterMoodName(m!),
                   onSelected: (m) {
                     setState(() => _mood = m);
+                    ref
+                        .read(shamaSessionProvider.notifier)
+                        .setMoodAfter(m?.name);
                     // Feeling heavier: offer support first (prototype).
                     if (m == AfterMood.heavier) context.push(Routes.support);
                   },
                 ),
                 const SizedBox(height: 30),
+                Text(
+                  l10n.captureReflection.toUpperCase(),
+                  style: AppText.label,
+                ),
+                const SizedBox(height: 12),
+                Row(
+                  children: [
+                    Expanded(
+                      child: _GlassButton(
+                        icon: Icons.edit_outlined,
+                        label: l10n.write,
+                        onTap: () => context.push(Routes.shamaWrite),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 14),
                 PrimaryButton(label: l10n.done, onPressed: _done),
               ],
             ),
           ),
+        ),
+      ),
+    );
+  }
+}
+
+/// The prototype's `.gbtn.glass`: an icon and label in a glass pill.
+class _GlassButton extends StatelessWidget {
+  const _GlassButton({
+    required this.icon,
+    required this.label,
+    required this.onTap,
+  });
+
+  final IconData icon;
+  final String label;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: 54,
+      child: OutlinedButton.icon(
+        onPressed: onTap,
+        icon: Icon(icon, size: 17),
+        label: Text(label),
+        style: OutlinedButton.styleFrom(
+          foregroundColor: AppColors.textPrimary,
+          backgroundColor: AppColors.glassFill,
+          side: const BorderSide(color: AppColors.glassEdge),
+          shape: const StadiumBorder(),
+          textStyle: const TextStyle(fontSize: 15),
         ),
       ),
     );

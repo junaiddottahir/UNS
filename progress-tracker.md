@@ -9,8 +9,8 @@ change.
 
 ## Current Goal
 
-- Unit 14: app — reflection journal (written entries, list, replay,
-  safety check).
+- Unit 15: app — voice-note reflections (record, encrypted storage,
+  playback).
 
 ## Completed
 
@@ -304,6 +304,24 @@ change.
   - 162 unit/widget tests; simulator screenshots with scripted words.
     Real speech needs a device (permission prompts).
 
+- Unit 14 (2026-09-24): reflection journal.
+  - After a session: "Capture a reflection? · Optional" → Write →
+    "Today's prompt" (rotates daily; first is the prototype's), "Only on
+    this phone", Finish. Saved with the session in the encrypted
+    database (`sessions.reflection`, schema v5 with a v4 → v5 upgrade).
+  - Finish runs the on-device phrase check (no AI). A match still saves
+    the entry, then shows support (architecture.md); otherwise
+    "Reflection saved to your journal".
+  - Journal (Profile → Journal, with entry count): newest first, date
+    ("Today 3:40 PM" / "Wed 23 Sep"), mood before → after, first line
+    of the reflection or "Session only". Insights → Premium placeholder.
+  - Entry: date · minutes, mood chips, reflection, its verses (tap to
+    play one) and "Replay session" — replays only verses still in the
+    approved library, through the normal player and after-screen.
+  - Fixed on the way: toast, journal card header and the write screen's
+    footer overflowed with long text (would also hit translations).
+  - 168 unit/widget tests; simulator screenshots of journal and entry.
+
 ## In Progress
 
 - None yet.
@@ -428,6 +446,9 @@ Each line is one unit; app and backend units are kept separate.
   runs out, so it can run over by up to one verse. OK?
 - New chat copy to review: "I couldn't read that just now. Pick a
   feeling below." (shown when the classifier is unavailable).
+- Reflection prompts 2–4 are my wording ("What felt lighter after
+  listening?", "What would you like to carry into the rest of today?",
+  "What is on your heart right now?"). Review.
 - Self-harm phrase list: who writes and reviews the English and Arabic
   phrases. English is the prototype's list (+ variants); Arabic is my
   unreviewed DRAFT — must be reviewed by a native speaker and clinician

@@ -31,10 +31,25 @@ class SessionStore {
         SessionsCompanion(verses: Value(played.join(','))),
       );
 
-  Future<void> finish(int id, {required DateTime at, String? moodAfter}) =>
-      (_db.update(_db.sessions)..where((s) => s.id.equals(id))).write(
-        SessionsCompanion(endedAt: Value(at), moodAfter: Value(moodAfter)),
-      );
+  Future<void> finish(
+    int id, {
+    required DateTime at,
+    String? moodAfter,
+    String? reflection,
+  }) => (_db.update(_db.sessions)..where((s) => s.id.equals(id))).write(
+    SessionsCompanion(
+      endedAt: Value(at),
+      moodAfter: Value(moodAfter),
+      reflection: Value(reflection),
+    ),
+  );
+
+  /// Finished sessions, newest first: the journal.
+  Stream<List<Session>> watchJournal() =>
+      (_db.select(_db.sessions)
+            ..where((s) => s.endedAt.isNotNull())
+            ..orderBy([(s) => OrderingTerm.desc(s.startedAt)]))
+          .watch();
 
   Future<Session?> byId(int id) => (_db.select(
     _db.sessions,

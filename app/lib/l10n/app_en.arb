@@ -489,5 +489,68 @@
   "finishListening": "Finish",
   "talkInstead": "Speak instead of typing",
   "voiceNoPermission": "Allow the microphone and speech recognition for Uns in Settings to talk instead of typing.",
-  "voiceUnsupported": "Voice isn't available on this phone. You can type instead."
+  "voiceUnsupported": "Voice isn't available on this phone. You can type instead.",
+  "captureReflection": "Capture a reflection? · Optional",
+  "write": "Write",
+  "record": "Record",
+  "todaysPrompt": "Today's prompt",
+  "prompt1": "Which verse stayed with you, and why?",
+  "prompt2": "What felt lighter after listening?",
+  "prompt3": "What would you like to carry into the rest of today?",
+  "prompt4": "What is on your heart right now?",
+  "writeHint": "Write a few lines…",
+  "onlyOnThisPhone": "Only on this phone",
+  "reflectionSaved": "Reflection saved to your journal",
+  "journal": "Journal",
+  "insights": "Insights",
+  "journalEmpty": "Sessions you finish appear here, with anything you write.",
+  "sessionOnly": "Session only",
+  "moodsBeforeAfter": "{before} → {after}",
+  "@moodsBeforeAfter": {
+    "placeholders": {
+      "before": {
+        "type": "String"
+      },
+      "after": {
+        "type": "String"
+      }
+    }
+  },
+  "todayAt": "Today {time}",
+  "@todayAt": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "entryMinutes": "{date} · {minutes} min",
+  "@entryMinutes": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      },
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "noReflection": "No reflection written for this session.",
+  "replaySession": "Replay session",
+  "playVerse": "Play {ref}",
+  "@playVerse": {
+    "placeholders": {
+      "ref": {
+        "type": "String"
+      }
+    }
+  },
+  "journalCount": "{count, plural, =0{No entries} =1{1 entry} other{{count} entries}}",
+  "@journalCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  }
 }
