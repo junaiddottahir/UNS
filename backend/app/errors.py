@@ -7,6 +7,7 @@ from starlette.exceptions import HTTPException
 
 _CODES = {
     400: "bad_request",
+    401: "unauthorized",
     404: "not_found",
     405: "method_not_allowed",
     429: "rate_limited",

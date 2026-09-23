@@ -42,7 +42,11 @@
   `GET /v1/library` with an ETag; validated at startup. Until the scholar
   delivers, a placeholder on the non-existent surah 0 with
   `"placeholder": true` stands in.
-- `backend/migrations/` — SQL migrations for the Supabase Postgres schema.
+- `backend/migrations/` — SQL migrations for the Supabase Postgres schema
+  (applied to project "Uns"). The backend reaches Supabase over its REST
+  API with the signed-in user's own token, so row-level security enforces
+  per-user access; account deletion is a `delete_my_account()` function
+  the user calls on themselves.
 - `app/lib/features/prayer/` — prayer calculation (`PrayerSchedule` wraps
   `adhan`), settings, country → method suggestion, and the times/settings
   screens. Times are computed in the city's IANA zone (from

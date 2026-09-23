@@ -9,8 +9,8 @@ change.
 
 ## Current Goal
 
-- Unit 16: backend — Supabase schema, JWT verification, settings/tasbih
-  sync endpoints, account deletion.
+- Unit 17: app — auth: sign in / register / forgot password (Apple,
+  Google, email), account card in Profile, sign out, delete account.
 
 ## Completed
 
@@ -342,6 +342,33 @@ change.
     encrypted file on disk, exact decrypt, playback from memory.
     Recording itself needs a device (mic permission).
 
+- Unit 16 (2026-09-24): backend accounts and sync (Supabase).
+  - Schema applied to the "Uns" project (migration
+    `backend/migrations/0001_sync_tables.sql`): `user_settings` (JSON,
+    newest wins; a check constraint refuses location keys) and
+    `tasbih_days` (per-day totals). Both cascade-delete with the user,
+    row-level security on, users only touch their own rows.
+    `delete_my_account()` (security definer, `authenticated` only)
+    deletes the caller — so no admin key is needed. Supabase's advisor
+    flags it as callable by signed-in users: intended. Performance
+    advisor clean.
+  - FastAPI verifies Supabase access tokens with the project's public
+    keys (ES256 via JWKS; audience, issuer, expiry, role checked) and
+    calls Supabase REST with the user's own token, so RLS applies.
+  - `GET/PUT /v1/me/settings` (strict schema: prayer, alerts, reciter,
+    language; unknown fields such as location or mood rejected; newest
+    `updated_at` wins), `GET/PUT /v1/me/tasbih` (higher count per day
+    wins, returns full history), `DELETE /v1/me` (deletes the account and
+    its rows; also the RevenueCat customer when
+    `REVENUECAT_SECRET_KEY` is set). 401 without a valid token; 503 when
+    Supabase isn't configured or reachable.
+  - `backend/.env` now holds `SUPABASE_URL` and the publishable key
+    (public values); `.env.example` documents all keys.
+  - 59 pytest tests (real ES256 signing for token checks). Live checks
+    against the project: real keys load, junk token refused, anonymous
+    read sees nothing, anonymous write/delete refused (401). Full live
+    flow waits for sign-in (unit 17); anonymous sign-in is off.
+
 ## In Progress
 
 - None yet.
@@ -380,8 +407,15 @@ Each line is one unit; app and backend units are kept separate.
 
 ## Open Questions
 
-- Settings merge on first sign in: when the phone and the account both have
-  settings, which wins? Proposal: the account's, after asking the user once.
+- Settings merge on first sign in: implemented as "newest change wins"
+  (by the time settings were last changed). Tasbih: higher count per day
+  wins (two phones counting the same day keep the larger, not the sum).
+- GitHub ↔ Supabase: not connected. Not needed so far (migrations are
+  in `backend/migrations/` and applied with the Supabase connector). To
+  get preview branches per pull request, connect it in the Supabase
+  dashboard (Project Settings → Integrations → GitHub).
+- RevenueCat secret key in `backend/.env` so account deletion also
+  removes purchase records.
 - Developer accounts needed before units 17–19: Apple Developer (Sign in
   with Apple, IAP), Google Play Console. (RevenueCat account exists.)
 - Final app ID (bundle ID / package name). Currently the placeholder

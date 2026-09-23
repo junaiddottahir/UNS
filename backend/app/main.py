@@ -2,13 +2,17 @@ import os
 from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
 
+import httpx
 from fastapi import FastAPI
 
+from app.config import load_config
 from app.errors import install_error_handlers
-from app.routers import classify, health, library
+from app.routers import classify, health, library, me
+from app.services.auth import SupabaseTokenVerifier
 from app.services.classifier import ClaudeClassifier
 from app.services.library import load_library
 from app.services.rate_limit import RateLimiter
+from app.services.supabase_rest import SupabaseRest
 
 
 @asynccontextmanager
@@ -22,7 +26,21 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
         os.environ.get(k) for k in ("ANTHROPIC_API_KEY", "ANTHROPIC_AUTH_TOKEN")
     )
     app.state.classifier = ClaudeClassifier() if configured else None
-    yield
+
+    config = load_config()
+    app.state.config = config
+    async with httpx.AsyncClient() as http:
+        app.state.http = http
+        if config.supabase_configured:
+            app.state.token_verifier = SupabaseTokenVerifier(config.supabase_url)
+            app.state.supabase = SupabaseRest(
+                config.supabase_url, config.supabase_publishable_key, http
+            )
+        else:
+            # Accounts are optional: sync endpoints answer 503.
+            app.state.token_verifier = None
+            app.state.supabase = None
+        yield
 
 
 app = FastAPI(title="Uns API", version="0.1.0", lifespan=lifespan)
@@ -30,3 +48,4 @@ install_error_handlers(app)
 app.include_router(health.router, prefix="/v1")
 app.include_router(library.router, prefix="/v1")
 app.include_router(classify.router, prefix="/v1")
+app.include_router(me.router, prefix="/v1")
