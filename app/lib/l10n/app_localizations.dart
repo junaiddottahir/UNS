@@ -657,6 +657,102 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Coming in a later update.'**
   String get comingSoon;
+
+  /// No description provided for @alertDetail.
+  ///
+  /// In en, this message translates to:
+  /// **'{time} · {place}'**
+  String alertDetail(String time, String place);
+
+  /// No description provided for @alertReminderTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'{prayer} in {minutes} min'**
+  String alertReminderTitle(String prayer, int minutes);
+
+  /// No description provided for @alertCheckInTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Did you pray {prayer}?'**
+  String alertCheckInTitle(String prayer);
+
+  /// No description provided for @prayerAlertsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Prayer alerts'**
+  String get prayerAlertsTitle;
+
+  /// No description provided for @alertsLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Alerts'**
+  String get alertsLabel;
+
+  /// No description provided for @alertsCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} of 5'**
+  String alertsCount(int count);
+
+  /// No description provided for @atPrayerTime.
+  ///
+  /// In en, this message translates to:
+  /// **'At prayer time'**
+  String get atPrayerTime;
+
+  /// No description provided for @remindMeBefore.
+  ///
+  /// In en, this message translates to:
+  /// **'Remind me before'**
+  String get remindMeBefore;
+
+  /// No description provided for @askDidYouPray.
+  ///
+  /// In en, this message translates to:
+  /// **'Ask \"did you pray?\"'**
+  String get askDidYouPray;
+
+  /// No description provided for @reminderNone.
+  ///
+  /// In en, this message translates to:
+  /// **'None'**
+  String get reminderNone;
+
+  /// No description provided for @reminderMinutes.
+  ///
+  /// In en, this message translates to:
+  /// **'{minutes} min'**
+  String reminderMinutes(int minutes);
+
+  /// No description provided for @yes.
+  ///
+  /// In en, this message translates to:
+  /// **'Yes'**
+  String get yes;
+
+  /// No description provided for @no.
+  ///
+  /// In en, this message translates to:
+  /// **'No'**
+  String get no;
+
+  /// No description provided for @alertSummaryBefore.
+  ///
+  /// In en, this message translates to:
+  /// **'{mode} · {minutes} min before'**
+  String alertSummaryBefore(String mode, int minutes);
+
+  /// No description provided for @notificationsOff.
+  ///
+  /// In en, this message translates to:
+  /// **'Notifications are off for Uns, so alerts won\'t appear.'**
+  String get notificationsOff;
+
+  /// No description provided for @turnOnNotifications.
+  ///
+  /// In en, this message translates to:
+  /// **'Turn on notifications'**
+  String get turnOnNotifications;
 }
 
 class _AppLocalizationsDelegate

@@ -22,6 +22,12 @@ final _noPrompt = notificationPermissionProvider.overrideWithValue(
 class _AllowNotifications implements NotificationPermission {
   @override
   Future<bool> request() async => true;
+
+  @override
+  Future<bool> isGranted() async => true;
+
+  @override
+  Future<void> openSettings() async {}
 }
 
 void main() {

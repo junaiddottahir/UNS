@@ -9,8 +9,7 @@ change.
 
 ## Current Goal
 
-- Unit 4: prayer notifications (per-prayer mode, pre-reminder, check-in),
-  onboarding step 3.
+- Unit 5: qibla compass + calibration prompt.
 
 ## Completed
 
@@ -99,6 +98,29 @@ change.
   - 48 unit/widget tests; iOS persistence integration test passes;
     screenshots checked against the prototype.
 
+- Unit 4 (2026-09-23): prayer notifications.
+  - Per prayer: at prayer time Adhan / Alert / Silent / Off (Silent added
+    to the prototype's three, per scope), remind before None / 10 / 15 /
+    30 min, "did you pray?" check-in Yes / No. Prayer settings → Alerts
+    ("n of 5") → list → per-prayer screen; today's times rows show the
+    mode icon and open that prayer's alert.
+  - Planned on the device from prayer times (`alert_planner.dart`):
+    up to 7 days ahead, capped at 60 pending (iOS allows 64). Rescheduled
+    on launch, on location / prayer / alert changes, every 6 hours while
+    open, and on return to the app (permission may have changed).
+  - Scheduling only runs when notifications are allowed (iOS refuses
+    otherwise). Alert screens show "Notifications are off…" with a
+    button that asks again or opens Settings.
+  - Android: exact alarms when granted (asked after notification
+    permission), inexact otherwise; boot receiver reschedules; channels
+    per sound. Not verified on a device yet (no Android SDK here).
+  - Fixed on the way: alert times formatted before date data loaded
+    would have crashed launch; quick taps could undo each other's alert
+    changes.
+  - 60 unit/widget tests; iOS integration tests: saved alerts are
+    registered with iOS on launch (24–28 for Fajr+reminder and
+    Maghrib+check-in over 7 days), and a scheduled alert fires on time.
+
 ## In Progress
 
 - None yet.
@@ -179,6 +201,17 @@ Each line is one unit; app and backend units are kept separate.
 - New copy to review: "Prayer times can't be calculated for {place}
   today…" (polar day/night) and the method names in the method picker.
 - Placeholder copy "Coming in a later update." on unbuilt tabs.
+- Adhan sound: no recording is bundled, so Adhan alerts use the default
+  sound. Need an approved adhan recording (iOS plays at most 30 s of a
+  notification sound; longer needs a shortened cut). Who chooses it?
+- "Did you pray?" check-in fires 30 min after the prayer starts (not in
+  the prototype). Confirm the timing. It's a nudge only; answers aren't
+  tracked (prayer tracker is out of scope).
+- If the app isn't opened for about 4+ days (all alerts on), scheduled
+  alerts run out. Add background refresh (iOS BGTaskScheduler / Android
+  WorkManager) later?
+- New notification copy to review: "Fajr in 15 min", "Did you pray
+  Asr?", body "4:21 AM · Sydney", "Notifications are off for Uns…".
 - Recent locations in the location picker (prototype): storage exists now;
   add when polishing Profile/settings, or as a small follow-up.
 - Self-harm phrase list: who writes and reviews the English and Arabic

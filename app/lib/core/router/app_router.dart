@@ -2,6 +2,8 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../features/alerts/prayer_alert_screen.dart';
+import '../../features/alerts/prayer_alerts_screen.dart';
 import '../../features/home/home_screen.dart';
 import '../../features/location/location_providers.dart';
 import '../../features/onboarding/city_search_screen.dart';
@@ -12,6 +14,7 @@ import '../../features/onboarding/notifications_step_screen.dart';
 import '../../features/onboarding/reciter_step_screen.dart';
 import '../../features/onboarding/welcome_screen.dart';
 import '../../features/prayer/method_screen.dart';
+import '../../features/prayer/prayer_schedule.dart';
 import '../../features/prayer/prayer_settings_screen.dart';
 import '../../features/prayer/prayer_times_screen.dart';
 import '../../l10n/app_localizations.dart';
@@ -89,6 +92,20 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: Routes.prayerMethod,
         builder: (_, _) => const MethodScreen(),
+      ),
+      GoRoute(
+        path: Routes.prayerAlerts,
+        builder: (_, _) => const PrayerAlertsScreen(),
+      ),
+      GoRoute(
+        path: '${Routes.prayerAlerts}/:prayer',
+        redirect: (_, state) =>
+            Prayer.values.asNameMap()[state.pathParameters['prayer']] == null
+            ? Routes.prayerAlerts
+            : null,
+        builder: (_, state) => PrayerAlertScreen(
+          prayer: Prayer.values.byName(state.pathParameters['prayer']!),
+        ),
       ),
       GoRoute(
         path: Routes.prayerLocation,

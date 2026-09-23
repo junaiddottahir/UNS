@@ -30,6 +30,7 @@ class _NotificationsStepScreenState
     setState(() => _asking = true);
     try {
       await ref.read(notificationPermissionProvider).request();
+      ref.read(permissionCheckProvider.notifier).recheck();
     } finally {
       if (mounted) setState(() => _asking = false);
     }

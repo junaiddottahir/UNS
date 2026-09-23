@@ -9,6 +9,8 @@ import '../../core/widgets/ambient_background.dart';
 import '../../core/widgets/glass.dart';
 import '../../core/widgets/step_top_bar.dart';
 import '../../l10n/app_localizations.dart';
+import '../alerts/alert_labels.dart';
+import '../alerts/alert_providers.dart';
 import '../location/location_providers.dart';
 import 'prayer_background.dart';
 import 'prayer_labels.dart';
@@ -29,6 +31,7 @@ class PrayerTimesScreen extends ConsumerWidget {
     final now = ref.watch(nowProvider);
     final times = schedule?.today(now) ?? const [];
     final next = schedule?.next(now);
+    final alerts = ref.watch(alertSettingsProvider);
 
     return Scaffold(
       body: AmbientBackground(
@@ -66,6 +69,12 @@ class PrayerTimesScreen extends ConsumerWidget {
                           children: [
                             for (final (i, t) in times.indexed)
                               _TimeRow(
+                                alertIcon: alertModeIcon(
+                                  alerts.modeOf(t.prayer),
+                                ),
+                                onTap: () => context.push(
+                                  Routes.prayerAlert(t.prayer.name),
+                                ),
                                 name: l10n.prayerName(t.prayer),
                                 time: formatPrayerTime(context, t.time),
                                 nextTag:
@@ -108,6 +117,8 @@ class PrayerTimesScreen extends ConsumerWidget {
 
 class _TimeRow extends StatelessWidget {
   const _TimeRow({
+    required this.alertIcon,
+    required this.onTap,
     required this.name,
     required this.time,
     required this.nextTag,
@@ -115,6 +126,8 @@ class _TimeRow extends StatelessWidget {
     required this.divider,
   });
 
+  final IconData alertIcon;
+  final VoidCallback onTap;
   final String name;
   final String time;
   final String? nextTag;
@@ -145,6 +158,8 @@ class _TimeRow extends StatelessWidget {
         valueStyle: AppText.row.copyWith(
           fontFeatures: const [FontFeature.tabularFigures()],
         ),
+        trailing: alertIcon,
+        onTap: onTap,
         divider: divider,
       ),
     );

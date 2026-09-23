@@ -321,4 +321,65 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get comingSoon => 'Coming in a later update.';
+
+  @override
+  String alertDetail(String time, String place) {
+    return '$time · $place';
+  }
+
+  @override
+  String alertReminderTitle(String prayer, int minutes) {
+    return '$prayer in $minutes min';
+  }
+
+  @override
+  String alertCheckInTitle(String prayer) {
+    return 'Did you pray $prayer?';
+  }
+
+  @override
+  String get prayerAlertsTitle => 'Prayer alerts';
+
+  @override
+  String get alertsLabel => 'Alerts';
+
+  @override
+  String alertsCount(int count) {
+    return '$count of 5';
+  }
+
+  @override
+  String get atPrayerTime => 'At prayer time';
+
+  @override
+  String get remindMeBefore => 'Remind me before';
+
+  @override
+  String get askDidYouPray => 'Ask \"did you pray?\"';
+
+  @override
+  String get reminderNone => 'None';
+
+  @override
+  String reminderMinutes(int minutes) {
+    return '$minutes min';
+  }
+
+  @override
+  String get yes => 'Yes';
+
+  @override
+  String get no => 'No';
+
+  @override
+  String alertSummaryBefore(String mode, int minutes) {
+    return '$mode · $minutes min before';
+  }
+
+  @override
+  String get notificationsOff =>
+      'Notifications are off for Uns, so alerts won\'t appear.';
+
+  @override
+  String get turnOnNotifications => 'Turn on notifications';
 }

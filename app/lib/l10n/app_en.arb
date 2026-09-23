@@ -192,5 +192,72 @@
   "tabShama": "Shama",
   "tabTasbih": "Tasbih",
   "tabProfile": "Profile",
-  "comingSoon": "Coming in a later update."
+  "comingSoon": "Coming in a later update.",
+  "alertDetail": "{time} · {place}",
+  "@alertDetail": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      },
+      "place": {
+        "type": "String"
+      }
+    }
+  },
+  "alertReminderTitle": "{prayer} in {minutes} min",
+  "@alertReminderTitle": {
+    "placeholders": {
+      "prayer": {
+        "type": "String"
+      },
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "alertCheckInTitle": "Did you pray {prayer}?",
+  "@alertCheckInTitle": {
+    "placeholders": {
+      "prayer": {
+        "type": "String"
+      }
+    }
+  },
+  "prayerAlertsTitle": "Prayer alerts",
+  "alertsLabel": "Alerts",
+  "alertsCount": "{count} of 5",
+  "@alertsCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "atPrayerTime": "At prayer time",
+  "remindMeBefore": "Remind me before",
+  "askDidYouPray": "Ask \"did you pray?\"",
+  "reminderNone": "None",
+  "reminderMinutes": "{minutes} min",
+  "@reminderMinutes": {
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "yes": "Yes",
+  "no": "No",
+  "alertSummaryBefore": "{mode} · {minutes} min before",
+  "@alertSummaryBefore": {
+    "placeholders": {
+      "mode": {
+        "type": "String"
+      },
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "notificationsOff": "Notifications are off for Uns, so alerts won't appear.",
+  "turnOnNotifications": "Turn on notifications"
 }

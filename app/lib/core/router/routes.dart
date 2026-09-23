@@ -15,4 +15,8 @@ abstract final class Routes {
   static const prayerSettings = '/prayer/settings';
   static const prayerMethod = '/prayer/method';
   static const prayerLocation = '/prayer/location';
+  static const prayerAlerts = '/prayer/alerts';
+
+  /// One prayer's alert choices, e.g. `/prayer/alerts/fajr`.
+  static String prayerAlert(String prayer) => '$prayerAlerts/$prayer';
 }

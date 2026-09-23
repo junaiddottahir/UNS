@@ -62,15 +62,33 @@ class FixedClock extends MinuteClock {
 }
 
 class FakeNotificationPermission implements NotificationPermission {
-  FakeNotificationPermission({this.allow = true});
+  FakeNotificationPermission({this.allow = true, this.granted = true});
   final bool allow;
+  bool granted;
   int requests = 0;
+  int settingsOpened = 0;
 
   @override
   Future<bool> request() async {
     requests++;
+    granted = allow;
     return allow;
   }
+
+  @override
+  Future<bool> isGranted() async => granted;
+
+  @override
+  Future<void> openSettings() async => settingsOpened++;
+}
+
+/// Records what would be scheduled with the OS.
+class FakeAlertScheduler implements AlertScheduler {
+  List<ScheduledNotification> pending = const [];
+
+  @override
+  Future<void> replaceAll(List<ScheduledNotification> notifications) async =>
+      pending = notifications;
 }
 
 /// A settings store on an in-memory database.
@@ -88,6 +106,7 @@ Future<ProviderContainer> pumpApp(
   DateTime? now,
   SettingsStore? settings,
   NotificationPermission? notifications,
+  AlertScheduler? scheduler,
 }) async {
   // Reduced motion, so the pulsing mood button lets frames settle.
   tester.platformDispatcher.accessibilityFeaturesTestValue =
@@ -110,6 +129,9 @@ Future<ProviderContainer> pumpApp(
       nowProvider.overrideWith(() => FixedClock(now ?? testNow)),
       notificationPermissionProvider.overrideWithValue(
         notifications ?? FakeNotificationPermission(),
+      ),
+      alertSchedulerProvider.overrideWithValue(
+        scheduler ?? FakeAlertScheduler(),
       ),
     ],
   );

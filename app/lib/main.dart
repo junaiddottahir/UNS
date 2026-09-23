@@ -7,6 +7,7 @@ import 'core/router/app_router.dart';
 import 'core/storage/app_database.dart';
 import 'core/storage/settings_store.dart';
 import 'core/theme/app_theme.dart';
+import 'features/alerts/alert_providers.dart';
 import 'l10n/app_localizations.dart';
 
 Future<void> main() async {
@@ -22,11 +23,35 @@ Future<void> main() async {
   );
 }
 
-class UnsApp extends ConsumerWidget {
+class UnsApp extends ConsumerStatefulWidget {
   const UnsApp({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<UnsApp> createState() => _UnsAppState();
+}
+
+class _UnsAppState extends ConsumerState<UnsApp> {
+  late final AppLifecycleListener _lifecycle;
+
+  @override
+  void initState() {
+    super.initState();
+    // Notifications may have been turned on in Settings meanwhile.
+    _lifecycle = AppLifecycleListener(
+      onResume: () => ref.read(permissionCheckProvider.notifier).recheck(),
+    );
+  }
+
+  @override
+  void dispose() {
+    _lifecycle.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // Keeps scheduled prayer alerts current from launch.
+    ref.watch(alertSyncProvider);
     return MaterialApp.router(
       onGenerateTitle: (context) => AppLocalizations.of(context).appTitle,
       debugShowCheckedModeBanner: false,

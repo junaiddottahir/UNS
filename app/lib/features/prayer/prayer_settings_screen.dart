@@ -8,12 +8,13 @@ import '../../core/widgets/ambient_background.dart';
 import '../../core/widgets/glass.dart';
 import '../../core/widgets/step_top_bar.dart';
 import '../../l10n/app_localizations.dart';
+import '../alerts/alert_providers.dart';
 import '../location/location_providers.dart';
 import 'prayer_labels.dart';
 import 'prayer_providers.dart';
 import 'prayer_settings.dart';
 
-/// Location, method, Asr and high-latitude rule. Alerts join in unit 4.
+/// Location, method, alerts, Asr and high-latitude rule.
 class PrayerSettingsScreen extends ConsumerWidget {
   const PrayerSettingsScreen({super.key});
 
@@ -24,6 +25,7 @@ class PrayerSettingsScreen extends ConsumerWidget {
     final settings = ref.watch(prayerSettingsProvider);
     final method = ref.watch(prayerMethodProvider);
     final notifier = ref.read(prayerSettingsProvider.notifier);
+    final alerts = ref.watch(alertSettingsProvider);
 
     return Scaffold(
       body: AmbientBackground(
@@ -60,6 +62,12 @@ class PrayerSettingsScreen extends ConsumerWidget {
                             value: l10n.methodName(method),
                             trailing: Icons.chevron_right,
                             onTap: () => context.push(Routes.prayerMethod),
+                          ),
+                          GlassRow(
+                            label: Text(l10n.alertsLabel),
+                            value: l10n.alertsCount(alerts.onCount),
+                            trailing: Icons.chevron_right,
+                            onTap: () => context.push(Routes.prayerAlerts),
                             divider: false,
                           ),
                         ],
