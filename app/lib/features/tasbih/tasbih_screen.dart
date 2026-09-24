@@ -67,6 +67,13 @@ class TasbihScreen extends ConsumerWidget {
                     Text(l10n.today.toUpperCase(), style: AppText.label),
                     const SizedBox(height: 10),
                     Text('$today', style: AppText.bearing),
+                    const SizedBox(height: 6),
+                    Text(switch (done.length) {
+                      0 => l10n.dhikrUnit,
+                      final n when n >= Dhikr.values.length =>
+                        l10n.dhikrAllComplete,
+                      final n => l10n.dhikrProgress(n, Dhikr.values.length),
+                    }, style: AppText.body),
                   ],
                 ),
               ),

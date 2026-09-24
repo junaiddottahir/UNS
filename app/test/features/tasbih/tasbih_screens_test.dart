@@ -54,6 +54,7 @@ void main() {
     tester,
   ) async {
     await _openTasbih(tester);
+    expect(find.text('dhikr'), findsOneWidget);
     await tester.tap(find.text('Allahu Akbar'));
     await tester.pumpAndSettle();
     expect(find.text('SINGLE DHIKR'), findsOneWidget);
@@ -65,6 +66,7 @@ void main() {
     // Back on the list, not History: Allahu Akbar has a tick.
     expect(find.text('Dhikr complete'), findsNothing);
     expect(find.byIcon(Icons.check_circle), findsOneWidget);
+    expect(find.text('dhikr · 1 of 3 complete'), findsOneWidget);
     // Today's total, and Allahu Akbar's target in the list.
     expect(find.text('34'), findsNWidgets(2));
 
@@ -82,6 +84,7 @@ void main() {
     await tester.tap(find.byTooltip('Back'));
     await tester.pumpAndSettle();
     expect(find.byIcon(Icons.check_circle), findsNWidgets(3));
+    expect(find.text('dhikr · all complete'), findsOneWidget);
   });
 
   testWidgets('history lists earlier days by weekday', (tester) async {

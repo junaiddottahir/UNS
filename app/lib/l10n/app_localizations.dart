@@ -2175,6 +2175,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Revisit a past session'**
   String get revisitPastSession;
+
+  /// Under today's tasbih total: what the number counts.
+  ///
+  /// In en, this message translates to:
+  /// **'dhikr'**
+  String get dhikrUnit;
+
+  /// No description provided for @dhikrProgress.
+  ///
+  /// In en, this message translates to:
+  /// **'dhikr · {done} of {total} complete'**
+  String dhikrProgress(int done, int total);
+
+  /// No description provided for @dhikrAllComplete.
+  ///
+  /// In en, this message translates to:
+  /// **'dhikr · all complete'**
+  String get dhikrAllComplete;
 }
 
 class _AppLocalizationsDelegate

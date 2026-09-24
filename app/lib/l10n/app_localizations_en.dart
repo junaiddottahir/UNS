@@ -1184,4 +1184,15 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get revisitPastSession => 'Revisit a past session';
+
+  @override
+  String get dhikrUnit => 'dhikr';
+
+  @override
+  String dhikrProgress(int done, int total) {
+    return 'dhikr · $done of $total complete';
+  }
+
+  @override
+  String get dhikrAllComplete => 'dhikr · all complete';
 }

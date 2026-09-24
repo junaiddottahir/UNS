@@ -717,5 +717,21 @@
   "resetsMonday": "Your free sessions reset on Monday",
   "alwaysFree": "Prayer times, tasbih and your journal are always free.",
   "seePremium": "See Premium",
-  "revisitPastSession": "Revisit a past session"
+  "revisitPastSession": "Revisit a past session",
+  "dhikrUnit": "dhikr",
+  "@dhikrUnit": {
+    "description": "Under today's tasbih total: what the number counts."
+  },
+  "dhikrProgress": "dhikr · {done} of {total} complete",
+  "@dhikrProgress": {
+    "placeholders": {
+      "done": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "dhikrAllComplete": "dhikr · all complete"
 }
