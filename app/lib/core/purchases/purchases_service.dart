@@ -16,8 +16,14 @@ abstract final class PurchasesService {
       debugPrint('RevenueCat: no API key set, purchases disabled.');
       return;
     }
+    // The Test Store key is for development builds only. A release build
+    // with it (e.g. installed on a phone for testing) runs with purchases
+    // off rather than failing to start; store builds need the platform key.
     if (kReleaseMode && key.startsWith('test_')) {
-      throw StateError('RevenueCat Test Store key used in a release build.');
+      debugPrint(
+        'RevenueCat: Test Store key in a release build, purchases off.',
+      );
+      return;
     }
 
     if (kDebugMode) await Purchases.setLogLevel(LogLevel.debug);
