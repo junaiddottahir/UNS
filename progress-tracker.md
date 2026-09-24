@@ -303,6 +303,10 @@ change.
     crashed on the first sound.
   - 162 unit/widget tests; simulator screenshots with scripted words.
     Real speech needs a device (permission prompts).
+  - Verified on the iPhone 15 Pro Max (2026-09-25): permission, on-device
+    recognition (en-US) and the transcript reaching the text box all work.
+    Fixed then: the wave never moved on iOS (it reports dBFS, about -60
+    to -15, not Android's -2..10). Silence timeout raised to 10 s.
 
 - Unit 14 (2026-09-24): reflection journal.
   - After a session: "Capture a reflection? · Optional" → Write →
@@ -570,9 +574,9 @@ Each line is one unit; app and backend units are kept separate.
   (single instance only; behind a proxy it needs the real client
   address). Revisit with the hosting choice; the library relies on
   caching.
-- DEFERRED TO THE END (user, 2026-09-23): Anthropic API key in
-  `backend/.env` and a live test of `/v1/classify`; confirm the org's
-  data-retention setting. Anthropic data retention settings for mood text
+- Anthropic API key set in `backend/.env` (2026-09-25); `/v1/classify`
+  tested live (from the phone over LAN too). Still to do: confirm the
+  org's data-retention setting. Anthropic data retention settings for mood text
   (scope says "no retention") — confirm the org's zero-data-retention
   status.
 - The app must not run real sessions from a placeholder library (unit 9
