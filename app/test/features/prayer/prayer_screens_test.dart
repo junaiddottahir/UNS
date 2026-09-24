@@ -158,5 +158,12 @@ void main() {
     await tester.tap(find.bySemanticsLabel('Tell us how you feel'));
     await tester.pumpAndSettle();
     expect(find.text('Shama'), findsWidgets);
+
+    // Tapping the question opens Shama too (to type or pick a feeling).
+    await tester.tap(find.bySemanticsLabel('Home'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('How are you feeling today?'));
+    await tester.pumpAndSettle();
+    expect(find.text('How are you feeling?'), findsOneWidget);
   });
 }

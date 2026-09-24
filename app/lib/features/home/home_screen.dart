@@ -140,18 +140,33 @@ class HomeScreen extends ConsumerWidget {
                   child: Row(
                     children: [
                       Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              l10n.welcomeGreeting.toUpperCase(),
-                              style: AppText.label.copyWith(
-                                color: AppColors.textFaint,
+                        // Tapping the question opens Shama to type or pick
+                        // a feeling; the orb beside it starts voice.
+                        child: Material(
+                          type: MaterialType.transparency,
+                          child: InkWell(
+                            onTap: () => context.go(Routes.shama),
+                            borderRadius: BorderRadius.circular(AppRadius.card),
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 8),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    l10n.welcomeGreeting.toUpperCase(),
+                                    style: AppText.label.copyWith(
+                                      color: AppColors.textFaint,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 8),
+                                  Text(
+                                    l10n.moodPrompt,
+                                    style: AppText.moodPrompt,
+                                  ),
+                                ],
                               ),
                             ),
-                            const SizedBox(height: 8),
-                            Text(l10n.moodPrompt, style: AppText.moodPrompt),
-                          ],
+                          ),
                         ),
                       ),
                       const SizedBox(width: 18),
