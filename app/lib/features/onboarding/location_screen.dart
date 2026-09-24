@@ -93,6 +93,15 @@ class _LocationScreenState extends ConsumerState<LocationScreen> {
                         ),
                       const SizedBox(height: 18),
                     ],
+                    // The choice sits above the button, so the button is
+                    // placed as on every onboarding screen.
+                    TextLink(
+                      label: l10n.locationChooseCity,
+                      onPressed: _locating
+                          ? null
+                          : () => context.push(Routes.citySearch),
+                    ),
+                    const SizedBox(height: 10),
                     PrimaryButton(
                       label: _locating
                           ? l10n.locationFinding
@@ -100,13 +109,6 @@ class _LocationScreenState extends ConsumerState<LocationScreen> {
                       icon: Icons.near_me_outlined,
                       loading: _locating,
                       onPressed: _useMyLocation,
-                    ),
-                    const SizedBox(height: 10),
-                    TextLink(
-                      label: l10n.locationChooseCity,
-                      onPressed: _locating
-                          ? null
-                          : () => context.push(Routes.citySearch),
                     ),
                   ],
                 ),

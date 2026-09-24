@@ -67,11 +67,12 @@ class _IntroScreenState extends State<IntroScreen> {
               fade: BackgroundFade.bottom,
               child: SafeArea(
                 child: Padding(
-                  padding: const EdgeInsetsDirectional.fromSTEB(
+                  // Room below for the button, placed as on Welcome.
+                  padding: const EdgeInsets.fromLTRB(
                     AppSpacing.screenH,
                     0,
-                    AppSpacing.screenH + 84,
-                    AppSpacing.screenBottom,
+                    AppSpacing.screenH,
+                    AppSpacing.screenBottom + PrimaryButton.height + 36,
                   ),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.end,
@@ -123,17 +124,18 @@ class _IntroScreenState extends State<IntroScreen> {
                   ),
                 ),
                 const Spacer(),
-                Align(
-                  alignment: AlignmentDirectional.bottomEnd,
-                  child: Padding(
-                    padding: const EdgeInsetsDirectional.only(
-                      end: AppSpacing.screenH,
-                      bottom: AppSpacing.screenBottom,
-                    ),
-                    child: OrbButton(
-                      onPressed: _next,
-                      semanticLabel: l10n.introNext,
-                    ),
+                // Full width at the bottom, as on Welcome; stays put while
+                // the slides swipe.
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(
+                    AppSpacing.screenH,
+                    0,
+                    AppSpacing.screenH,
+                    AppSpacing.screenBottom,
+                  ),
+                  child: PrimaryButton(
+                    label: isLast ? l10n.continueLabel : l10n.introNext,
+                    onPressed: _next,
                   ),
                 ),
               ],

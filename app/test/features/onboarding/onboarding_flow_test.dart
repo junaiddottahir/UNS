@@ -29,7 +29,7 @@ void main() {
     expect(find.text('Begin'), findsOneWidget);
   });
 
-  testWidgets('intro slides advance with the arrow to location', (
+  testWidgets('intro slides: Next, Next, then Continue to location', (
     tester,
   ) async {
     await pumpApp(tester);
@@ -37,8 +37,8 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.text('Pray on time, anywhere'), findsOneWidget);
 
-    for (var i = 0; i < 3; i++) {
-      await tester.tap(find.byIcon(Icons.arrow_forward));
+    for (final label in ['Next', 'Next', 'Continue']) {
+      await tester.tap(find.text(label));
       await tester.pumpAndSettle();
     }
     expect(find.text('Where are you?'), findsOneWidget);

@@ -5,6 +5,9 @@ import '../theme/app_theme.dart';
 
 /// Full-width cream pill, the prototype's `.cta`.
 class PrimaryButton extends StatelessWidget {
+  /// Its fixed height, for layouts that leave room for it.
+  static const double height = 58;
+
   const PrimaryButton({
     super.key,
     required this.label,
@@ -21,7 +24,7 @@ class PrimaryButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 58,
+      height: height,
       width: double.infinity,
       child: FilledButton(
         onPressed: loading ? null : onPressed,
@@ -51,39 +54,6 @@ class PrimaryButton extends StatelessWidget {
             if (loading || icon != null) const SizedBox(width: 8),
             Flexible(child: Text(label, overflow: TextOverflow.ellipsis)),
           ],
-        ),
-      ),
-    );
-  }
-}
-
-/// Round cream "next" button, the prototype's `.orb`.
-class OrbButton extends StatelessWidget {
-  const OrbButton({
-    super.key,
-    required this.onPressed,
-    required this.semanticLabel,
-  });
-
-  final VoidCallback onPressed;
-  final String semanticLabel;
-
-  @override
-  Widget build(BuildContext context) {
-    return Semantics(
-      button: true,
-      label: semanticLabel,
-      child: SizedBox.square(
-        dimension: 64,
-        child: FilledButton(
-          onPressed: onPressed,
-          style: FilledButton.styleFrom(
-            backgroundColor: AppColors.ctaBackground,
-            foregroundColor: AppColors.ctaForeground,
-            shape: const CircleBorder(),
-            padding: EdgeInsets.zero,
-          ),
-          child: const Icon(Icons.arrow_forward, size: 22),
         ),
       ),
     );
