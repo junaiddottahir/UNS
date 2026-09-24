@@ -81,8 +81,9 @@ class DeviceVoiceInput implements VoiceInput {
       await _speech.listen(
         onResult: (SpeechRecognitionResult r) =>
             _listener?.onWords(r.recognizedWords),
+        // iOS reports dBFS: about -60 in a quiet room, -15 speaking up.
         onSoundLevelChange: (level) =>
-            _listener?.onLevel(((level + 2) / 12).clamp(0, 1).toDouble()),
+            _listener?.onLevel(((level + 60) / 45).clamp(0, 1).toDouble()),
         listenOptions: SpeechListenOptions(
           listenFor: const Duration(minutes: 2),
           pauseFor: const Duration(seconds: 5),
