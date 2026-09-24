@@ -36,6 +36,9 @@ abstract final class Routes {
 
   /// One journal entry, e.g. `/journal/12`.
   static String journalEntry(int id) => '$journal/$id';
+
+  /// Editing an entry's reflection, e.g. `/journal/12/edit`.
+  static String journalEdit(int id) => '$journal/$id/edit';
   static const qiblaCalibrate = '/qibla/calibrate';
   static const prayerTimes = '/prayer/times';
   static const prayerSettings = '/prayer/settings';

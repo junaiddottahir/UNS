@@ -116,6 +116,55 @@ void main() {
     expect(find.text('Session only'), findsOneWidget);
   });
 
+  testWidgets('edit an entry: add, change, clear; the safety check runs', (
+    tester,
+  ) async {
+    final db = await _open(tester);
+    await _toAfter(tester);
+    await tester.tap(find.text('Done'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.bySemanticsLabel('Profile'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Journal'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Session only'));
+    await tester.pumpAndSettle();
+    expect(find.text('No reflection written for this session.'), findsOne);
+
+    Future<void> edit(String text) async {
+      await tester.tap(find.byTooltip('Edit reflection'));
+      await tester.pumpAndSettle();
+      expect(find.text('EDIT REFLECTION'), findsOneWidget);
+      await tester.enterText(find.byType(TextField), text);
+      await tester.tap(find.text('Save'));
+      await tester.pumpAndSettle();
+    }
+
+    await edit('Grateful for a quiet evening.');
+    expect(find.text('Reflection updated'), findsOneWidget);
+    expect(find.text('Grateful for a quiet evening.'), findsOneWidget);
+
+    // Opens with the current text.
+    await tester.tap(find.byTooltip('Edit reflection'));
+    await tester.pumpAndSettle();
+    expect(
+      tester.widget<TextField>(find.byType(TextField)).controller!.text,
+      'Grateful for a quiet evening.',
+    );
+    await tester.tap(find.byTooltip('Back'));
+    await tester.pumpAndSettle();
+
+    await edit('');
+    expect(find.text('No reflection written for this session.'), findsOne);
+    final row = (await tester.runAsync(
+      () => db.select(db.sessions).getSingle(),
+    ))!;
+    expect(row.reflection, isNull);
+
+    await edit('some days I want to die');
+    expect(find.text("You don't have to carry this alone"), findsOneWidget);
+  });
+
   group('replay', () {
     test('keeps only verses still in the approved library', () async {
       final db = AppDatabase(NativeDatabase.memory());

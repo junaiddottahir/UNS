@@ -773,5 +773,7 @@
         "type": "String"
       }
     }
-  }
+  },
+  "editReflection": "Edit reflection",
+  "reflectionUpdated": "Reflection updated"
 }

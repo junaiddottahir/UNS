@@ -1215,4 +1215,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String recitedVerses(String refs) {
     return 'Recitation · Quran $refs';
   }
+
+  @override
+  String get editReflection => 'Edit reflection';
+
+  @override
+  String get reflectionUpdated => 'Reflection updated';
 }

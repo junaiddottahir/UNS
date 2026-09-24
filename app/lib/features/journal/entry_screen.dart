@@ -65,7 +65,16 @@ class EntryScreen extends ConsumerWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const BackTopBar(),
+              BackTopBar(
+                trailing: IconButton(
+                  onPressed: () => context.push(Routes.journalEdit(e.id)),
+                  icon: const Icon(
+                    Icons.edit_outlined,
+                    color: AppColors.textPrimary,
+                  ),
+                  tooltip: l10n.editReflection,
+                ),
+              ),
               Expanded(
                 child: ListView(
                   padding: const EdgeInsets.fromLTRB(

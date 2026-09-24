@@ -63,6 +63,12 @@ class SessionStore {
     ),
   );
 
+  /// Replaces an entry's written reflection; null removes it.
+  Future<void> updateReflection(int id, String? reflection) =>
+      (_db.update(_db.sessions)..where((s) => s.id.equals(id))).write(
+        SessionsCompanion(reflection: Value(reflection)),
+      );
+
   /// Finished sessions, newest first: the journal.
   Stream<List<Session>> watchJournal() =>
       (_db.select(_db.sessions)

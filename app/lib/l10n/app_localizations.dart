@@ -2217,6 +2217,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Recitation · Quran {refs}'**
   String recitedVerses(String refs);
+
+  /// No description provided for @editReflection.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit reflection'**
+  String get editReflection;
+
+  /// No description provided for @reflectionUpdated.
+  ///
+  /// In en, this message translates to:
+  /// **'Reflection updated'**
+  String get reflectionUpdated;
 }
 
 class _AppLocalizationsDelegate

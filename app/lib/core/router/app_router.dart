@@ -140,6 +140,15 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       ),
       GoRoute(path: Routes.privacy, builder: (_, _) => const PrivacyScreen()),
       GoRoute(
+        path: '${Routes.journal}/:id/edit',
+        redirect: (_, state) =>
+            int.tryParse(state.pathParameters['id'] ?? '') == null
+            ? Routes.journal
+            : null,
+        builder: (_, state) =>
+            WriteScreen(entryId: int.parse(state.pathParameters['id']!)),
+      ),
+      GoRoute(
         path: '${Routes.journal}/:id',
         redirect: (_, state) =>
             int.tryParse(state.pathParameters['id'] ?? '') == null

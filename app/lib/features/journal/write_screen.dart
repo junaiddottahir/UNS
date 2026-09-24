@@ -15,11 +15,15 @@ import '../shama/mood_chat.dart';
 import '../shama/shama_session.dart';
 import 'reflection_prompts.dart';
 
-/// A written reflection after a session. It stays on the phone (encrypted)
-/// and is never read by AI; the on-device phrase check still runs, and a
-/// match shows the helpline after the entry is saved.
+/// A written reflection after a session, or (with [entryId]) editing a
+/// journal entry's. It stays on the phone (encrypted) and is never read by
+/// AI; the on-device phrase check still runs, and a match shows the
+/// helpline after the entry is saved.
 class WriteScreen extends ConsumerStatefulWidget {
-  const WriteScreen({super.key});
+  const WriteScreen({super.key, this.entryId});
+
+  /// The journal entry being edited; null right after a session.
+  final int? entryId;
 
   @override
   ConsumerState<WriteScreen> createState() => _WriteScreenState();
@@ -28,6 +32,19 @@ class WriteScreen extends ConsumerStatefulWidget {
 class _WriteScreenState extends ConsumerState<WriteScreen> {
   final _text = TextEditingController();
   bool _saving = false;
+
+  bool get _editing => widget.entryId != null;
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.entryId case final id?) {
+      ref.read(sessionStoreProvider).byId(id).then((entry) {
+        if (!mounted || _text.text.isNotEmpty) return;
+        _text.text = entry?.reflection ?? '';
+      });
+    }
+  }
 
   @override
   void dispose() {
@@ -44,6 +61,19 @@ class _WriteScreenState extends ConsumerState<WriteScreen> {
         text.isNotEmpty &&
         (await ref.read(safetyCheckProvider.future)).isRisky(text);
     // The entry saves either way (architecture.md).
+    if (widget.entryId case final id?) {
+      await ref
+          .read(sessionStoreProvider)
+          .updateReflection(id, text.isEmpty ? null : text);
+      if (!mounted) return;
+      context.pop();
+      if (risky) {
+        context.push(Routes.support);
+      } else {
+        showToast(l10n.reflectionUpdated);
+      }
+      return;
+    }
     await ref.read(shamaSessionProvider.notifier).save(reflection: text);
     ref.read(moodChatProvider.notifier).reset();
     if (!mounted) return;
@@ -77,7 +107,8 @@ class _WriteScreenState extends ConsumerState<WriteScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        l10n.todaysPrompt.toUpperCase(),
+                        (_editing ? l10n.editReflection : l10n.todaysPrompt)
+                            .toUpperCase(),
                         style: AppText.label,
                       ),
                       const SizedBox(height: 12),
@@ -136,7 +167,9 @@ class _WriteScreenState extends ConsumerState<WriteScreen> {
                                   fontWeight: FontWeight.w500,
                                 ),
                               ),
-                              child: Text(l10n.finish),
+                              child: Text(
+                                _editing ? l10n.saveRecording : l10n.finish,
+                              ),
                             ),
                           ),
                         ],
