@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 import '../../l10n/app_localizations.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_theme.dart';
+import 'svg_icon.dart';
 
 /// Main tabs with the prototype's floating glass tab bar over them.
 class TabShell extends StatelessWidget {
@@ -17,10 +18,10 @@ class TabShell extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
     final tabs = [
-      (Icons.home_outlined, l10n.tabHome),
-      (Icons.menu_book_outlined, l10n.tabShama),
-      (Icons.radio_button_checked, l10n.tabTasbih),
-      (Icons.person_outline, l10n.tabProfile),
+      (AppIcons.home, l10n.tabHome),
+      (AppIcons.shama, l10n.tabShama),
+      (AppIcons.tasbih, l10n.tabTasbih),
+      (AppIcons.profile, l10n.tabProfile),
     ];
     return Scaffold(
       body: Stack(
@@ -80,7 +81,8 @@ class _Tab extends StatelessWidget {
     required this.onTap,
   });
 
-  final IconData icon;
+  /// One of [AppIcons].
+  final String icon;
   final String label;
   final bool selected;
   final VoidCallback onTap;
@@ -107,7 +109,7 @@ class _Tab extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(
+                SvgIcon(
                   icon,
                   size: 19,
                   color: selected

@@ -108,7 +108,7 @@ class HistoryScreen extends ConsumerWidget {
                     Padding(
                       padding: const EdgeInsetsDirectional.only(start: 8),
                       child: ActionPill(
-                        icon: Icons.local_fire_department_outlined,
+                        icon: const Icon(Icons.local_fire_department_outlined),
                         label: l10n.streaksPremium,
                         onTap: () => context.push(Routes.plans),
                       ),

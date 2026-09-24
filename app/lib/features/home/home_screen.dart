@@ -7,6 +7,7 @@ import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_theme.dart';
 import '../../core/widgets/ambient_background.dart';
 import '../../core/widgets/glass.dart';
+import '../../core/widgets/svg_icon.dart';
 import '../../l10n/app_localizations.dart';
 import '../location/location_providers.dart';
 import '../prayer/prayer_background.dart';
@@ -121,12 +122,12 @@ class HomeScreen extends ConsumerWidget {
                   spacing: 8,
                   children: [
                     ActionPill(
-                      icon: Icons.explore_outlined,
+                      icon: const Icon(Icons.explore_outlined),
                       label: l10n.qibla,
                       onTap: () => context.push(Routes.qibla),
                     ),
                     ActionPill(
-                      icon: Icons.radio_button_checked,
+                      icon: const SvgIcon(AppIcons.tasbih),
                       label: l10n.tasbih,
                       onTap: () => context.go(Routes.tasbih),
                     ),

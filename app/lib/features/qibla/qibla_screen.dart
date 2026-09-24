@@ -140,7 +140,7 @@ class _Footer extends ConsumerWidget {
           )
         else if (state is CompassReading)
           ActionPill(
-            icon: Icons.refresh,
+            icon: const Icon(Icons.refresh),
             label: l10n.calibrate,
             onTap: () => context.push(Routes.qiblaCalibrate),
           ),

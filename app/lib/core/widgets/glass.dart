@@ -117,7 +117,8 @@ class ActionPill extends StatelessWidget {
     required this.onTap,
   });
 
-  final IconData icon;
+  /// An [Icon] or [SvgIcon]; sized and coloured by the pill.
+  final Widget icon;
   final String label;
   final VoidCallback onTap;
 
@@ -135,7 +136,13 @@ class ActionPill extends StatelessWidget {
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Icon(icon, size: 15, color: AppColors.textPrimary),
+              IconTheme(
+                data: const IconThemeData(
+                  size: 15,
+                  color: AppColors.textPrimary,
+                ),
+                child: icon,
+              ),
               const SizedBox(width: 9),
               Text(
                 label.toUpperCase(),
