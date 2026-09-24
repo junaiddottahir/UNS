@@ -86,7 +86,7 @@ class DeviceVoiceInput implements VoiceInput {
             _listener?.onLevel(((level + 60) / 45).clamp(0, 1).toDouble()),
         listenOptions: SpeechListenOptions(
           listenFor: const Duration(minutes: 2),
-          pauseFor: const Duration(seconds: 5),
+          pauseFor: const Duration(seconds: 10),
           onDevice: true,
           partialResults: true,
           listenMode: ListenMode.dictation,
