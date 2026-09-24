@@ -434,24 +434,18 @@ change.
   - 200 unit/widget tests; live: the real RevenueCat Test Store offering
     (annual, monthly, lifetime with prices) loads on the simulator.
     A test purchase needs a tap on the store sheet.
-- Unit 20 (2026-09-24): Athletics font, Arabic, RTL.
-  - `app_ar.arb`: all strings in Arabic, marked DRAFT — needs review
-    by a native speaker. Arabic plurals for the journal count.
-  - Profile → Language: phone setting / English / العربية
-    (`language` setting, synced to the account as en/ar; "phone
-    setting" stays local). Drives `MaterialApp.locale` and the
-    language of scheduled prayer notifications.
-  - Arabic uses Western digits (0-9) everywhere, so DateFormat times
-    match counts and durations; dates use the Arabic comma.
-  - RTL: the remaining left/right paddings made directional. The
-    Arabic verse always stays right to left.
+- Unit 20 (2026-09-24): Athletics font wiring, RTL-safe layout.
+  - Arabic and the Profile language switcher were built, then removed
+    at the owner's request: the app is English only for now
+    (`supportedLocales` is just `en`). Directional paddings stay, so
+    adding Arabic later is mostly an `app_ar.arb` file.
   - Theme font family is `Athletics`; the pubspec block is commented
     out until the licensed files are in `assets/fonts/` (the root
     OTFs are web-font copies, git-ignored, not shipped). Falls back to
-    the system font until then; Arabic falls back to the system
-    Arabic font.
-  - 202 unit/widget tests; checked in Arabic on the simulator.
-
+    the system font until then.
+- Tasbih fix (2026-09-24): finishing one dhikr returns to the list with
+  a tick (done-today, stored locally, clears at midnight); History with
+  "Dhikr complete" only appears once all three are done today.
 ## In Progress
 
 - None yet.
@@ -486,7 +480,7 @@ Each line is one unit; app and backend units are kept separate.
 18. App: settings and tasbih sync for signed-in users.
 19. App: session quota (3/week) + paywall + RevenueCat store purchases +
     restore.
-20. App: Athletics font, English/Arabic localisation and RTL pass.
+20. App: Athletics font and RTL pass (English only; Arabic dropped).
 
 ## Open Questions
 

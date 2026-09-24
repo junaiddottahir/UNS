@@ -5,7 +5,6 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:intl/intl.dart' as intl;
 
-import 'app_localizations_ar.dart';
 import 'app_localizations_en.dart';
 
 // ignore_for_file: type=lint
@@ -93,10 +92,7 @@ abstract class AppLocalizations {
       ];
 
   /// A list of this localizations delegate's supported locales.
-  static const List<Locale> supportedLocales = <Locale>[
-    Locale('ar'),
-    Locale('en'),
-  ];
+  static const List<Locale> supportedLocales = <Locale>[Locale('en')];
 
   /// No description provided for @appTitle.
   ///
@@ -2179,36 +2175,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Revisit a past session'**
   String get revisitPastSession;
-
-  /// No description provided for @language.
-  ///
-  /// In en, this message translates to:
-  /// **'Language'**
-  String get language;
-
-  /// No description provided for @languageSystem.
-  ///
-  /// In en, this message translates to:
-  /// **'Phone setting'**
-  String get languageSystem;
-
-  /// Always in English, whatever the app language.
-  ///
-  /// In en, this message translates to:
-  /// **'English'**
-  String get languageEnglish;
-
-  /// Always in Arabic script, whatever the app language.
-  ///
-  /// In en, this message translates to:
-  /// **'العربية'**
-  String get languageArabic;
-
-  /// No description provided for @languageBody.
-  ///
-  /// In en, this message translates to:
-  /// **'Verses always show in Arabic, with the English translation.'**
-  String get languageBody;
 }
 
 class _AppLocalizationsDelegate
@@ -2222,7 +2188,7 @@ class _AppLocalizationsDelegate
 
   @override
   bool isSupported(Locale locale) =>
-      <String>['ar', 'en'].contains(locale.languageCode);
+      <String>['en'].contains(locale.languageCode);
 
   @override
   bool shouldReload(_AppLocalizationsDelegate old) => false;
@@ -2231,8 +2197,6 @@ class _AppLocalizationsDelegate
 AppLocalizations lookupAppLocalizations(Locale locale) {
   // Lookup logic when only language code is specified.
   switch (locale.languageCode) {
-    case 'ar':
-      return AppLocalizationsAr();
     case 'en':
       return AppLocalizationsEn();
   }

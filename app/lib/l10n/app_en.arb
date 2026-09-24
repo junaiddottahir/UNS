@@ -717,16 +717,5 @@
   "resetsMonday": "Your free sessions reset on Monday",
   "alwaysFree": "Prayer times, tasbih and your journal are always free.",
   "seePremium": "See Premium",
-  "revisitPastSession": "Revisit a past session",
-  "language": "Language",
-  "languageSystem": "Phone setting",
-  "languageEnglish": "English",
-  "languageArabic": "العربية",
-  "languageBody": "Verses always show in Arabic, with the English translation.",
-  "@languageEnglish": {
-    "description": "Always in English, whatever the app language."
-  },
-  "@languageArabic": {
-    "description": "Always in Arabic script, whatever the app language."
-  }
+  "revisitPastSession": "Revisit a past session"
 }

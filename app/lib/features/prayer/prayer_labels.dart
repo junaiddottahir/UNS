@@ -1,7 +1,6 @@
 import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
 
-import '../../core/l10n/language.dart';
 import '../../l10n/app_localizations.dart';
 import 'prayer_schedule.dart';
 import 'prayer_settings.dart';
@@ -63,11 +62,11 @@ String formatPrayerTime(BuildContext context, DateTime time) {
 /// "Wed, 23 Sep".
 String formatShortDate(BuildContext context, DateTime date) {
   final locale = Localizations.localeOf(context).toLanguageTag();
-  return DateFormat('EEE${listComma(locale)} d MMM', locale).format(date);
+  return DateFormat('EEE, d MMM', locale).format(date);
 }
 
 /// "Wednesday, 23 September".
 String formatLongDate(BuildContext context, DateTime date) {
   final locale = Localizations.localeOf(context).toLanguageTag();
-  return DateFormat('EEEE${listComma(locale)} d MMMM', locale).format(date);
+  return DateFormat('EEEE, d MMMM', locale).format(date);
 }

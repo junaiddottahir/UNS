@@ -8,7 +8,6 @@ import 'package:uns/features/prayer/prayer_providers.dart';
 import 'package:uns/features/prayer/prayer_schedule.dart';
 import 'package:uns/features/prayer/prayer_settings.dart';
 import 'package:uns/features/reciter/reciter.dart';
-import 'package:uns/core/l10n/language.dart';
 import 'package:uns/features/tasbih/tasbih_store.dart';
 
 import '../../support/test_app.dart';
@@ -49,14 +48,12 @@ void main() {
           'highLatitude': 'middleOfNight',
         },
         'reciter': 'sudais',
-        'language': 'ar',
       }
       ..settingsAt = DateTime.utc(2026, 9, 20);
     final (c, _) = await _start(tester, api: api);
     expect(c.read(prayerSettingsProvider).asr, AsrMethod.hanafi);
     expect(c.read(prayerSettingsProvider).method, PrayerMethod.karachi);
     expect(c.read(reciterProvider), Reciter.sudais);
-    expect(c.read(languageProvider), AppLanguage.ar);
     // Nothing was pushed back over the account's settings.
     expect(
       api.calls.where((c) => c.startsWith('PUT /v1/me/settings')),
@@ -69,9 +66,7 @@ void main() {
     final (c, _) = await _start(tester, api: api);
     c.read(prayerSettingsProvider.notifier).setAsr(AsrMethod.hanafi);
     c.read(alertSettingsProvider.notifier).toggle(Prayer.fajr);
-    c.read(languageProvider.notifier).set(AppLanguage.ar);
     await tester.pumpAndSettle();
-    expect(api.settings!['language'], 'ar');
     expect((api.settings!['prayer']! as Map)['asr'], 'hanafi');
     expect(
       ((api.settings!['alerts']! as Map)['prayers']! as Map)['fajr'],

@@ -7,7 +7,6 @@ import 'package:supabase_flutter/supabase_flutter.dart'
 import 'core/auth/auth_service.dart';
 import 'core/auth/secure_session_storage.dart';
 import 'core/config/app_config.dart';
-import 'core/l10n/language.dart';
 import 'core/purchases/purchases_service.dart';
 import 'core/router/app_router.dart';
 import 'core/storage/app_database.dart';
@@ -19,7 +18,6 @@ import 'l10n/app_localizations.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  useWesternDigits();
   await PurchasesService.configure();
   if (AppConfig.supabaseUrl.isNotEmpty) {
     await Supabase.initialize(
@@ -92,7 +90,6 @@ class _UnsAppState extends ConsumerState<UnsApp> {
         GlobalCupertinoLocalizations.delegate,
       ],
       supportedLocales: AppLocalizations.supportedLocales,
-      locale: ref.watch(languageProvider).locale,
     );
   }
 }

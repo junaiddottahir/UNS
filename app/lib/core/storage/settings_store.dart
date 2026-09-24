@@ -14,7 +14,6 @@ abstract final class SettingKeys {
   static const reciter = 'reciter';
   static const library = 'library';
   static const accountOffered = 'account_offered';
-  static const language = 'language';
 
   /// Dhikr finished today, for the ticks on the Tasbih tab. Not synced.
   static const tasbihDone = 'tasbih_done';
@@ -26,7 +25,7 @@ abstract final class SettingKeys {
   static const syncedAgreedAt = 'synced_agreed_at';
 
   /// The settings that sync to a signed-in account (architecture.md).
-  static const synced = {prayer, alerts, reciter, language};
+  static const synced = {prayer, alerts, reciter};
 }
 
 /// Settings loaded into memory at startup, so providers can read them
