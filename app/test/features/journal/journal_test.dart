@@ -133,8 +133,8 @@ void main() {
             replay: [VerseRef(1, 3), VerseRef(2, 255), VerseRef(1, 1)],
           );
       expect(container.read(shamaSessionProvider)!.queue, [
-        VerseRef(1, 3),
-        VerseRef(1, 1),
+        VerseItem(VerseRef(1, 3)),
+        VerseItem(VerseRef(1, 1)),
       ]);
     });
   });

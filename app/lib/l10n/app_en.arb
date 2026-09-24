@@ -369,8 +369,8 @@
   "moodHumble": "Humble",
   "moodArrogant": "Proud",
   "moodGreedy": "Wanting more",
-  "libraryNotReady": "Sessions open once our scholar has approved the verses.",
-  "libraryOffline": "Connect to the internet once to download the verses.",
+  "libraryNotReady": "There's nothing for this feeling yet. Try another.",
+  "libraryOffline": "Connect to the internet once to download your session.",
   "feelingMood": "Feeling {mood}",
   "@feelingMood": {
     "placeholders": {
@@ -425,11 +425,11 @@
   "arabicSourceLabel": "Arabic · Uthmani · from Quran API",
   "translationSourceLabel": "Translation · Sahih International",
   "endSession": "End session",
-  "previousVerse": "Previous verse",
-  "nextVerse": "Next verse",
+  "previousVerse": "Previous",
+  "nextVerse": "Next",
   "play": "Play",
   "pause": "Pause",
-  "preparingVerses": "Preparing verses…",
+  "preparingVerses": "Preparing your session…",
   "beforeMood": "Before · {mood}",
   "@beforeMood": {
     "placeholders": {
@@ -733,5 +733,36 @@
   "goPremium": "Go Premium",
   "@goPremium": {
     "description": "Home shortcut to the plans screen, hidden for members."
-  }
+  },
+  "duaLabel": "Dua · {title}",
+  "@duaLabel": {
+    "placeholders": {
+      "title": {
+        "type": "String"
+      }
+    }
+  },
+  "duaSourceLabel": "{source} · via UmmahAPI",
+  "@duaSourceLabel": {
+    "description": "Under a dua: its hadith source, then where the text came from.",
+    "placeholders": {
+      "source": {
+        "type": "String"
+      }
+    }
+  },
+  "repeatTimes": "Said {count} times",
+  "@repeatTimes": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "readAlong": "Read along",
+  "@readAlong": {
+    "description": "In the session's bottom row while a dua (which has no audio) is on screen."
+  },
+  "sourceDuas": "Duas",
+  "sourceDuasValue": "UmmahAPI · hadith cited"
 }

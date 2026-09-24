@@ -39,6 +39,10 @@ abstract final class AppConfig {
   /// Per-ayah recitation links (UmmahAPI → EveryAyah MP3s).
   static const recitationBaseUrl = 'https://ummahapi.com/api/quran';
 
+  /// The whole dua collection (UmmahAPI), fetched in one request so the
+  /// choice of duas, which follows the user's mood, happens on the phone.
+  static const duasUrl = 'https://ummahapi.com/api/duas';
+
   /// Verse played as a reciter sample in onboarding. Pending the scholar's
   /// confirmation.
   static const reciterSampleSurah = 1;

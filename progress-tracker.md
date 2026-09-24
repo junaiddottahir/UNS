@@ -443,6 +443,25 @@ change.
     out until the licensed files are in `assets/fonts/` (the root
     OTFs are web-font copies, git-ignored, not shipped). Falls back to
     the system font until then.
+- Shama sessions with duas (2026-09-24): sessions no longer wait for
+  the scholar's verses. Until the approved verse list arrives, a session
+  is UmmahAPI duas to read (no audio exists for duas), each shown for a
+  reading time (8 s + 0.5 s/word, longer if repeated, 20–90 s) with
+  Arabic, transliteration, translation and its hadith source. With
+  approved verses it alternates verse, verse, dua. The queue goes round
+  again until the chosen time is up (a journal replay plays once).
+  - Privacy: all 126 duas are downloaded in one request and cached
+    encrypted for 30 days (schema v8 `content_cache`); the mood → dua
+    category choice happens on the phone, so UmmahAPI never learns it.
+  - Feeling → dua categories (`dua_categories.dart`) is a DRAFT for the
+    scholar: anxiety → distress, protection; sadness → grief,
+    distress; loneliness → distress, guidance; anger → forgiveness,
+    protection; gratitude → gratitude, dhikr; hope → guidance,
+    gratitude; humility → forgiveness, gratitude; arrogance →
+    forgiveness, dhikr; greed → gratitude, business. "Remind me" adds
+    dhikr. Duas played aren't saved in the journal (verses only).
+  - "Our sources" lists Duas · UmmahAPI. Checked live on the simulator:
+    an Anxious session found 11 duas.
 - Home (2026-09-24): the Tasbih shortcut is now "Go Premium" (hidden
   for members); tapping "How are you feeling today?" opens Shama.
   Prayer settings no longer offer High latitude. The backend still

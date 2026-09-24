@@ -7,6 +7,8 @@ import 'package:http/http.dart' show BaseClient, BaseRequest, StreamedResponse;
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:uns/core/duas/dua.dart';
+import 'package:uns/core/duas/dua_repository.dart';
 import 'package:uns/core/api/api_client.dart';
 import 'package:uns/core/auth/auth_service.dart';
 import 'package:uns/core/purchases/premium_store.dart';
@@ -158,6 +160,32 @@ class FakeSamplePlayer implements SamplePlayer {
 }
 
 /// Hands back a fake file per reciter, or fails when [offline].
+/// A dua made up for tests (not real text).
+Dua testDua(int id, {String category = 'distress', int repeat = 1}) => Dua(
+  id: id,
+  category: category,
+  title: 'Dua $id',
+  arabic: 'arabic dua $id',
+  transliteration: 'transliteration $id',
+  translation: 'translation of dua $id',
+  source: 'Source $id',
+  repeat: repeat,
+);
+
+/// The dua collection, in memory; [offline] throws as with no copy.
+class FakeDuas implements DuaRepository {
+  FakeDuas([this.duas = const [], this.offline = false]);
+
+  final List<Dua> duas;
+  final bool offline;
+
+  @override
+  Future<List<Dua>> all() async {
+    if (offline) throw const SocketException('offline');
+    return duas;
+  }
+}
+
 class FakeRecitations extends RecitationRepository {
   FakeRecitations({this.offline = false})
     : super(RecitationClient(_NoHttp()), _NoHttp(), () async => Directory(''));
@@ -580,6 +608,7 @@ Future<ProviderContainer> pumpApp(
   AuthService? auth,
   AccountApi? accountApi,
   PremiumStore? premium,
+  DuaRepository? duas,
 }) async {
   // Assets load inside each test's fake clock; a load cached by an earlier
   // test would never complete in this one.
@@ -634,6 +663,7 @@ Future<ProviderContainer> pumpApp(
       accountApiProvider.overrideWithValue(accountApi ?? FakeAccountApi()),
       syncDelayProvider.overrideWithValue(Duration.zero),
       premiumStoreProvider.overrideWithValue(premium ?? FakePremiumStore()),
+      duaRepositoryProvider.overrideWithValue(duas ?? FakeDuas()),
     ],
   );
   addTearDown(container.dispose);
@@ -660,5 +690,6 @@ Future<ProviderContainer> containerFor(
     sessionRandomProvider.overrideWithValue(Random(1)),
     quranRepositoryProvider.overrideWithValue(FakeQuran()),
     recitationRepositoryProvider.overrideWithValue(FakeRecitations()),
+    duaRepositoryProvider.overrideWithValue(FakeDuas()),
   ],
 );

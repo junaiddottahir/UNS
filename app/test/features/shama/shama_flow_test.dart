@@ -73,24 +73,46 @@ void main() {
     expect(row.verses, isNotEmpty);
   });
 
-  testWidgets('placeholder library: chips are off and it says why', (
+  testWidgets('before the scholar\'s verses, a session is duas to read', (
     tester,
   ) async {
     final container = await pumpApp(
       tester,
       library: testLibrary(placeholder: true),
+      duas: FakeDuas([testDua(1, repeat: 3), testDua(2)]),
     );
     container.read(appRouterProvider).go(Routes.shama);
     await tester.pumpAndSettle();
-    expect(find.textContaining('approved the verses'), findsOneWidget);
-    await tester.tap(find.text('SAD'));
+    await tester.tap(find.text('ANXIOUS'));
     await tester.pumpAndSettle();
-    expect(find.text('What would help right now?'), findsNothing);
+    await tester.tap(find.text('Comfort me'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Begin'));
+    await tester.pump();
+    await tester.pump();
+
+    expect(find.textContaining('DUA · DUA '), findsOneWidget);
+    expect(find.text('READ ALONG'), findsOneWidget);
+    expect(find.textContaining('VIA UMMAHAPI'), findsOneWidget);
+    await tester.tap(find.byTooltip('End session'));
+    await tester.pumpAndSettle();
   });
 
-  testWidgets('no library and offline: says to connect once', (tester) async {
-    final container = await pumpApp(tester, noLibrary: true);
+  testWidgets('offline with nothing downloaded: says to connect once', (
+    tester,
+  ) async {
+    final container = await pumpApp(
+      tester,
+      noLibrary: true,
+      duas: FakeDuas(const [], true),
+    );
     container.read(appRouterProvider).go(Routes.shama);
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('SAD'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Comfort me'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Begin'));
     await tester.pumpAndSettle();
     expect(find.textContaining('Connect to the internet'), findsOneWidget);
   });

@@ -12,7 +12,6 @@ import '../library/verse_library.dart';
 import '../paywall/quota.dart';
 import 'mood_chat.dart';
 import 'shama_labels.dart';
-import 'shama_session.dart';
 import 'voice_input.dart';
 
 /// Shama tab: "How are you feeling?" — type it, or pick a chip. Typed words
@@ -70,17 +69,10 @@ class _ShamaScreenState extends ConsumerState<ShamaScreen> {
     final l10n = AppLocalizations.of(context);
     final chat = ref.watch(moodChatProvider);
     final voice = ref.watch(voiceAvailableProvider);
-    final library = ref.watch(verseLibraryProvider);
-    final notice = switch (library) {
-      AsyncData(value: null) => l10n.libraryOffline,
-      AsyncData(:final value?) when value.placeholder => l10n.libraryNotReady,
-      _ => null,
-    };
-    final enabled = notice == null;
     final premium = ref.watch(premiumProvider).value ?? false;
     final used = ref.watch(sessionsThisWeekProvider).value;
     final left = used == null ? null : freeSessionsPerWeek - used;
-    final String? quotaLabel = premium || left == null || !enabled
+    final String? quotaLabel = premium || left == null
         ? null
         : left > 0
         ? l10n.freeLeft(left, freeSessionsPerWeek)
@@ -132,10 +124,6 @@ class _ShamaScreenState extends ConsumerState<ShamaScreen> {
                       ),
                       const SizedBox(height: 14),
                       Text(l10n.howAreYouFeeling, style: AppText.headline),
-                      if (notice != null) ...[
-                        const SizedBox(height: 14),
-                        Text(notice, style: AppText.body),
-                      ],
                     ],
                   ),
                 ),
@@ -192,29 +180,25 @@ class _ShamaScreenState extends ConsumerState<ShamaScreen> {
                         ],
                       )
                     else
-                      Opacity(
-                        opacity: enabled ? 1 : 0.45,
-                        child: Wrap(
-                          spacing: 8,
-                          runSpacing: 8,
-                          children: [
-                            for (final e in moodChips)
-                              _Chip(
-                                label: l10n.emotionName(e),
-                                onTap: enabled ? () => _start(e) : null,
-                              ),
-                          ],
-                        ),
+                      // Sessions always open: duas are there even before the
+                      // scholar's verses; offline, the player says so.
+                      Wrap(
+                        spacing: 8,
+                        runSpacing: 8,
+                        children: [
+                          for (final e in moodChips)
+                            _Chip(
+                              label: l10n.emotionName(e),
+                              onTap: () => _start(e),
+                            ),
+                        ],
                       ),
                     const SizedBox(height: 14),
                     _InputBar(
-                      onVoice: voice && enabled
+                      onVoice: voice
                           ? () => context.push(Routes.shamaVoice)
                           : null,
                       controller: _draft,
-                      // Stays enabled while a reply is pending so the
-                      // keyboard and focus aren't lost; only Send waits.
-                      enabled: enabled,
                       thinking: chat.thinking,
                       onSend: _send,
                     ),
@@ -285,7 +269,6 @@ class _InputBar extends StatelessWidget {
   const _InputBar({
     required this.onVoice,
     required this.controller,
-    required this.enabled,
     required this.thinking,
     required this.onSend,
   });
@@ -293,7 +276,6 @@ class _InputBar extends StatelessWidget {
   /// Opens the voice screen; null hides the mic.
   final VoidCallback? onVoice;
   final TextEditingController controller;
-  final bool enabled;
   final bool thinking;
   final VoidCallback onSend;
 
@@ -301,7 +283,9 @@ class _InputBar extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
     final hasText = controller.text.trim().isNotEmpty;
-    final canSend = enabled && !thinking && hasText;
+    // Stays usable while a reply is pending so the keyboard and focus
+    // aren't lost; only Send waits.
+    final canSend = !thinking && hasText;
     // Empty box: the button is the mic (prototype), when voice is offered.
     final showMic = !hasText && !thinking && onVoice != null;
     return Container(
@@ -317,7 +301,6 @@ class _InputBar extends StatelessWidget {
           Expanded(
             child: TextField(
               controller: controller,
-              enabled: enabled,
               maxLength: 1000,
               textInputAction: TextInputAction.send,
               onSubmitted: (_) => canSend ? onSend() : null,

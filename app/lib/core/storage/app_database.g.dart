@@ -1437,6 +1437,268 @@ class SessionsCompanion extends UpdateCompanion<Session> {
   }
 }
 
+class $ContentCacheTable extends ContentCache
+    with TableInfo<$ContentCacheTable, CachedContent> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $ContentCacheTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _keyMeta = const VerificationMeta('key');
+  @override
+  late final GeneratedColumn<String> key = GeneratedColumn<String>(
+    'key',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _bodyMeta = const VerificationMeta('body');
+  @override
+  late final GeneratedColumn<String> body = GeneratedColumn<String>(
+    'body',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _fetchedAtMeta = const VerificationMeta(
+    'fetchedAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> fetchedAt = GeneratedColumn<DateTime>(
+    'fetched_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: true,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [key, body, fetchedAt];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'content_cache';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<CachedContent> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('key')) {
+      context.handle(
+        _keyMeta,
+        key.isAcceptableOrUnknown(data['key']!, _keyMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_keyMeta);
+    }
+    if (data.containsKey('body')) {
+      context.handle(
+        _bodyMeta,
+        body.isAcceptableOrUnknown(data['body']!, _bodyMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_bodyMeta);
+    }
+    if (data.containsKey('fetched_at')) {
+      context.handle(
+        _fetchedAtMeta,
+        fetchedAt.isAcceptableOrUnknown(data['fetched_at']!, _fetchedAtMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_fetchedAtMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {key};
+  @override
+  CachedContent map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return CachedContent(
+      key: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}key'],
+      )!,
+      body: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}body'],
+      )!,
+      fetchedAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}fetched_at'],
+      )!,
+    );
+  }
+
+  @override
+  $ContentCacheTable createAlias(String alias) {
+    return $ContentCacheTable(attachedDatabase, alias);
+  }
+}
+
+class CachedContent extends DataClass implements Insertable<CachedContent> {
+  final String key;
+  final String body;
+  final DateTime fetchedAt;
+  const CachedContent({
+    required this.key,
+    required this.body,
+    required this.fetchedAt,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['key'] = Variable<String>(key);
+    map['body'] = Variable<String>(body);
+    map['fetched_at'] = Variable<DateTime>(fetchedAt);
+    return map;
+  }
+
+  ContentCacheCompanion toCompanion(bool nullToAbsent) {
+    return ContentCacheCompanion(
+      key: Value(key),
+      body: Value(body),
+      fetchedAt: Value(fetchedAt),
+    );
+  }
+
+  factory CachedContent.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return CachedContent(
+      key: serializer.fromJson<String>(json['key']),
+      body: serializer.fromJson<String>(json['body']),
+      fetchedAt: serializer.fromJson<DateTime>(json['fetchedAt']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'key': serializer.toJson<String>(key),
+      'body': serializer.toJson<String>(body),
+      'fetchedAt': serializer.toJson<DateTime>(fetchedAt),
+    };
+  }
+
+  CachedContent copyWith({String? key, String? body, DateTime? fetchedAt}) =>
+      CachedContent(
+        key: key ?? this.key,
+        body: body ?? this.body,
+        fetchedAt: fetchedAt ?? this.fetchedAt,
+      );
+  CachedContent copyWithCompanion(ContentCacheCompanion data) {
+    return CachedContent(
+      key: data.key.present ? data.key.value : this.key,
+      body: data.body.present ? data.body.value : this.body,
+      fetchedAt: data.fetchedAt.present ? data.fetchedAt.value : this.fetchedAt,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('CachedContent(')
+          ..write('key: $key, ')
+          ..write('body: $body, ')
+          ..write('fetchedAt: $fetchedAt')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(key, body, fetchedAt);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is CachedContent &&
+          other.key == this.key &&
+          other.body == this.body &&
+          other.fetchedAt == this.fetchedAt);
+}
+
+class ContentCacheCompanion extends UpdateCompanion<CachedContent> {
+  final Value<String> key;
+  final Value<String> body;
+  final Value<DateTime> fetchedAt;
+  final Value<int> rowid;
+  const ContentCacheCompanion({
+    this.key = const Value.absent(),
+    this.body = const Value.absent(),
+    this.fetchedAt = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  ContentCacheCompanion.insert({
+    required String key,
+    required String body,
+    required DateTime fetchedAt,
+    this.rowid = const Value.absent(),
+  }) : key = Value(key),
+       body = Value(body),
+       fetchedAt = Value(fetchedAt);
+  static Insertable<CachedContent> custom({
+    Expression<String>? key,
+    Expression<String>? body,
+    Expression<DateTime>? fetchedAt,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (key != null) 'key': key,
+      if (body != null) 'body': body,
+      if (fetchedAt != null) 'fetched_at': fetchedAt,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  ContentCacheCompanion copyWith({
+    Value<String>? key,
+    Value<String>? body,
+    Value<DateTime>? fetchedAt,
+    Value<int>? rowid,
+  }) {
+    return ContentCacheCompanion(
+      key: key ?? this.key,
+      body: body ?? this.body,
+      fetchedAt: fetchedAt ?? this.fetchedAt,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (key.present) {
+      map['key'] = Variable<String>(key.value);
+    }
+    if (body.present) {
+      map['body'] = Variable<String>(body.value);
+    }
+    if (fetchedAt.present) {
+      map['fetched_at'] = Variable<DateTime>(fetchedAt.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('ContentCacheCompanion(')
+          ..write('key: $key, ')
+          ..write('body: $body, ')
+          ..write('fetchedAt: $fetchedAt, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
   $AppDatabaseManager get managers => $AppDatabaseManager(this);
@@ -1444,6 +1706,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   late final $TasbihDaysTable tasbihDays = $TasbihDaysTable(this);
   late final $VerseTextsTable verseTexts = $VerseTextsTable(this);
   late final $SessionsTable sessions = $SessionsTable(this);
+  late final $ContentCacheTable contentCache = $ContentCacheTable(this);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
@@ -1453,6 +1716,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
     tasbihDays,
     verseTexts,
     sessions,
+    contentCache,
   ];
 }
 
@@ -2252,6 +2516,177 @@ typedef $$SessionsTableProcessedTableManager =
       Session,
       PrefetchHooks Function()
     >;
+typedef $$ContentCacheTableCreateCompanionBuilder =
+    ContentCacheCompanion Function({
+      required String key,
+      required String body,
+      required DateTime fetchedAt,
+      Value<int> rowid,
+    });
+typedef $$ContentCacheTableUpdateCompanionBuilder =
+    ContentCacheCompanion Function({
+      Value<String> key,
+      Value<String> body,
+      Value<DateTime> fetchedAt,
+      Value<int> rowid,
+    });
+
+class $$ContentCacheTableFilterComposer
+    extends Composer<_$AppDatabase, $ContentCacheTable> {
+  $$ContentCacheTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get key => $composableBuilder(
+    column: $table.key,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get body => $composableBuilder(
+    column: $table.body,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get fetchedAt => $composableBuilder(
+    column: $table.fetchedAt,
+    builder: (column) => ColumnFilters(column),
+  );
+}
+
+class $$ContentCacheTableOrderingComposer
+    extends Composer<_$AppDatabase, $ContentCacheTable> {
+  $$ContentCacheTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get key => $composableBuilder(
+    column: $table.key,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get body => $composableBuilder(
+    column: $table.body,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get fetchedAt => $composableBuilder(
+    column: $table.fetchedAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$ContentCacheTableAnnotationComposer
+    extends Composer<_$AppDatabase, $ContentCacheTable> {
+  $$ContentCacheTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get key =>
+      $composableBuilder(column: $table.key, builder: (column) => column);
+
+  GeneratedColumn<String> get body =>
+      $composableBuilder(column: $table.body, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get fetchedAt =>
+      $composableBuilder(column: $table.fetchedAt, builder: (column) => column);
+}
+
+class $$ContentCacheTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $ContentCacheTable,
+          CachedContent,
+          $$ContentCacheTableFilterComposer,
+          $$ContentCacheTableOrderingComposer,
+          $$ContentCacheTableAnnotationComposer,
+          $$ContentCacheTableCreateCompanionBuilder,
+          $$ContentCacheTableUpdateCompanionBuilder,
+          (
+            CachedContent,
+            BaseReferences<_$AppDatabase, $ContentCacheTable, CachedContent>,
+          ),
+          CachedContent,
+          PrefetchHooks Function()
+        > {
+  $$ContentCacheTableTableManager(_$AppDatabase db, $ContentCacheTable table)
+    : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$ContentCacheTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$ContentCacheTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$ContentCacheTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<String> key = const Value.absent(),
+                Value<String> body = const Value.absent(),
+                Value<DateTime> fetchedAt = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => ContentCacheCompanion(
+                key: key,
+                body: body,
+                fetchedAt: fetchedAt,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String key,
+                required String body,
+                required DateTime fetchedAt,
+                Value<int> rowid = const Value.absent(),
+              }) => ContentCacheCompanion.insert(
+                key: key,
+                body: body,
+                fetchedAt: fetchedAt,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) => (
+                  e.readTable<$ContentCacheTable, CachedContent>(table),
+                  BaseReferences<
+                    _$AppDatabase,
+                    $ContentCacheTable,
+                    CachedContent
+                  >(db, table, e),
+                ),
+              )
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$ContentCacheTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $ContentCacheTable,
+      CachedContent,
+      $$ContentCacheTableFilterComposer,
+      $$ContentCacheTableOrderingComposer,
+      $$ContentCacheTableAnnotationComposer,
+      $$ContentCacheTableCreateCompanionBuilder,
+      $$ContentCacheTableUpdateCompanionBuilder,
+      (
+        CachedContent,
+        BaseReferences<_$AppDatabase, $ContentCacheTable, CachedContent>,
+      ),
+      CachedContent,
+      PrefetchHooks Function()
+    >;
 
 class $AppDatabaseManager {
   final _$AppDatabase _db;
@@ -2264,4 +2699,6 @@ class $AppDatabaseManager {
       $$VerseTextsTableTableManager(_db, _db.verseTexts);
   $$SessionsTableTableManager get sessions =>
       $$SessionsTableTableManager(_db, _db.sessions);
+  $$ContentCacheTableTableManager get contentCache =>
+      $$ContentCacheTableTableManager(_db, _db.contentCache);
 }

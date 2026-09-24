@@ -3,6 +3,8 @@ import 'dart:math';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../core/duas/dua.dart';
+import '../../core/duas/dua_repository.dart';
 import '../../core/quran/quran_providers.dart';
 import '../../core/quran/quran_repository.dart';
 import '../../core/quran/verse_ref.dart';
@@ -12,6 +14,7 @@ import '../library/library_repository.dart';
 import '../library/verse_library.dart';
 import '../prayer/prayer_providers.dart';
 import '../reciter/reciter.dart';
+import 'dua_categories.dart';
 import 'session_store.dart';
 import 'verse_player.dart';
 
@@ -43,11 +46,87 @@ enum SessionPhase { loading, playing, paused, finished, unavailable }
 
 /// Why a session couldn't start.
 enum Unavailable {
-  /// The library is still the placeholder, or has no verses for this.
+  /// Nothing approved for this feeling.
   notApproved,
 
-  /// Offline, and none of the verses are cached yet.
+  /// Offline, with nothing downloaded yet.
   offline,
+}
+
+/// One step of a session: a recited verse, or a dua to read.
+sealed class SessionItem {
+  const SessionItem();
+}
+
+class VerseItem extends SessionItem {
+  const VerseItem(this.ref);
+
+  final VerseRef ref;
+
+  @override
+  bool operator ==(Object other) => other is VerseItem && other.ref == ref;
+
+  @override
+  int get hashCode => ref.hashCode;
+
+  @override
+  String toString() => '$ref';
+}
+
+class DuaItem extends SessionItem {
+  const DuaItem(this.dua);
+
+  final Dua dua;
+
+  @override
+  bool operator ==(Object other) => other is DuaItem && other.dua.id == dua.id;
+
+  @override
+  int get hashCode => dua.id.hashCode;
+
+  @override
+  String toString() => 'dua ${dua.id}';
+}
+
+/// What's on screen now.
+sealed class SessionContent {
+  const SessionContent();
+}
+
+/// A verse, unchanged from the Quran API, with its recitation playing.
+class VerseContent extends SessionContent {
+  const VerseContent(this.text);
+
+  final VerseText text;
+}
+
+/// A dua to read (there's no recitation for duas), shown for [length].
+class DuaContent extends SessionContent {
+  const DuaContent(this.dua, this.length);
+
+  final Dua dua;
+  final Duration length;
+}
+
+/// How long a dua stays on screen: time to read it slowly, a little
+/// longer when it's said more than once.
+Duration readingTime(Dua dua) {
+  final words = dua.translation.split(RegExp(r'\s+')).length;
+  final once = 8 + words * 0.5;
+  final seconds = (once * min(dua.repeat, 3)).clamp(20, 90);
+  return Duration(seconds: seconds.round());
+}
+
+/// Verses with a dua after every two; either alone when the other is empty.
+List<SessionItem> interleave(List<VerseRef> verses, List<Dua> duas) {
+  if (verses.isEmpty) return [for (final d in duas) DuaItem(d)];
+  final items = <SessionItem>[];
+  var next = 0;
+  for (final (i, v) in verses.indexed) {
+    items.add(VerseItem(v));
+    if (i.isOdd && next < duas.length) items.add(DuaItem(duas[next++]));
+  }
+  return items;
 }
 
 class SessionState {
@@ -55,11 +134,13 @@ class SessionState {
     required this.emotion,
     required this.comfort,
     required this.minutes,
+    this.replay = false,
     this.phase = SessionPhase.loading,
     this.queue = const [],
     this.index = 0,
-    this.verse,
+    this.content,
     this.played = const [],
+    this.completed = 0,
     this.elapsedBefore = Duration.zero,
     this.position = Duration.zero,
     this.unavailable,
@@ -70,18 +151,24 @@ class SessionState {
   final Emotion emotion;
   final bool comfort;
   final int minutes;
-  final SessionPhase phase;
-  final List<VerseRef> queue;
-  final int index;
 
-  /// The verse on screen, unchanged from the Quran API.
-  final VerseText? verse;
+  /// Replaying a journal entry: its verses once, in order.
+  final bool replay;
+  final SessionPhase phase;
+  final List<SessionItem> queue;
+  final int index;
+  final SessionContent? content;
+
+  /// Verses played, for the journal.
   final List<VerseRef> played;
 
-  /// Time spent in verses before the current one.
+  /// Steps (verses and duas) finished, across repeats of the queue.
+  final int completed;
+
+  /// Time spent in steps before the current one.
   final Duration elapsedBefore;
 
-  /// Position within the current verse.
+  /// Position within the current step.
   final Duration position;
   final Unavailable? unavailable;
   final int? sessionId;
@@ -101,10 +188,11 @@ class SessionState {
 
   SessionState copyWith({
     SessionPhase? phase,
-    List<VerseRef>? queue,
+    List<SessionItem>? queue,
     int? index,
-    VerseText? verse,
+    SessionContent? content,
     List<VerseRef>? played,
+    int? completed,
     Duration? elapsedBefore,
     Duration? position,
     Unavailable? unavailable,
@@ -114,11 +202,13 @@ class SessionState {
     emotion: emotion,
     comfort: comfort,
     minutes: minutes,
+    replay: replay,
     phase: phase ?? this.phase,
     queue: queue ?? this.queue,
     index: index ?? this.index,
-    verse: verse ?? this.verse,
+    content: content ?? this.content,
     played: played ?? this.played,
+    completed: completed ?? this.completed,
     elapsedBefore: elapsedBefore ?? this.elapsedBefore,
     position: position ?? this.position,
     unavailable: unavailable ?? this.unavailable,
@@ -132,20 +222,27 @@ final shamaSessionProvider =
       ShamaSessionNotifier.new,
     );
 
-/// Runs a session: approved verses for the emotion and help chosen, in a
-/// random order, until the chosen time is up (the verse playing then
+/// Runs a session like a meditation: approved verses (recited) and duas
+/// (to read) for the feeling and help chosen, in a random order, going
+/// round again until the chosen time is up (the step then showing
 /// finishes). Only verses in the approved library ever play.
 class ShamaSessionNotifier extends Notifier<SessionState?> {
   StreamSubscription<Duration>? _positions;
   StreamSubscription<void>? _completions;
+  Timer? _reading;
 
-  /// Bumped on every move, so a late completion from an old verse is
+  /// Bumped on every move, so a late completion from an old step is
   /// ignored.
   int _generation = 0;
 
+  static const _tick = Duration(milliseconds: 250);
+
   @override
   SessionState? build() {
-    ref.onDispose(_unsubscribe);
+    ref.onDispose(() {
+      _unsubscribe();
+      _reading?.cancel();
+    });
     return null;
   }
 
@@ -160,12 +257,18 @@ class ShamaSessionNotifier extends Notifier<SessionState?> {
     List<VerseRef>? replay,
   }) async {
     await _halt();
-    state = SessionState(emotion: emotion, comfort: comfort, minutes: minutes);
+    state = SessionState(
+      emotion: emotion,
+      comfort: comfort,
+      minutes: minutes,
+      replay: replay != null,
+    );
 
     final library = await ref.read(verseLibraryProvider.future);
     final approved = library == null || library.placeholder
         ? const <VerseRef>{}
         : {for (final e in library.entries) e.ref};
+    final random = ref.read(sessionRandomProvider);
     final verses = replay != null
         ? [
             for (final r in replay)
@@ -173,20 +276,34 @@ class ShamaSessionNotifier extends Notifier<SessionState?> {
           ]
         : library == null || library.placeholder
         ? const <VerseRef>[]
-        : library.versesFor(emotion, comfort: comfort);
-    if (library == null || verses.isEmpty) {
+        : ([...library.versesFor(emotion, comfort: comfort)]..shuffle(random));
+    var duasOffline = false;
+    final duas = <Dua>[];
+    if (replay == null) {
+      try {
+        final categories = duaCategoriesFor(emotion, comfort: comfort);
+        duas.addAll(
+          (await ref.read(duaRepositoryProvider).all()).where(
+            (d) => categories.contains(d.category),
+          ),
+        );
+        duas.shuffle(random);
+      } on Exception {
+        duasOffline = true;
+      }
+    }
+
+    final queue = interleave(verses, duas);
+    if (queue.isEmpty) {
       state = state!.copyWith(
         phase: SessionPhase.unavailable,
-        unavailable: library == null
+        unavailable: library == null || duasOffline
             ? Unavailable.offline
             : Unavailable.notApproved,
       );
       return;
     }
 
-    final queue = replay != null
-        ? verses
-        : ([...verses]..shuffle(ref.read(sessionRandomProvider)));
     final id = await ref
         .read(sessionStoreProvider)
         .start(
@@ -199,74 +316,127 @@ class ShamaSessionNotifier extends Notifier<SessionState?> {
     state = state!.copyWith(queue: queue, sessionId: id);
     _positions = _player.positions.listen((p) {
       final s = state;
-      if (s != null && s.phase == SessionPhase.playing) {
+      if (s != null &&
+          s.phase == SessionPhase.playing &&
+          s.content is VerseContent) {
         state = s.copyWith(position: p);
       }
     });
-    _completions = _player.completions.listen((_) => _onVerseEnd());
+    _completions = _player.completions.listen((_) {
+      if (state?.content is VerseContent) unawaited(_onStepEnd());
+    });
     await _playAt(0);
   }
 
   Future<void> _playAt(int index) async {
     final generation = ++_generation;
     var i = index;
+    // Steps tried in a row without one working (offline, not cached).
+    var failures = 0;
     final reciter = ref.read(reciterProvider).source;
     while (true) {
       final s = state;
       if (s == null) return;
-      if (i >= s.queue.length || s.elapsed >= s.length) {
+      if (s.elapsed >= s.length) {
         await _end();
         return;
       }
-      state = s.copyWith(index: i, phase: SessionPhase.loading);
-      try {
-        final verseRef = s.queue[i];
-        final (text, file) = await (
-          ref.read(quranRepositoryProvider).verse(verseRef),
-          ref.read(recitationRepositoryProvider).audio(reciter, verseRef),
-        ).wait;
-        if (generation != _generation) return;
-        await _player.open(file);
-        if (generation != _generation) return;
-        state = state!.copyWith(
-          verse: text,
-          position: Duration.zero,
-          phase: SessionPhase.playing,
-        );
-        _player.play();
-        return;
-      } on Object catch (e) {
-        if (generation != _generation) return;
-        if (e is! Exception && e is! ParallelWaitError) rethrow;
-        // Not cached and can't be fetched (offline): try the next one.
-        i++;
-        if (i >= state!.queue.length && state!.played.isEmpty) {
-          state = state!.copyWith(
+      if (i >= s.queue.length) {
+        // Round again until the time is up; a replay plays once.
+        if (s.replay) {
+          await _end();
+          return;
+        }
+        i = 0;
+      }
+      if (failures >= s.queue.length) {
+        if (s.completed == 0) {
+          state = s.copyWith(
             phase: SessionPhase.unavailable,
             unavailable: Unavailable.offline,
           );
-          return;
+        } else {
+          await _end();
         }
+        return;
+      }
+      state = s.copyWith(index: i, phase: SessionPhase.loading);
+      switch (s.queue[i]) {
+        case DuaItem(:final dua):
+          state = state!.copyWith(
+            content: DuaContent(dua, readingTime(dua)),
+            position: Duration.zero,
+            phase: SessionPhase.playing,
+          );
+          _startReading();
+          return;
+        case VerseItem(ref: final verseRef):
+          try {
+            final (text, file) = await (
+              ref.read(quranRepositoryProvider).verse(verseRef),
+              ref.read(recitationRepositoryProvider).audio(reciter, verseRef),
+            ).wait;
+            if (generation != _generation) return;
+            await _player.open(file);
+            if (generation != _generation) return;
+            state = state!.copyWith(
+              content: VerseContent(text),
+              position: Duration.zero,
+              phase: SessionPhase.playing,
+            );
+            _player.play();
+            return;
+          } on Object catch (e) {
+            if (generation != _generation) return;
+            if (e is! Exception && e is! ParallelWaitError) rethrow;
+            // Not cached and can't be fetched (offline): try the next one.
+            i++;
+            failures++;
+          }
       }
     }
   }
 
-  Future<void> _onVerseEnd() async {
+  /// A dua has no audio: its time runs on a timer while not paused.
+  void _startReading() {
+    _reading?.cancel();
+    final generation = _generation;
+    _reading = Timer.periodic(_tick, (_) {
+      final s = state;
+      if (s == null || generation != _generation) {
+        _reading?.cancel();
+        return;
+      }
+      if (s.phase != SessionPhase.playing) return;
+      final content = s.content;
+      if (content is! DuaContent) return;
+      final position = s.position + _tick;
+      state = s.copyWith(position: position);
+      if (position >= content.length) {
+        _reading?.cancel();
+        unawaited(_onStepEnd());
+      }
+    });
+  }
+
+  Future<void> _onStepEnd() async {
     final s = state;
     if (s == null || s.phase != SessionPhase.playing) return;
     await _countCurrent(s);
     await _playAt(state!.index + 1);
   }
 
-  /// Adds the current verse to the time and the played list.
+  /// Adds the current step to the time (and a verse to the played list).
   Future<void> _countCurrent(SessionState s) async {
-    final played = [...s.played, s.queue[s.index]];
+    final item = s.queue[s.index];
+    final played = item is VerseItem ? [...s.played, item.ref] : s.played;
     state = s.copyWith(
       played: played,
+      completed: s.completed + 1,
       elapsedBefore: s.elapsedBefore + s.position,
       position: Duration.zero,
     );
-    if (s.sessionId != null) {
+    if (item is VerseItem && s.sessionId != null) {
       await ref.read(sessionStoreProvider).recordVerses(s.sessionId!, played);
     }
   }
@@ -274,27 +444,30 @@ class ShamaSessionNotifier extends Notifier<SessionState?> {
   Future<void> togglePause() async {
     final s = state;
     if (s == null) return;
+    final reading = s.content is DuaContent;
     if (s.phase == SessionPhase.playing) {
-      await _player.pause();
+      if (!reading) await _player.pause();
       state = s.copyWith(phase: SessionPhase.paused);
     } else if (s.phase == SessionPhase.paused) {
       state = s.copyWith(phase: SessionPhase.playing);
-      _player.play();
+      if (!reading) _player.play();
     }
   }
 
   Future<void> next() async {
     final s = state;
-    if (s == null || s.verse == null) return;
+    if (s == null || s.content == null) return;
+    _reading?.cancel();
     await _player.stop();
     await _countCurrent(s);
     await _playAt(s.index + 1);
   }
 
-  /// Restarts the verse, or goes back one if it has only just begun.
+  /// Restarts the step, or goes back one if it has only just begun.
   Future<void> previous() async {
     final s = state;
-    if (s == null || s.verse == null) return;
+    if (s == null || s.content == null) return;
+    _reading?.cancel();
     await _player.stop();
     final back = s.position < const Duration(seconds: 3) && s.index > 0;
     state = s.copyWith(
@@ -308,6 +481,7 @@ class ShamaSessionNotifier extends Notifier<SessionState?> {
   Future<void> end() async {
     final s = state;
     if (s == null) return;
+    _reading?.cancel();
     if (s.phase == SessionPhase.playing || s.phase == SessionPhase.paused) {
       await _player.stop();
       await _countCurrent(s);
@@ -317,6 +491,7 @@ class ShamaSessionNotifier extends Notifier<SessionState?> {
 
   Future<void> _end() async {
     _generation++;
+    _reading?.cancel();
     _unsubscribe();
     await _player.stop();
     final s = state;
@@ -357,6 +532,7 @@ class ShamaSessionNotifier extends Notifier<SessionState?> {
 
   Future<void> _halt() async {
     _generation++;
+    _reading?.cancel();
     _unsubscribe();
     if (state != null) await _player.stop();
   }

@@ -61,9 +61,10 @@ class SourcesScreen extends ConsumerWidget {
                             l10n.sourceRecitationValue,
                           ),
                           _row(l10n.sourceReciter, l10n.reciterName(reciter)),
+                          _row(l10n.sourceText, l10n.sourceTextValue),
                           _row(
-                            l10n.sourceText,
-                            l10n.sourceTextValue,
+                            l10n.sourceDuas,
+                            l10n.sourceDuasValue,
                             divider: false,
                           ),
                         ],

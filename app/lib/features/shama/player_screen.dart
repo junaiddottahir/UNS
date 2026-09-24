@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../core/duas/dua.dart';
+import '../../core/quran/quran_repository.dart';
 import '../../core/router/routes.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_theme.dart';
@@ -40,7 +42,6 @@ class PlayerScreen extends ConsumerWidget {
       );
     }
 
-    final verse = s.verse;
     final dashes = s.queue.length.clamp(1, 12);
     return Scaffold(
       body: AmbientBackground(
@@ -87,47 +88,13 @@ class PlayerScreen extends ConsumerWidget {
                 ),
               ),
               Expanded(
-                child: verse == null
-                    ? Center(
-                        child: Text(l10n.preparingVerses, style: AppText.body),
-                      )
-                    : ListView(
-                        padding: const EdgeInsets.fromLTRB(
-                          AppSpacing.screenH,
-                          40,
-                          AppSpacing.screenH,
-                          20,
-                        ),
-                        children: [
-                          Text(
-                            l10n.verseLabel('${verse.ref}').toUpperCase(),
-                            style: AppText.label,
-                          ),
-                          const SizedBox(height: 30),
-                          // Arabic, exactly as the Quran API sent it.
-                          Text(
-                            verse.arabic,
-                            textDirection: TextDirection.rtl,
-                            textAlign: TextAlign.right,
-                            style: AppText.arabic,
-                          ),
-                          const SizedBox(height: 10),
-                          Align(
-                            alignment: Alignment.centerRight,
-                            child: Text(
-                              l10n.arabicSourceLabel.toUpperCase(),
-                              style: AppText.sourceTag,
-                            ),
-                          ),
-                          const SizedBox(height: 30),
-                          Text(verse.translation, style: AppText.translation),
-                          const SizedBox(height: 10),
-                          Text(
-                            l10n.translationSourceLabel.toUpperCase(),
-                            style: AppText.sourceTag,
-                          ),
-                        ],
-                      ),
+                child: switch (s.content) {
+                  null => Center(
+                    child: Text(l10n.preparingVerses, style: AppText.body),
+                  ),
+                  VerseContent(text: final verse) => _VerseView(verse),
+                  DuaContent(:final dua) => _DuaView(dua),
+                },
               ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(
@@ -153,8 +120,11 @@ class PlayerScreen extends ConsumerWidget {
                       children: [
                         Text(_mmss(s.elapsed), style: AppText.label),
                         Text(
-                          l10n
-                              .reciterName(ref.watch(reciterProvider))
+                          (s.content is DuaContent
+                                  ? l10n.readAlong
+                                  : l10n.reciterName(
+                                      ref.watch(reciterProvider),
+                                    ))
                               .toUpperCase(),
                           style: AppText.label,
                         ),
@@ -207,6 +177,107 @@ class PlayerScreen extends ConsumerWidget {
           ),
         ),
       ),
+    );
+  }
+}
+
+/// A verse: Arabic above the translation, each with its source.
+class _VerseView extends StatelessWidget {
+  const _VerseView(this.verse);
+
+  final VerseText verse;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    return ListView(
+      padding: const EdgeInsets.fromLTRB(
+        AppSpacing.screenH,
+        40,
+        AppSpacing.screenH,
+        20,
+      ),
+      children: [
+        Text(
+          l10n.verseLabel('${verse.ref}').toUpperCase(),
+          style: AppText.label,
+        ),
+        const SizedBox(height: 30),
+        // Arabic, exactly as the Quran API sent it.
+        Text(
+          verse.arabic,
+          textDirection: TextDirection.rtl,
+          textAlign: TextAlign.right,
+          style: AppText.arabic,
+        ),
+        const SizedBox(height: 10),
+        Align(
+          alignment: Alignment.centerRight,
+          child: Text(
+            l10n.arabicSourceLabel.toUpperCase(),
+            style: AppText.sourceTag,
+          ),
+        ),
+        const SizedBox(height: 30),
+        Text(verse.translation, style: AppText.translation),
+        const SizedBox(height: 10),
+        Text(
+          l10n.translationSourceLabel.toUpperCase(),
+          style: AppText.sourceTag,
+        ),
+      ],
+    );
+  }
+}
+
+/// A dua to read: Arabic, transliteration and translation, with its
+/// hadith source, all unchanged from UmmahAPI.
+class _DuaView extends StatelessWidget {
+  const _DuaView(this.dua);
+
+  final Dua dua;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    return ListView(
+      padding: const EdgeInsets.fromLTRB(
+        AppSpacing.screenH,
+        40,
+        AppSpacing.screenH,
+        20,
+      ),
+      children: [
+        Text(l10n.duaLabel(dua.title).toUpperCase(), style: AppText.label),
+        const SizedBox(height: 30),
+        Text(
+          dua.arabic,
+          textDirection: TextDirection.rtl,
+          textAlign: TextAlign.right,
+          style: AppText.arabic,
+        ),
+        if (dua.transliteration.isNotEmpty) ...[
+          const SizedBox(height: 20),
+          Text(
+            dua.transliteration,
+            style: AppText.body.copyWith(fontStyle: FontStyle.italic),
+          ),
+        ],
+        const SizedBox(height: 24),
+        Text(dua.translation, style: AppText.translation),
+        if (dua.repeat > 1) ...[
+          const SizedBox(height: 14),
+          Text(
+            l10n.repeatTimes(dua.repeat).toUpperCase(),
+            style: AppText.label,
+          ),
+        ],
+        const SizedBox(height: 10),
+        Text(
+          l10n.duaSourceLabel(dua.source).toUpperCase(),
+          style: AppText.sourceTag,
+        ),
+      ],
     );
   }
 }

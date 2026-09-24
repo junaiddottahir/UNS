@@ -1183,13 +1183,13 @@ abstract class AppLocalizations {
   /// No description provided for @libraryNotReady.
   ///
   /// In en, this message translates to:
-  /// **'Sessions open once our scholar has approved the verses.'**
+  /// **'There\'s nothing for this feeling yet. Try another.'**
   String get libraryNotReady;
 
   /// No description provided for @libraryOffline.
   ///
   /// In en, this message translates to:
-  /// **'Connect to the internet once to download the verses.'**
+  /// **'Connect to the internet once to download your session.'**
   String get libraryOffline;
 
   /// No description provided for @feelingMood.
@@ -1291,13 +1291,13 @@ abstract class AppLocalizations {
   /// No description provided for @previousVerse.
   ///
   /// In en, this message translates to:
-  /// **'Previous verse'**
+  /// **'Previous'**
   String get previousVerse;
 
   /// No description provided for @nextVerse.
   ///
   /// In en, this message translates to:
-  /// **'Next verse'**
+  /// **'Next'**
   String get nextVerse;
 
   /// No description provided for @play.
@@ -1315,7 +1315,7 @@ abstract class AppLocalizations {
   /// No description provided for @preparingVerses.
   ///
   /// In en, this message translates to:
-  /// **'Preparing verses…'**
+  /// **'Preparing your session…'**
   String get preparingVerses;
 
   /// No description provided for @beforeMood.
@@ -2175,6 +2175,42 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Go Premium'**
   String get goPremium;
+
+  /// No description provided for @duaLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Dua · {title}'**
+  String duaLabel(String title);
+
+  /// Under a dua: its hadith source, then where the text came from.
+  ///
+  /// In en, this message translates to:
+  /// **'{source} · via UmmahAPI'**
+  String duaSourceLabel(String source);
+
+  /// No description provided for @repeatTimes.
+  ///
+  /// In en, this message translates to:
+  /// **'Said {count} times'**
+  String repeatTimes(int count);
+
+  /// In the session's bottom row while a dua (which has no audio) is on screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Read along'**
+  String get readAlong;
+
+  /// No description provided for @sourceDuas.
+  ///
+  /// In en, this message translates to:
+  /// **'Duas'**
+  String get sourceDuas;
+
+  /// No description provided for @sourceDuasValue.
+  ///
+  /// In en, this message translates to:
+  /// **'UmmahAPI · hadith cited'**
+  String get sourceDuasValue;
 }
 
 class _AppLocalizationsDelegate

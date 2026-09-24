@@ -613,11 +613,11 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get libraryNotReady =>
-      'Sessions open once our scholar has approved the verses.';
+      'There\'s nothing for this feeling yet. Try another.';
 
   @override
   String get libraryOffline =>
-      'Connect to the internet once to download the verses.';
+      'Connect to the internet once to download your session.';
 
   @override
   String feelingMood(String mood) {
@@ -678,10 +678,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get endSession => 'End session';
 
   @override
-  String get previousVerse => 'Previous verse';
+  String get previousVerse => 'Previous';
 
   @override
-  String get nextVerse => 'Next verse';
+  String get nextVerse => 'Next';
 
   @override
   String get play => 'Play';
@@ -690,7 +690,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get pause => 'Pause';
 
   @override
-  String get preparingVerses => 'Preparing verses…';
+  String get preparingVerses => 'Preparing your session…';
 
   @override
   String beforeMood(String mood) {
@@ -1186,4 +1186,28 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get goPremium => 'Go Premium';
+
+  @override
+  String duaLabel(String title) {
+    return 'Dua · $title';
+  }
+
+  @override
+  String duaSourceLabel(String source) {
+    return '$source · via UmmahAPI';
+  }
+
+  @override
+  String repeatTimes(int count) {
+    return 'Said $count times';
+  }
+
+  @override
+  String get readAlong => 'Read along';
+
+  @override
+  String get sourceDuas => 'Duas';
+
+  @override
+  String get sourceDuasValue => 'UmmahAPI · hadith cited';
 }

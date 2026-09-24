@@ -118,16 +118,6 @@ void main() {
     expect(find.text('FEELING SAD'), findsOneWidget);
   });
 
-  testWidgets('placeholder library: typing is off too', (tester) async {
-    final container = await pumpApp(
-      tester,
-      library: testLibrary(placeholder: true),
-    );
-    container.read(appRouterProvider).go(Routes.shama);
-    await tester.pumpAndSettle();
-    expect(tester.widget<TextField>(find.byType(TextField)).enabled, isFalse);
-  });
-
   testWidgets('a second message right after a reply still works', (
     tester,
   ) async {
@@ -136,7 +126,10 @@ void main() {
     await _say(tester, 'Work has been a lot lately');
     expect(find.textContaining("couldn't read that"), findsOneWidget);
     // Focus is kept, so the next words go straight in.
-    expect(tester.widget<TextField>(find.byType(TextField)).enabled, isTrue);
+    expect(
+      tester.widget<TextField>(find.byType(TextField)).enabled,
+      isNot(false),
+    );
     await _say(tester, 'I want to end it all');
     expect(find.text("You don't have to carry this alone"), findsOneWidget);
   });

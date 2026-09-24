@@ -42,6 +42,18 @@ class VerseTexts extends Table {
   Set<Column> get primaryKey => {edition, surah, ayah};
 }
 
+/// Downloaded content kept whole for offline use, e.g. the dua collection
+/// as fetched from UmmahAPI.
+@DataClassName('CachedContent')
+class ContentCache extends Table {
+  TextColumn get key => text()();
+  TextColumn get body => text()();
+  DateTimeColumn get fetchedAt => dateTime()();
+
+  @override
+  Set<Column> get primaryKey => {key};
+}
+
 /// Shama sessions and their journal reflections: what was chosen and
 /// played, the mood after, and what the user wrote. Never leaves the device.
 class Sessions extends Table {
@@ -73,12 +85,14 @@ class Sessions extends Table {
 
 /// The encrypted on-device database. Holds every piece of user data; later
 /// units add journal tables.
-@DriftDatabase(tables: [Settings, TasbihDays, VerseTexts, Sessions])
+@DriftDatabase(
+  tables: [Settings, TasbihDays, VerseTexts, Sessions, ContentCache],
+)
 class AppDatabase extends _$AppDatabase {
   AppDatabase(super.executor);
 
   @override
-  int get schemaVersion => 7;
+  int get schemaVersion => 8;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -92,6 +106,7 @@ class AppDatabase extends _$AppDatabase {
         await m.addColumn(sessions, sessions.voiceSeconds);
       }
       if (from >= 4 && from < 7) await m.addColumn(sessions, sessions.isReplay);
+      if (from < 8) await m.createTable(contentCache);
     },
   );
 

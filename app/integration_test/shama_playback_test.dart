@@ -82,8 +82,9 @@ void main() {
     }
     final s = container.read(shamaSessionProvider)!;
     expect(s.phase, SessionPhase.playing);
-    expect(s.verse!.arabic, isNotEmpty);
-    expect(s.verse!.translation, isNotEmpty);
+    final verse = (s.content! as VerseContent).text;
+    expect(verse.arabic, isNotEmpty);
+    expect(verse.translation, isNotEmpty);
     expect(s.position, greaterThan(const Duration(seconds: 2)));
 
     await container.read(shamaSessionProvider.notifier).end();

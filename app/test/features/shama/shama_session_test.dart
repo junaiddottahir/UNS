@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:drift/native.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:uns/core/duas/dua_repository.dart';
 import 'package:uns/core/quran/quran_providers.dart';
 import 'package:uns/core/quran/verse_ref.dart';
 import 'package:uns/core/storage/app_database.dart';
@@ -24,6 +25,7 @@ void main() {
     bool noLibrary = false,
     FakeQuran? quran,
     FakeRecitations? recitations,
+    FakeDuas? duas,
   }) async {
     db = AppDatabase(NativeDatabase.memory());
     addTearDown(db.close);
@@ -42,6 +44,7 @@ void main() {
         recitationRepositoryProvider.overrideWithValue(
           recitations ?? FakeRecitations(),
         ),
+        duaRepositoryProvider.overrideWithValue(duas ?? FakeDuas()),
       ],
     );
     addTearDown(container.dispose);
@@ -59,39 +62,48 @@ void main() {
 
   Future<void> settle() => pumpEventQueue();
 
+  /// The queue's verses, in order.
+  List<VerseRef> verses() => [
+    for (final item in state().queue)
+      if (item is VerseItem) item.ref,
+  ];
+
   test('plays only the chosen help\'s approved verses', () async {
     await setUpWith();
     await start();
     expect(state().phase, SessionPhase.playing);
-    expect(state().queue.toSet(), {
-      VerseRef(1, 1),
-      VerseRef(1, 2),
-      VerseRef(1, 3),
-    });
-    expect(state().verse!.arabic, 'arabic ${state().queue.first}');
+    expect(verses().toSet(), {VerseRef(1, 1), VerseRef(1, 2), VerseRef(1, 3)});
+    expect(
+      (state().content! as VerseContent).text.arabic,
+      'arabic ${verses().first}',
+    );
     expect(player.playing, isTrue);
 
     await start(comfort: false);
-    expect(state().queue, [VerseRef(1, 4)]);
+    expect(verses(), [VerseRef(1, 4)]);
   });
 
-  test('moves verse to verse, then ends when they run out', () async {
+  test('goes verse to verse, round again, until the time is up', () async {
     await setUpWith();
-    await start(minutes: 30);
-    final queue = state().queue;
+    await start(minutes: 5); // 3 verses of 90 s are 4½ min: one more.
+    final queue = verses();
     for (var i = 0; i < 3; i++) {
       expect(state().index, i);
       player.finishVerse();
       await settle();
     }
+    expect(state().phase, SessionPhase.playing);
+    expect(state().index, 0);
+    player.finishVerse();
+    await settle();
     expect(state().phase, SessionPhase.finished);
-    expect(state().played, queue);
-    expect(state().elapsed, const Duration(seconds: 270));
+    expect(state().played, [...queue, queue.first]);
+    expect(state().elapsed, const Duration(seconds: 360));
 
     final row = await (db.select(db.sessions)).getSingle();
-    expect(row.verses, queue.join(','));
+    expect(row.verses, [...queue, queue.first].join(','));
     expect(row.help, 'comfort');
-    expect(row.minutes, 30);
+    expect(row.minutes, 5);
   });
 
   test('ends at the chosen time, after the verse playing then', () async {
@@ -151,7 +163,7 @@ void main() {
     await setUpWith(quran: FakeQuran(offlineRefs: {VerseRef(1, 1)}));
     await start();
     expect(state().phase, SessionPhase.playing);
-    expect(state().queue[state().index], isNot(VerseRef(1, 1)));
+    expect(state().queue[state().index], isNot(VerseItem(VerseRef(1, 1))));
 
     await setUpWith(recitations: FakeRecitations(offline: true));
     await start();
@@ -172,5 +184,111 @@ void main() {
     final row = await (db.select(db.sessions)).getSingle();
     expect(row.moodAfter, 'calmer');
     expect(row.endedAt, isNotNull);
+  });
+
+  group('duas', () {
+    final duas = [
+      testDua(1),
+      testDua(2, category: 'protection'),
+      testDua(3, category: 'food'), // not for anxiety
+      testDua(4, category: 'grief'), // sadness, not anxiety
+    ];
+
+    test('interleave: a dua after every two verses', () {
+      final items = interleave(
+        [VerseRef(1, 1), VerseRef(1, 2), VerseRef(1, 3), VerseRef(1, 4)],
+        [testDua(1), testDua(2)],
+      );
+      expect(items.map((i) => '$i'), [
+        '1:1',
+        '1:2',
+        'dua 1',
+        '1:3',
+        '1:4',
+        'dua 2',
+      ]);
+      expect(interleave([], [testDua(1)]), [DuaItem(testDua(1))]);
+    });
+
+    test(
+      'with no approved verses, a session is duas for the feeling',
+      () async {
+        await setUpWith(
+          library: testLibrary(placeholder: true),
+          duas: FakeDuas(duas),
+        );
+        await start();
+        expect(state().phase, SessionPhase.playing);
+        expect(state().queue.map((i) => (i as DuaItem).dua.id).toSet(), {1, 2});
+        expect(state().content, isA<DuaContent>());
+        expect(player.opened, isEmpty);
+      },
+    );
+
+    test('verses and duas mix when both are there', () async {
+      await setUpWith(duas: FakeDuas(duas));
+      await start();
+      expect(state().queue.whereType<VerseItem>(), hasLength(3));
+      expect(state().queue.whereType<DuaItem>(), hasLength(1));
+      expect(state().queue[2], isA<DuaItem>());
+    });
+
+    test('offline with no copy of the duas and no verses', () async {
+      await setUpWith(
+        library: testLibrary(placeholder: true),
+        duas: FakeDuas(const [], true),
+      );
+      await start();
+      expect(state().unavailable, Unavailable.offline);
+    });
+
+    test('reading time: slow reading, longer when repeated', () {
+      expect(readingTime(testDua(1)), const Duration(seconds: 20));
+      final long = testDua(1, repeat: 3);
+      expect(readingTime(long), const Duration(seconds: 30));
+      expect(
+        readingTime(testDua(1, repeat: 100)).inSeconds,
+        lessThanOrEqualTo(90),
+      );
+    });
+
+    testWidgets('a dua runs on a timer, pauses, and the session goes on', (
+      tester,
+    ) async {
+      await tester.runAsync(
+        () => setUpWith(
+          library: testLibrary(placeholder: true),
+          duas: FakeDuas(duas),
+        ),
+      );
+      await session().start(
+        emotion: Emotion.anxiety,
+        comfort: true,
+        minutes: 1,
+      );
+      await tester.pump();
+      final first = state().index;
+      await tester.pump(const Duration(seconds: 10));
+      expect(state().position, const Duration(seconds: 10));
+
+      await session().togglePause();
+      await tester.pump(const Duration(seconds: 30));
+      expect(state().position, const Duration(seconds: 10));
+      await session().togglePause();
+
+      // 20 s each: the next dua, then round again, then the minute is up.
+      await tester.pump(const Duration(seconds: 10));
+      await tester.pump();
+      expect(state().index, isNot(first));
+      expect(state().completed, 1);
+      await tester.pump(const Duration(seconds: 20));
+      await tester.pump();
+      expect(state().completed, 2);
+      expect(state().phase, SessionPhase.playing);
+      await tester.pump(const Duration(seconds: 20));
+      await tester.pump();
+      expect(state().phase, SessionPhase.finished);
+      expect(state().played, isEmpty); // duas aren't journal verses
+    });
   });
 }
