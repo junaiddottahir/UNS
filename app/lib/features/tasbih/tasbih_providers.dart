@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/storage/app_database.dart';
+import '../../core/storage/settings_store.dart';
 import '../prayer/prayer_providers.dart';
 import 'dhikr.dart';
 import 'tasbih_store.dart';
@@ -23,6 +24,40 @@ final todayTasbihProvider = StreamProvider<int>((ref) {
 final tasbihHistoryProvider = StreamProvider<List<DailyTotal>>(
   (ref) => ref.watch(tasbihStoreProvider).watchRecent(),
 );
+
+/// The dhikr finished today, ticked on the Tasbih tab. Clears at
+/// midnight; stored on the phone only.
+final doneTodayProvider = NotifierProvider<DoneTodayNotifier, Set<Dhikr>>(
+  DoneTodayNotifier.new,
+);
+
+class DoneTodayNotifier extends Notifier<Set<Dhikr>> {
+  String get _today =>
+      TasbihStore.keyFor(ref.read(nowProvider.select(_dateOnly)));
+
+  @override
+  Set<Dhikr> build() {
+    ref.watch(nowProvider.select(_dateOnly));
+    final json = ref
+        .read(settingsStoreProvider)
+        .readJson(SettingKeys.tasbihDone);
+    if (json?['day'] != _today) return const {};
+    final byName = Dhikr.values.asNameMap();
+    return {
+      for (final name in json?['done'] as List? ?? const []) ?byName[name],
+    };
+  }
+
+  void mark(Dhikr d) {
+    state = {...state, d};
+    ref.read(settingsStoreProvider).writeJson(SettingKeys.tasbihDone, {
+      'day': _today,
+      'done': [for (final d in state) d.name],
+    });
+  }
+
+  bool get allDone => state.containsAll(Dhikr.values);
+}
 
 /// A counting session: one dhikr, or the after-prayer set in order.
 class TasbihSession {
@@ -71,6 +106,7 @@ class TasbihSessionNotifier extends Notifier<TasbihSession?> {
     state = s.copyWith(count: s.count + 1);
     unawaited(ref.read(tasbihStoreProvider).increment(ref.read(nowProvider)));
     if (state!.atTarget) {
+      ref.read(doneTodayProvider.notifier).mark(s.dhikr);
       HapticFeedback.heavyImpact();
       HapticFeedback.vibrate();
       return TapResult.reachedTarget;

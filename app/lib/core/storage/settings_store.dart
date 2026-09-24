@@ -16,6 +16,9 @@ abstract final class SettingKeys {
   static const accountOffered = 'account_offered';
   static const language = 'language';
 
+  /// Dhikr finished today, for the ticks on the Tasbih tab. Not synced.
+  static const tasbihDone = 'tasbih_done';
+
   /// When the synced settings (below) last changed on this phone.
   static const syncedChangedAt = 'synced_changed_at';
 

@@ -16,7 +16,8 @@ import 'dhikr_labels.dart';
 import 'tasbih_providers.dart';
 
 /// Tap anywhere to count. At the target it vibrates, then moves to the
-/// next dhikr in the set, or to History when the session is done.
+/// next dhikr in the set. When the session ends it goes back to the list,
+/// or to History once every dhikr is done today.
 class CounterScreen extends ConsumerStatefulWidget {
   const CounterScreen({super.key});
 
@@ -39,7 +40,14 @@ class _CounterScreenState extends ConsumerState<CounterScreen> {
       _next = Timer(targetPause, () {
         if (!mounted) return;
         final more = ref.read(tasbihSessionProvider.notifier).advance();
-        if (!more) context.pushReplacement('${Routes.tasbihHistory}?done=1');
+        if (more) return;
+        // Every dhikr done today: show the day in History. Otherwise back
+        // to the list, where this one is now ticked.
+        if (ref.read(doneTodayProvider.notifier).allDone) {
+          context.pushReplacement('${Routes.tasbihHistory}?done=1');
+        } else {
+          context.pop();
+        }
       });
     }
   }

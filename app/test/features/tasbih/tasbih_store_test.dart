@@ -85,10 +85,12 @@ void main() {
 
   group('session', () {
     late ProviderContainer container;
-    setUp(() {
+    setUp(() async {
+      final settings = await SettingsStore.load(db);
       container = ProviderContainer(
         overrides: [
           appDatabaseProvider.overrideWithValue(db),
+          settingsStoreProvider.overrideWithValue(settings),
           nowProvider.overrideWith(() => FixedClock(testNow)),
         ],
       );
@@ -110,6 +112,9 @@ void main() {
       expect(await store.watchDay(testNow).first, 34);
       expect(session().advance(), isFalse);
       expect(container.read(tasbihSessionProvider), isNull);
+      // Ticked for today, but not every dhikr is done.
+      expect(container.read(doneTodayProvider), {Dhikr.allahuAkbar});
+      expect(container.read(doneTodayProvider.notifier).allDone, isFalse);
     });
 
     test('the after-prayer set runs in order', () {
@@ -123,6 +128,7 @@ void main() {
         final more = session().advance();
         expect(more, d != Dhikr.allahuAkbar);
       }
+      expect(container.read(doneTodayProvider.notifier).allDone, isTrue);
     });
 
     test('start over resets the count but keeps today', () async {

@@ -25,6 +25,7 @@ class TasbihScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context);
     final today = ref.watch(todayTasbihProvider).value ?? 0;
+    final done = ref.watch(doneTodayProvider);
 
     return Scaffold(
       body: AmbientBackground(
@@ -83,10 +84,17 @@ class TasbihScreen extends ConsumerWidget {
                       child: Column(
                         children: [
                           for (final d in Dhikr.values)
-                            GlassRow(
-                              label: Text(l10n.dhikrName(d)),
-                              value: '${d.target}',
-                              onTap: () => _start(context, ref, [d]),
+                            Semantics(
+                              label: done.contains(d) ? l10n.done : null,
+                              child: GlassRow(
+                                label: Text(l10n.dhikrName(d)),
+                                value: '${d.target}',
+                                trailing: done.contains(d)
+                                    ? Icons.check_circle
+                                    : null,
+                                trailingColor: AppColors.accentStrong,
+                                onTap: () => _start(context, ref, [d]),
+                              ),
                             ),
                           GlassRow(
                             leading: Icons.add,

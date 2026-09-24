@@ -44,6 +44,7 @@ class GlassRow extends StatelessWidget {
     this.valueStyle,
     this.leading,
     this.trailing,
+    this.trailingColor,
     this.onTap,
     this.divider = true,
   });
@@ -53,6 +54,7 @@ class GlassRow extends StatelessWidget {
   final TextStyle? valueStyle;
   final IconData? leading;
   final IconData? trailing;
+  final Color? trailingColor;
   final VoidCallback? onTap;
   final bool divider;
 
@@ -93,7 +95,11 @@ class GlassRow extends StatelessWidget {
               ),
             if (trailing != null) ...[
               const SizedBox(width: 6),
-              Icon(trailing, size: 16, color: AppColors.textMuted),
+              Icon(
+                trailing,
+                size: 16,
+                color: trailingColor ?? AppColors.textMuted,
+              ),
             ],
           ],
         ),
