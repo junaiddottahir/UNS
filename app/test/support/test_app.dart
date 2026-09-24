@@ -35,6 +35,7 @@ import 'package:uns/features/qibla/compass_source.dart';
 import 'package:uns/features/qibla/qibla_providers.dart';
 import 'package:uns/features/library/verse_library.dart';
 import 'package:uns/features/reciter/reciter_sample.dart';
+import 'package:uns/features/shama/ambient_player.dart';
 import 'package:uns/features/shama/classify_client.dart';
 import 'package:uns/features/shama/mood_chat.dart';
 import 'package:uns/features/shama/shama_session.dart';
@@ -160,15 +161,35 @@ class FakeSamplePlayer implements SamplePlayer {
 }
 
 /// Hands back a fake file per reciter, or fails when [offline].
-/// A dua made up for tests (not real text).
-Dua testDua(int id, {String category = 'distress', int repeat = 1}) => Dua(
+/// Records whether the ambient sound is playing.
+class FakeAmbientPlayer implements AmbientPlayer {
+  bool playing = false;
+
+  @override
+  void play() => playing = true;
+
+  @override
+  Future<void> pause() async => playing = false;
+
+  @override
+  Future<void> dispose() async {}
+}
+
+/// A dua made up for tests (not real text). [source] "Quran 1:1" makes it
+/// a recited one.
+Dua testDua(
+  int id, {
+  String category = 'distress',
+  int repeat = 1,
+  String? source,
+}) => Dua(
   id: id,
   category: category,
   title: 'Dua $id',
   arabic: 'arabic dua $id',
   transliteration: 'transliteration $id',
   translation: 'translation of dua $id',
-  source: 'Source $id',
+  source: source ?? 'Source $id',
   repeat: repeat,
 );
 
@@ -609,6 +630,7 @@ Future<ProviderContainer> pumpApp(
   AccountApi? accountApi,
   PremiumStore? premium,
   DuaRepository? duas,
+  AmbientPlayer? ambient,
 }) async {
   // Assets load inside each test's fake clock; a load cached by an earlier
   // test would never complete in this one.
@@ -664,6 +686,7 @@ Future<ProviderContainer> pumpApp(
       syncDelayProvider.overrideWithValue(Duration.zero),
       premiumStoreProvider.overrideWithValue(premium ?? FakePremiumStore()),
       duaRepositoryProvider.overrideWithValue(duas ?? FakeDuas()),
+      ambientPlayerProvider.overrideWithValue(ambient ?? FakeAmbientPlayer()),
     ],
   );
   addTearDown(container.dispose);
@@ -691,5 +714,6 @@ Future<ProviderContainer> containerFor(
     quranRepositoryProvider.overrideWithValue(FakeQuran()),
     recitationRepositoryProvider.overrideWithValue(FakeRecitations()),
     duaRepositoryProvider.overrideWithValue(FakeDuas()),
+    ambientPlayerProvider.overrideWithValue(FakeAmbientPlayer()),
   ],
 );

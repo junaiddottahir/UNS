@@ -2211,6 +2211,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'UmmahAPI · hadith cited'**
   String get sourceDuasValue;
+
+  /// Under a dua that is a Quran verse, while its recitation plays.
+  ///
+  /// In en, this message translates to:
+  /// **'Recitation · Quran {refs}'**
+  String recitedVerses(String refs);
 }
 
 class _AppLocalizationsDelegate

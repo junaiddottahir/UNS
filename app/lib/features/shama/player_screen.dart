@@ -93,7 +93,10 @@ class PlayerScreen extends ConsumerWidget {
                     child: Text(l10n.preparingVerses, style: AppText.body),
                   ),
                   VerseContent(text: final verse) => _VerseView(verse),
-                  DuaContent(:final dua) => _DuaView(dua),
+                  DuaContent(:final dua, :final recited) => _DuaView(
+                    dua,
+                    recited: recited,
+                  ),
                 },
               ),
               Padding(
@@ -120,7 +123,7 @@ class PlayerScreen extends ConsumerWidget {
                       children: [
                         Text(_mmss(s.elapsed), style: AppText.label),
                         Text(
-                          (s.content is DuaContent
+                          (!hasRecitation(s.content)
                                   ? l10n.readAlong
                                   : l10n.reciterName(
                                       ref.watch(reciterProvider),
@@ -132,43 +135,52 @@ class PlayerScreen extends ConsumerWidget {
                       ],
                     ),
                     const SizedBox(height: 22),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        _Round(
-                          icon: Icons.skip_previous_rounded,
-                          label: l10n.previousVerse,
-                          onTap: session.previous,
-                        ),
-                        const SizedBox(width: 28),
-                        SizedBox.square(
-                          dimension: 72,
-                          child: FilledButton(
-                            onPressed: session.togglePause,
-                            style: FilledButton.styleFrom(
-                              backgroundColor: AppColors.ctaBackground,
-                              foregroundColor: AppColors.ctaForeground,
-                              shape: const CircleBorder(),
-                              padding: EdgeInsets.zero,
-                            ),
-                            child: Icon(
-                              s.phase == SessionPhase.paused
-                                  ? Icons.play_arrow_rounded
-                                  : Icons.pause_rounded,
-                              size: 30,
-                              semanticLabel: s.phase == SessionPhase.paused
-                                  ? l10n.play
-                                  : l10n.pause,
+                    // Audio controls only while Quran is recited; a dua to
+                    // read moves on by itself. The space stays, so the
+                    // text doesn't jump between steps.
+                    Visibility(
+                      visible: hasRecitation(s.content),
+                      maintainSize: true,
+                      maintainAnimation: true,
+                      maintainState: true,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          _Round(
+                            icon: Icons.skip_previous_rounded,
+                            label: l10n.previousVerse,
+                            onTap: session.previous,
+                          ),
+                          const SizedBox(width: 28),
+                          SizedBox.square(
+                            dimension: 72,
+                            child: FilledButton(
+                              onPressed: session.togglePause,
+                              style: FilledButton.styleFrom(
+                                backgroundColor: AppColors.ctaBackground,
+                                foregroundColor: AppColors.ctaForeground,
+                                shape: const CircleBorder(),
+                                padding: EdgeInsets.zero,
+                              ),
+                              child: Icon(
+                                s.phase == SessionPhase.paused
+                                    ? Icons.play_arrow_rounded
+                                    : Icons.pause_rounded,
+                                size: 30,
+                                semanticLabel: s.phase == SessionPhase.paused
+                                    ? l10n.play
+                                    : l10n.pause,
+                              ),
                             ),
                           ),
-                        ),
-                        const SizedBox(width: 28),
-                        _Round(
-                          icon: Icons.skip_next_rounded,
-                          label: l10n.nextVerse,
-                          onTap: session.next,
-                        ),
-                      ],
+                          const SizedBox(width: 28),
+                          _Round(
+                            icon: Icons.skip_next_rounded,
+                            label: l10n.nextVerse,
+                            onTap: session.next,
+                          ),
+                        ],
+                      ),
                     ),
                   ],
                 ),
@@ -233,9 +245,12 @@ class _VerseView extends StatelessWidget {
 /// A dua to read: Arabic, transliteration and translation, with its
 /// hadith source, all unchanged from UmmahAPI.
 class _DuaView extends StatelessWidget {
-  const _DuaView(this.dua);
+  const _DuaView(this.dua, {required this.recited});
 
   final Dua dua;
+
+  /// Its Quran recitation is playing.
+  final bool recited;
 
   @override
   Widget build(BuildContext context) {
@@ -277,6 +292,15 @@ class _DuaView extends StatelessWidget {
           l10n.duaSourceLabel(dua.source).toUpperCase(),
           style: AppText.sourceTag,
         ),
+        if (recited) ...[
+          const SizedBox(height: 4),
+          Text(
+            l10n
+                .recitedVerses(dua.quranVerses.map((v) => '$v').join(', '))
+                .toUpperCase(),
+            style: AppText.sourceTag,
+          ),
+        ],
       ],
     );
   }

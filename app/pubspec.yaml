@@ -53,6 +53,7 @@ flutter:
     - assets/images/
     - assets/data/
     - assets/icons/
+    - assets/audio/
 
   # Athletics (the brand font). The files in the repo root are web-font
   # copies, not a licence to ship it. Once the licensed desktop/app OTFs

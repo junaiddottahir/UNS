@@ -94,6 +94,9 @@ void main() {
     expect(find.textContaining('DUA · DUA '), findsOneWidget);
     expect(find.text('READ ALONG'), findsOneWidget);
     expect(find.textContaining('VIA UMMAHAPI'), findsOneWidget);
+    // Read-only: no audio controls.
+    expect(find.bySemanticsLabel('Pause'), findsNothing);
+    expect(find.bySemanticsLabel('Next'), findsNothing);
     await tester.tap(find.byTooltip('End session'));
     await tester.pumpAndSettle();
   });

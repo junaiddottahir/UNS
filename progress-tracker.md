@@ -460,6 +460,14 @@ change.
     gratitude; humility → forgiveness, gratitude; arrogance →
     forgiveness, dhikr; greed → gratitude, business. "Remind me" adds
     dhikr. Duas played aren't saved in the journal (verses only).
+  - Sound (2026-09-24): the 20 duas whose source is the Quran (e.g.
+    "Quran 21:87") play that verse's recitation in the chosen reciter,
+    verse by verse for ranges; the full verse is recited even when the
+    dua quotes part of it. Hadith duas are read over a soft ambient
+    sound (`assets/audio/ambient.m4a`, original brown-noise "wind" made
+    for Uns, 60 s seamless loop — replace the file to change it).
+    Audio controls show only while Quran is recited; read-only duas
+    move on by themselves (the X still ends the session).
   - "Our sources" lists Duas · UmmahAPI. Checked live on the simulator:
     an Anxious session found 11 duas.
 - Home (2026-09-24): the Tasbih shortcut is now "Go Premium" (hidden

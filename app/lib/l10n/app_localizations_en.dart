@@ -1210,4 +1210,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get sourceDuasValue => 'UmmahAPI · hadith cited';
+
+  @override
+  String recitedVerses(String refs) {
+    return 'Recitation · Quran $refs';
+  }
 }

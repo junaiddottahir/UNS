@@ -10,6 +10,7 @@ import 'package:uns/core/storage/app_database.dart';
 import 'package:uns/core/storage/settings_store.dart';
 import 'package:uns/features/library/verse_library.dart';
 import 'package:uns/features/prayer/prayer_providers.dart';
+import 'package:uns/features/shama/ambient_player.dart';
 import 'package:uns/features/shama/shama_session.dart';
 import 'package:uns/features/shama/verse_player.dart';
 
@@ -18,6 +19,7 @@ import '../../support/test_app.dart';
 void main() {
   late AppDatabase db;
   late FakeVersePlayer player;
+  late FakeAmbientPlayer ambient;
   late ProviderContainer container;
 
   Future<void> setUpWith({
@@ -30,6 +32,7 @@ void main() {
     db = AppDatabase(NativeDatabase.memory());
     addTearDown(db.close);
     player = FakeVersePlayer();
+    ambient = FakeAmbientPlayer();
     container = ProviderContainer(
       overrides: [
         appDatabaseProvider.overrideWithValue(db),
@@ -45,6 +48,7 @@ void main() {
           recitations ?? FakeRecitations(),
         ),
         duaRepositoryProvider.overrideWithValue(duas ?? FakeDuas()),
+        ambientPlayerProvider.overrideWithValue(ambient),
       ],
     );
     addTearDown(container.dispose);
@@ -252,6 +256,57 @@ void main() {
       );
     });
 
+    test('a dua from the Quran knows its verses', () {
+      expect(
+        testDua(
+          1,
+          source: 'Quran 2:285-286, Sahih Al-Bukhari 5:345',
+        ).quranVerses,
+        [VerseRef(2, 285), VerseRef(2, 286)],
+      );
+      expect(testDua(1, source: 'Quran 27:19, 46:15').quranVerses, [
+        VerseRef(27, 19),
+      ]);
+      expect(testDua(1, source: 'Sahih Muslim 4:2092').quranVerses, isEmpty);
+      expect(testDua(1, source: 'Quran 1:9').quranVerses, isEmpty);
+    });
+
+    test('a Quran dua plays its recitation, verse by verse', () async {
+      await setUpWith(
+        library: testLibrary(placeholder: true),
+        duas: FakeDuas([
+          testDua(1, source: 'Quran 2:285-286, Sahih Al-Bukhari 5:345'),
+        ]),
+      );
+      await start();
+      final content = state().content! as DuaContent;
+      expect(content.recited, isTrue);
+      expect(hasRecitation(content), isTrue);
+      expect(player.opened, hasLength(1));
+      expect(player.playing, isTrue);
+      expect(ambient.playing, isFalse);
+
+      player.finishVerse(); // 2:285 → 2:286, same step
+      await settle();
+      expect(player.opened, hasLength(2));
+      expect(state().completed, 0);
+      player.finishVerse(); // the dua is done
+      await settle();
+      expect(state().completed, 1);
+      expect(state().elapsed, const Duration(seconds: 180));
+    });
+
+    test('offline, a Quran dua without its recitation is read', () async {
+      await setUpWith(
+        library: testLibrary(placeholder: true),
+        duas: FakeDuas([testDua(1, source: 'Quran 21:87')]),
+        recitations: FakeRecitations(offline: true),
+      );
+      await start();
+      expect((state().content! as DuaContent).recited, isFalse);
+      expect(ambient.playing, isTrue);
+    });
+
     testWidgets('a dua runs on a timer, pauses, and the session goes on', (
       tester,
     ) async {
@@ -268,13 +323,17 @@ void main() {
       );
       await tester.pump();
       final first = state().index;
+      expect(ambient.playing, isTrue);
+      expect(hasRecitation(state().content), isFalse);
       await tester.pump(const Duration(seconds: 10));
       expect(state().position, const Duration(seconds: 10));
 
       await session().togglePause();
+      expect(ambient.playing, isFalse);
       await tester.pump(const Duration(seconds: 30));
       expect(state().position, const Duration(seconds: 10));
       await session().togglePause();
+      expect(ambient.playing, isTrue);
 
       // 20 s each: the next dua, then round again, then the minute is up.
       await tester.pump(const Duration(seconds: 10));
@@ -288,6 +347,7 @@ void main() {
       await tester.pump(const Duration(seconds: 20));
       await tester.pump();
       expect(state().phase, SessionPhase.finished);
+      expect(ambient.playing, isFalse);
       expect(state().played, isEmpty); // duas aren't journal verses
     });
   });

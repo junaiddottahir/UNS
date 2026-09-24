@@ -1,3 +1,5 @@
+import '../quran/verse_ref.dart';
+
 /// A dua exactly as UmmahAPI sends it: Arabic, transliteration and
 /// translation, with its hadith source.
 class Dua {
@@ -26,6 +28,24 @@ class Dua {
 
   /// How many times it's traditionally said.
   final int repeat;
+
+  static final _quran = RegExp(r'Quran\s+(\d+):(\d+)(?:-(\d+))?');
+
+  /// The verses this dua is, when its source is the Quran: the first
+  /// reference cited (e.g. "Quran 2:285-286" → 2:285, 2:286). Their
+  /// recitation plays while it's shown. Empty for duas from hadith.
+  List<VerseRef> get quranVerses {
+    final m = _quran.firstMatch(source);
+    if (m == null) return const [];
+    final surah = int.parse(m[1]!);
+    final first = int.parse(m[2]!);
+    final last = m[3] == null ? first : int.parse(m[3]!);
+    if (last < first || last - first > 10) return const [];
+    return [
+      for (var a = first; a <= last; a++)
+        if (VerseRef.isValid(surah, a)) VerseRef(surah, a),
+    ];
+  }
 
   /// Null when a field is missing or empty, so a malformed entry is
   /// skipped rather than shown half-filled.

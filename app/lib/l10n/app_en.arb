@@ -764,5 +764,14 @@
     "description": "In the session's bottom row while a dua (which has no audio) is on screen."
   },
   "sourceDuas": "Duas",
-  "sourceDuasValue": "UmmahAPI · hadith cited"
+  "sourceDuasValue": "UmmahAPI · hadith cited",
+  "recitedVerses": "Recitation · Quran {refs}",
+  "@recitedVerses": {
+    "description": "Under a dua that is a Quran verse, while its recitation plays.",
+    "placeholders": {
+      "refs": {
+        "type": "String"
+      }
+    }
+  }
 }
