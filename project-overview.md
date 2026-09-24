@@ -57,7 +57,7 @@ Visual reference: `Uns Prototype.html`.
 - Tasbih counter: defaults SubhanAllah 33, Alhamdulillah 33, Allahu Akbar 34;
   haptics; daily history. Custom dhikr lists and streaks are premium.
 
-### Shama sessions (3 per week free, unlimited premium)
+### Shama sessions (6 per week free, unlimited premium)
 
 - Input by free-text chat, voice or emotion chips. Voice is transcribed on
   the device, then treated exactly like typed text.

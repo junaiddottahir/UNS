@@ -416,7 +416,8 @@ change.
     account (see unit 17).
 
 - Unit 19 (2026-09-24): weekly limit, paywall, purchases.
-  - 3 new Shama sessions a week free (Monday 00:00 local); replays of
+  - 3 new Shama sessions a week free (raised to 6 on 2026-09-24 at the
+    owner's request) (Monday 00:00 local); replays of
     past sessions are free and don't count (schema v7 `is_replay`).
     Counted on the phone. Shama tab shows "2 of 3 free this week" / "No
     free sessions left" (tap → paywall); a 4th session shows the limit

@@ -4,7 +4,7 @@ import '../prayer/prayer_providers.dart';
 import '../shama/shama_session.dart';
 
 /// Free Shama sessions per week (scope); Premium is unlimited.
-const freeSessionsPerWeek = 3;
+const freeSessionsPerWeek = 6;
 
 /// The week starts Monday 00:00 on the phone's clock.
 DateTime weekStart(DateTime now) {

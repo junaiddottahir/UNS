@@ -77,15 +77,25 @@ void main() {
     final db = await _dbWith(tester, sessions: 1, replays: 2);
     await _shama(tester, db: db);
     // Replays and last week's sessions don't count.
-    expect(find.text('2 OF 3 FREE THIS WEEK'), findsOneWidget);
+    expect(
+      find.text(
+        '${freeSessionsPerWeek - 1} OF $freeSessionsPerWeek FREE THIS WEEK',
+      ),
+      findsOneWidget,
+    );
   });
 
-  testWidgets('the 4th session shows the limit, not a session', (tester) async {
-    final db = await _dbWith(tester, sessions: 3);
+  testWidgets('past the free sessions, it shows the limit, not a session', (
+    tester,
+  ) async {
+    final db = await _dbWith(tester, sessions: freeSessionsPerWeek);
     await _shama(tester, db: db);
     expect(find.text('NO FREE SESSIONS LEFT'), findsOneWidget);
     await _begin(tester);
-    expect(find.text('3 OF 3 USED'), findsOneWidget);
+    expect(
+      find.text('$freeSessionsPerWeek OF $freeSessionsPerWeek USED'),
+      findsOneWidget,
+    );
     expect(find.text('Your free sessions reset on Monday'), findsOneWidget);
     expect(find.textContaining('FROM QURAN API'), findsNothing);
 
@@ -95,7 +105,7 @@ void main() {
   });
 
   testWidgets('Premium: no limit and no counter', (tester) async {
-    final db = await _dbWith(tester, sessions: 5);
+    final db = await _dbWith(tester, sessions: freeSessionsPerWeek + 2);
     await _shama(tester, db: db, premium: FakePremiumStore(premium: true));
     expect(find.textContaining('FREE THIS WEEK'), findsNothing);
     await _begin(tester);
@@ -104,7 +114,7 @@ void main() {
 
   testWidgets('paywall: prices, saving, buy → Premium', (tester) async {
     final premium = FakePremiumStore();
-    final db = await _dbWith(tester, sessions: 3);
+    final db = await _dbWith(tester, sessions: freeSessionsPerWeek);
     final c = await _shama(tester, db: db, premium: premium);
     await _begin(tester);
     await tester.tap(find.text('See Premium'));
