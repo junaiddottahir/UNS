@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../core/purchases/premium_store.dart';
 import '../../core/router/routes.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_theme.dart';
 import '../../core/widgets/ambient_background.dart';
 import '../../core/widgets/glass.dart';
-import '../../core/widgets/svg_icon.dart';
 import '../../l10n/app_localizations.dart';
 import '../location/location_providers.dart';
 import '../prayer/prayer_background.dart';
@@ -126,11 +126,13 @@ class HomeScreen extends ConsumerWidget {
                       label: l10n.qibla,
                       onTap: () => context.push(Routes.qibla),
                     ),
-                    ActionPill(
-                      icon: const SvgIcon(AppIcons.tasbih),
-                      label: l10n.tasbih,
-                      onTap: () => context.go(Routes.tasbih),
-                    ),
+                    // Members have nothing left to buy.
+                    if (!(ref.watch(premiumProvider).value ?? false))
+                      ActionPill(
+                        icon: const Icon(Icons.auto_awesome_outlined),
+                        label: l10n.goPremium,
+                        onTap: () => context.push(Routes.plans),
+                      ),
                   ],
                 ),
                 const Spacer(),

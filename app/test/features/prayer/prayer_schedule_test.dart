@@ -15,7 +15,6 @@ PrayerSchedule _schedule(
   zone: timeZoneNamed(zone),
   method: method,
   asr: asr,
-  highLatitude: HighLatitudeMethod.middleOfNight,
 );
 
 int _minutes(DateTime t) => t.hour * 60 + t.minute;

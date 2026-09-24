@@ -107,12 +107,10 @@ void main() {
       const settings = PrayerSettings(
         method: PrayerMethod.karachi,
         asr: AsrMethod.hanafi,
-        highLatitude: HighLatitudeMethod.twilightAngle,
       );
       final back = PrayerSettings.fromJson(settings.toJson());
       expect(back.method, PrayerMethod.karachi);
       expect(back.asr, AsrMethod.hanafi);
-      expect(back.highLatitude, HighLatitudeMethod.twilightAngle);
 
       final odd = PrayerSettings.fromJson({'method': 'nope', 'asr': 3});
       expect(odd.method, isNull);

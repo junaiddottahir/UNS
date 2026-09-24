@@ -42,11 +42,7 @@ void main() {
   testWidgets("a new phone takes the account's settings", (tester) async {
     final api = FakeAccountApi()
       ..settings = {
-        'prayer': {
-          'method': 'karachi',
-          'asr': 'hanafi',
-          'highLatitude': 'middleOfNight',
-        },
+        'prayer': {'method': 'karachi', 'asr': 'hanafi'},
         'reciter': 'sudais',
       }
       ..settingsAt = DateTime.utc(2026, 9, 20);

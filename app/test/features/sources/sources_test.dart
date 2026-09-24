@@ -40,6 +40,6 @@ void main() {
     await tester.pumpAndSettle();
     await tester.tap(find.text('Prayer'));
     await tester.pumpAndSettle();
-    expect(find.text('HIGH LATITUDE'), findsOneWidget);
+    expect(find.text('Prayer settings'), findsOneWidget);
   });
 }

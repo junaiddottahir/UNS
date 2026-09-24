@@ -83,16 +83,6 @@ class PrayerSettingsScreen extends ConsumerWidget {
                         onSelected: notifier.setAsr,
                       ),
                     ),
-                    const SizedBox(height: 22),
-                    _Section(
-                      label: l10n.highLatitudeLabel,
-                      child: OptionPills<HighLatitudeMethod>(
-                        options: HighLatitudeMethod.values,
-                        selected: settings.highLatitude,
-                        labelOf: l10n.highLatitudeName,
-                        onSelected: notifier.setHighLatitude,
-                      ),
-                    ),
                   ],
                 ),
               ),

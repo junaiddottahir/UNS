@@ -443,6 +443,10 @@ change.
     out until the licensed files are in `assets/fonts/` (the root
     OTFs are web-font copies, git-ignored, not shipped). Falls back to
     the system font until then.
+- Home (2026-09-24): the Tasbih shortcut is now "Go Premium" (hidden
+  for members); tapping "How are you feeling today?" opens Shama.
+  Prayer settings no longer offer High latitude. The backend still
+  accepts an optional `highLatitude` in synced settings (ignored).
 - Tasbih fix (2026-09-24): finishing one dhikr returns to the list with
   a tick (done-today, stored locally, clears at midnight); History with
   "Dhikr complete" only appears once all three are done today.
@@ -549,9 +553,9 @@ Each line is one unit; app and backend units are kept separate.
   follow the adhan library's regional guidance (e.g. UK → Moonsighting
   Committee, US/CA → ISNA, Malaysia/Indonesia → Singapore). Scholar to
   confirm.
-- Default high-latitude rule is "middle of night" (from the prototype);
-  adhan recommends 1/7th above 48°. Keep, or switch automatically by
-  latitude?
+- High latitude is no longer a user setting (removed 2026-09-24 at the
+  owner's request); it's fixed at "middle of night". adhan recommends
+  1/7th above 48°: keep fixed, or switch automatically by latitude?
 - Prayer times use 12-hour time without AM/PM, as in the prototype (24-hour
   if the phone is set to it). Confirm.
 - New copy to review: "Prayer times can't be calculated for {place}

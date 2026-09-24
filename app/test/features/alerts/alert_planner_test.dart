@@ -13,7 +13,6 @@ void main() {
     zone: timeZoneNamed(sydney.timeZone),
     method: PrayerMethod.muslimWorldLeague,
     asr: AsrMethod.standard,
-    highLatitude: HighLatitudeMethod.middleOfNight,
   );
   // testNow is 13:00 in Sydney: Fajr and Dhuhr have passed today.
   List<PlannedAlert> plan(AlertSettings s, {int days = 7}) =>

@@ -37,9 +37,8 @@ class PrayerSchedule {
     required this.zone,
     required PrayerMethod method,
     required AsrMethod asr,
-    required HighLatitudeMethod highLatitude,
   }) : _coordinates = adhan.Coordinates(latitude, longitude),
-       _params = _parameters(method, asr, highLatitude);
+       _params = _parameters(method, asr);
 
   final tz.Location zone;
   final adhan.Coordinates _coordinates;
@@ -96,7 +95,6 @@ class PrayerSchedule {
   static adhan.CalculationParameters _parameters(
     PrayerMethod method,
     AsrMethod asr,
-    HighLatitudeMethod highLatitude,
   ) {
     final params = switch (method) {
       PrayerMethod.muslimWorldLeague =>
@@ -118,13 +116,9 @@ class PrayerSchedule {
       AsrMethod.standard => adhan.Madhab.shafi,
       AsrMethod.hanafi => adhan.Madhab.hanafi,
     };
-    params.highLatitudeRule = switch (highLatitude) {
-      HighLatitudeMethod.middleOfNight =>
-        adhan.HighLatitudeRule.middle_of_the_night,
-      HighLatitudeMethod.seventhOfNight =>
-        adhan.HighLatitudeRule.seventh_of_the_night,
-      HighLatitudeMethod.twilightAngle => adhan.HighLatitudeRule.twilight_angle,
-    };
+    // Where twilight lasts all night, Fajr and Isha are bounded by the
+    // middle of the night (not a user setting).
+    params.highLatitudeRule = adhan.HighLatitudeRule.middle_of_the_night;
     return params;
   }
 }

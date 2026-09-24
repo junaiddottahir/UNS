@@ -67,10 +67,6 @@
   "asrLabel": "Asr",
   "asrStandard": "Standard",
   "asrHanafi": "Hanafi",
-  "highLatitudeLabel": "High latitude",
-  "highLatitudeMiddle": "Middle of night",
-  "highLatitudeSeventh": "1/7th",
-  "highLatitudeAngle": "Angle",
   "methodLabel": "Method",
   "methodTitle": "Calculation method",
   "methodMwl": "Muslim World League",
@@ -733,5 +729,9 @@
       }
     }
   },
-  "dhikrAllComplete": "dhikr · all complete"
+  "dhikrAllComplete": "dhikr · all complete",
+  "goPremium": "Go Premium",
+  "@goPremium": {
+    "description": "Home shortcut to the plans screen, hidden for members."
+  }
 }

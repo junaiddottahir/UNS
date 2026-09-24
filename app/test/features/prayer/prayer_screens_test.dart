@@ -90,11 +90,11 @@ void main() {
     expect(find.text('ISNA (North America)'), findsOneWidget);
 
     await tester.tap(find.text('HANAFI'));
-    await tester.tap(find.text('1/7TH'));
     await tester.pumpAndSettle();
     final settings = container.read(prayerSettingsProvider);
     expect(settings.asr, AsrMethod.hanafi);
-    expect(settings.highLatitude, HighLatitudeMethod.seventhOfNight);
+    // High latitude is no longer a setting.
+    expect(find.text('HIGH LATITUDE'), findsNothing);
   });
 
   testWidgets('settings: change city, method follows the new country', (
@@ -149,9 +149,13 @@ void main() {
     await tester.tap(find.byTooltip('Back'));
     await tester.pumpAndSettle();
 
-    await tester.tap(find.text('TASBIH'));
+    // The Premium shortcut opens the plans.
+    expect(find.text('TASBIH'), findsNothing);
+    await tester.tap(find.text('GO PREMIUM'));
     await tester.pumpAndSettle();
-    expect(find.text('After prayer'), findsOneWidget);
+    expect(find.text('Go deeper'), findsOneWidget);
+    await tester.tap(find.byTooltip('Close'));
+    await tester.pumpAndSettle();
 
     await tester.tap(find.bySemanticsLabel('Home'));
     await tester.pumpAndSettle();

@@ -352,30 +352,6 @@ abstract class AppLocalizations {
   /// **'Hanafi'**
   String get asrHanafi;
 
-  /// No description provided for @highLatitudeLabel.
-  ///
-  /// In en, this message translates to:
-  /// **'High latitude'**
-  String get highLatitudeLabel;
-
-  /// No description provided for @highLatitudeMiddle.
-  ///
-  /// In en, this message translates to:
-  /// **'Middle of night'**
-  String get highLatitudeMiddle;
-
-  /// No description provided for @highLatitudeSeventh.
-  ///
-  /// In en, this message translates to:
-  /// **'1/7th'**
-  String get highLatitudeSeventh;
-
-  /// No description provided for @highLatitudeAngle.
-  ///
-  /// In en, this message translates to:
-  /// **'Angle'**
-  String get highLatitudeAngle;
-
   /// No description provided for @methodLabel.
   ///
   /// In en, this message translates to:
@@ -2193,6 +2169,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'dhikr · all complete'**
   String get dhikrAllComplete;
+
+  /// Home shortcut to the plans screen, hidden for members.
+  ///
+  /// In en, this message translates to:
+  /// **'Go Premium'**
+  String get goPremium;
 }
 
 class _AppLocalizationsDelegate

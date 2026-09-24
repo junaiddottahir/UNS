@@ -152,18 +152,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get asrHanafi => 'Hanafi';
 
   @override
-  String get highLatitudeLabel => 'High latitude';
-
-  @override
-  String get highLatitudeMiddle => 'Middle of night';
-
-  @override
-  String get highLatitudeSeventh => '1/7th';
-
-  @override
-  String get highLatitudeAngle => 'Angle';
-
-  @override
   String get methodLabel => 'Method';
 
   @override
@@ -1195,4 +1183,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get dhikrAllComplete => 'dhikr · all complete';
+
+  @override
+  String get goPremium => 'Go Premium';
 }

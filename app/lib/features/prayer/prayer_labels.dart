@@ -35,12 +35,6 @@ extension PrayerLabels on AppLocalizations {
     AsrMethod.hanafi => asrHanafi,
   };
 
-  String highLatitudeName(HighLatitudeMethod h) => switch (h) {
-    HighLatitudeMethod.middleOfNight => highLatitudeMiddle,
-    HighLatitudeMethod.seventhOfNight => highLatitudeSeventh,
-    HighLatitudeMethod.twilightAngle => highLatitudeAngle,
-  };
-
   /// "2h 14m" or "14m", rounded up so the last minute reads "1m", not "0m".
   String untilText(Duration d) {
     final minutes = (d.inSeconds / 60).ceil().clamp(0, 1 << 30);

@@ -27,9 +27,6 @@ class PrayerSettingsNotifier extends Notifier<PrayerSettings> {
 
   void setAsr(AsrMethod asr) => _save(state.copyWith(asr: asr));
 
-  void setHighLatitude(HighLatitudeMethod rule) =>
-      _save(state.copyWith(highLatitude: rule));
-
   void _save(PrayerSettings settings) {
     state = settings;
     ref
@@ -64,7 +61,6 @@ final prayerScheduleProvider = Provider<PrayerSchedule?>((ref) {
     zone: timeZoneNamed(location.city.timeZone),
     method: ref.watch(prayerMethodProvider),
     asr: settings.asr,
-    highLatitude: settings.highLatitude,
   );
 });
 
