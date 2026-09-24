@@ -97,6 +97,17 @@ void main() {
     // Read-only: no audio controls.
     expect(find.bySemanticsLabel('Pause'), findsNothing);
     expect(find.bySemanticsLabel('Next'), findsNothing);
+
+    // Tap the right half for the next dua, the left half to go back.
+    final first = find.textContaining('DUA · DUA ');
+    final firstTitle = tester.widget<Text>(first).data!;
+    final size = tester.getSize(find.byType(Scaffold).last);
+    await tester.tapAt(Offset(size.width * 0.8, size.height * 0.4));
+    await tester.pump();
+    expect(find.text(firstTitle), findsNothing);
+    await tester.tapAt(Offset(size.width * 0.2, size.height * 0.4));
+    await tester.pump();
+    expect(find.text(firstTitle), findsOneWidget);
     await tester.tap(find.byTooltip('End session'));
     await tester.pumpAndSettle();
   });

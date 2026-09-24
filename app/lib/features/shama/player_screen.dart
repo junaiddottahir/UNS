@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/semantics.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
@@ -88,16 +89,20 @@ class PlayerScreen extends ConsumerWidget {
                 ),
               ),
               Expanded(
-                child: switch (s.content) {
-                  null => Center(
-                    child: Text(l10n.preparingVerses, style: AppText.body),
-                  ),
-                  VerseContent(text: final verse) => _VerseView(verse),
-                  DuaContent(:final dua, :final recited) => _DuaView(
-                    dua,
-                    recited: recited,
-                  ),
-                },
+                child: _TapZones(
+                  onBack: () => session.previous(restart: false),
+                  onNext: session.next,
+                  child: switch (s.content) {
+                    null => Center(
+                      child: Text(l10n.preparingVerses, style: AppText.body),
+                    ),
+                    VerseContent(text: final verse) => _VerseView(verse),
+                    DuaContent(:final dua, :final recited) => _DuaView(
+                      dua,
+                      recited: recited,
+                    ),
+                  },
+                ),
               ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(
@@ -187,6 +192,39 @@ class PlayerScreen extends ConsumerWidget {
               ),
             ],
           ),
+        ),
+      ),
+    );
+  }
+}
+
+/// Like stories: a tap on the left half goes back a step, on the right
+/// half goes on. Screen readers get the same as actions.
+class _TapZones extends StatelessWidget {
+  const _TapZones({
+    required this.onBack,
+    required this.onNext,
+    required this.child,
+  });
+
+  final VoidCallback onBack;
+  final VoidCallback onNext;
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    return Semantics(
+      customSemanticsActions: {
+        CustomSemanticsAction(label: l10n.previousVerse): onBack,
+        CustomSemanticsAction(label: l10n.nextVerse): onNext,
+      },
+      child: LayoutBuilder(
+        builder: (context, box) => GestureDetector(
+          behavior: HitTestBehavior.opaque,
+          onTapUp: (d) =>
+              d.localPosition.dx < box.maxWidth / 2 ? onBack() : onNext(),
+          child: child,
         ),
       ),
     );

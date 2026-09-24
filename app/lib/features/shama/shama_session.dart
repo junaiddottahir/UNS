@@ -125,7 +125,19 @@ Duration readingTime(Dua dua) {
   return Duration(seconds: seconds.round());
 }
 
-/// Verses with a dua after every two; either alone when the other is empty.
+/// A session's order: what's recited first (verses, with a Quran dua
+/// after every two), then the duas to read.
+List<SessionItem> sessionQueue(List<VerseRef> verses, List<Dua> duas) => [
+  ...interleave(verses, [
+    for (final d in duas)
+      if (d.quranVerses.isNotEmpty) d,
+  ]),
+  for (final d in duas)
+    if (d.quranVerses.isEmpty) DuaItem(d),
+];
+
+/// Verses with a dua after every two, any duas left over at the end;
+/// either alone when the other is empty.
 List<SessionItem> interleave(List<VerseRef> verses, List<Dua> duas) {
   if (verses.isEmpty) return [for (final d in duas) DuaItem(d)];
   final items = <SessionItem>[];
@@ -134,7 +146,8 @@ List<SessionItem> interleave(List<VerseRef> verses, List<Dua> duas) {
     items.add(VerseItem(v));
     if (i.isOdd && next < duas.length) items.add(DuaItem(duas[next++]));
   }
-  return items;
+  // More duas than pairs of verses: the rest follow.
+  return [...items, for (final d in duas.skip(next)) DuaItem(d)];
 }
 
 class SessionState {
@@ -305,7 +318,7 @@ class ShamaSessionNotifier extends Notifier<SessionState?> {
       }
     }
 
-    final queue = interleave(verses, duas);
+    final queue = sessionQueue(verses, duas);
     if (queue.isEmpty) {
       state = state!.copyWith(
         phase: SessionPhase.unavailable,
@@ -547,13 +560,16 @@ class ShamaSessionNotifier extends Notifier<SessionState?> {
     await _playAt(s.index + 1);
   }
 
-  /// Restarts the step, or goes back one if it has only just begun.
-  Future<void> previous() async {
+  /// Restarts the step, or goes back one if it has only just begun. With
+  /// [restart] false (a tap on the left of the screen), always goes back
+  /// one, unless this is the first.
+  Future<void> previous({bool restart = true}) async {
     final s = state;
     if (s == null || s.content == null) return;
     await _quiet();
     await _player.stop();
-    final back = s.position < const Duration(seconds: 3) && s.index > 0;
+    final back =
+        s.index > 0 && (!restart || s.position < const Duration(seconds: 3));
     state = s.copyWith(
       elapsedBefore: s.elapsedBefore + s.position,
       position: Duration.zero,

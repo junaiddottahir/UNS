@@ -214,6 +214,40 @@ void main() {
       expect(interleave([], [testDua(1)]), [DuaItem(testDua(1))]);
     });
 
+    test('recited first: verses and Quran duas, then duas to read', () {
+      final quran1 = testDua(10, source: 'Quran 21:87');
+      final quran2 = testDua(11, source: 'Quran 3:173, Sahih Al-Bukhari');
+      final items = sessionQueue(
+        [VerseRef(1, 1), VerseRef(1, 2)],
+        [testDua(1), quran1, testDua(2), quran2],
+      );
+      expect(items.map((i) => '$i'), [
+        '1:1',
+        '1:2',
+        'dua 10',
+        'dua 11',
+        'dua 1',
+        'dua 2',
+      ]);
+      expect(sessionQueue([], [testDua(1), quran1]).map((i) => '$i'), [
+        'dua 10',
+        'dua 1',
+      ]);
+    });
+
+    test('left tap goes back a step even well into it', () async {
+      await setUpWith();
+      await start(minutes: 30);
+      await session().next();
+      player.advance(const Duration(seconds: 30));
+      await settle();
+      await session().previous(restart: false);
+      expect(state().index, 0);
+      // At the first step it just starts it again.
+      await session().previous(restart: false);
+      expect(state().index, 0);
+    });
+
     test(
       'with no approved verses, a session is duas for the feeling',
       () async {
@@ -233,8 +267,9 @@ void main() {
       await setUpWith(duas: FakeDuas(duas));
       await start();
       expect(state().queue.whereType<VerseItem>(), hasLength(3));
-      expect(state().queue.whereType<DuaItem>(), hasLength(1));
-      expect(state().queue[2], isA<DuaItem>());
+      // Both anxiety duas are to read, so they come after the verses.
+      expect(state().queue.whereType<DuaItem>(), hasLength(2));
+      expect(state().queue.take(3), everyElement(isA<VerseItem>()));
     });
 
     test('offline with no copy of the duas and no verses', () async {

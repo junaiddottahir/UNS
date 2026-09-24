@@ -469,6 +469,11 @@ change.
     for Uns, 60 s seamless loop — replace the file to change it).
     Audio controls show only while Quran is recited; read-only duas
     move on by themselves (the X still ends the session).
+  - Order and navigation (2026-09-24): everything recited comes first
+    (verses with a Quran dua after every two, extra Quran duas after),
+    then the duas to read. Tapping the right half of the player goes to
+    the next step, the left half back one (screen readers get both as
+    actions).
   - "Our sources" lists Duas · UmmahAPI. Checked live on the simulator:
     an Anxious session found 11 duas.
 - Home (2026-09-24): the Tasbih shortcut is now "Go Premium" (hidden
