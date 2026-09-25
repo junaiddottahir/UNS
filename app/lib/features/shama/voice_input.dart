@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:speech_to_text/speech_recognition_error.dart';
 import 'package:speech_to_text/speech_recognition_result.dart';
@@ -65,6 +66,7 @@ class DeviceVoiceInput implements VoiceInput {
     if (!supported) return VoiceProblem.unsupported;
     _listener = listener;
     if (!_ready) {
+      final asked = !await _speech.hasPermission;
       _ready = await _speech.initialize(
         onError: _onError,
         onStatus: (status) {
@@ -76,6 +78,10 @@ class DeviceVoiceInput implements VoiceInput {
             ? VoiceProblem.unsupported
             : VoiceProblem.noPermission;
       }
+      // iOS says "granted" while its permission alert is still closing; a
+      // mic started then records silence for the whole first try.
+      if (asked) await _backInForeground();
+      if (_listener != listener) return null; // closed while waiting
     }
     try {
       await _speech.listen(
@@ -98,6 +104,23 @@ class DeviceVoiceInput implements VoiceInput {
     return null;
   }
 
+  static Future<void> _backInForeground() async {
+    if (WidgetsBinding.instance.lifecycleState != AppLifecycleState.resumed) {
+      final resumed = Completer<void>();
+      final watch = AppLifecycleListener(
+        onResume: () {
+          if (!resumed.isCompleted) resumed.complete();
+        },
+      );
+      await resumed.future.timeout(
+        const Duration(seconds: 3),
+        onTimeout: () {},
+      );
+      watch.dispose();
+    }
+    await Future<void>.delayed(const Duration(milliseconds: 400));
+  }
+
   void _onError(SpeechRecognitionError error) {
     final text = error.errorMsg.toLowerCase();
     _listener?.onDone(
@@ -111,7 +134,10 @@ class DeviceVoiceInput implements VoiceInput {
   Future<void> stop() => _speech.stop();
 
   @override
-  Future<void> cancel() => _speech.cancel();
+  Future<void> cancel() {
+    _listener = null;
+    return _speech.cancel();
+  }
 }
 
 final voiceInputProvider = Provider<VoiceInput>((ref) => DeviceVoiceInput());
