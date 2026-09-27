@@ -33,7 +33,7 @@ class HomeScreen extends ConsumerWidget {
 
     return Scaffold(
       body: AmbientBackground(
-        image: prayerBackground(next?.prayer),
+        image: prayerBackground(schedule?.current(now)),
         fade: BackgroundFade.bottom,
         child: SafeArea(
           child: Padding(

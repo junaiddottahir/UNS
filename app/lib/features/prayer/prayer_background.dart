@@ -1,7 +1,7 @@
 import 'prayer_schedule.dart';
 
-/// The prototype's background photo for each prayer, shown while it is the
-/// next one.
+/// The prototype's background photo for each prayer, shown from the start
+/// of its time until the next prayer begins.
 String prayerBackground(Prayer? p) => switch (p) {
   Prayer.fajr => 'assets/images/bg_fajr.jpg',
   Prayer.dhuhr => 'assets/images/bg_dhuhr.jpg',

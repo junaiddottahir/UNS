@@ -35,7 +35,7 @@ class PrayerTimesScreen extends ConsumerWidget {
 
     return Scaffold(
       body: AmbientBackground(
-        image: prayerBackground(next?.prayer),
+        image: prayerBackground(schedule?.current(now)),
         child: SafeArea(
           child: Column(
             children: [

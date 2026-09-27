@@ -173,6 +173,31 @@ void main() {
     });
   });
 
+  group('current', () {
+    final s = _schedule(
+      -33.8678,
+      151.2073,
+      'Australia/Sydney',
+      PrayerMethod.muslimWorldLeague,
+    );
+    final today = s.timesOn(2026, 9, 23);
+    const minute = Duration(minutes: 1);
+
+    test('changes exactly when a prayer time starts', () {
+      expect(s.current(today[1].time.subtract(minute)), Prayer.fajr);
+      expect(s.current(today[1].time), Prayer.dhuhr);
+      expect(s.current(today[3].time.add(minute)), Prayer.maghrib);
+    });
+
+    test("after midnight and before Fajr is still the night's Isha", () {
+      expect(s.current(today[0].time.subtract(minute)), Prayer.isha);
+      expect(
+        s.current(today[4].time.add(const Duration(hours: 1))),
+        Prayer.isha,
+      );
+    });
+  });
+
   test('polar day has no times and no next prayer', () {
     final s = _schedule(
       78.2232,
@@ -182,6 +207,7 @@ void main() {
     );
     expect(s.timesOn(2026, 6, 21), isEmpty);
     expect(s.next(DateTime.utc(2026, 6, 21, 12)), isNull);
+    expect(s.current(DateTime.utc(2026, 6, 21, 12)), isNull);
   });
 
   group('suggestedMethodFor', () {

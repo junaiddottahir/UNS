@@ -80,6 +80,18 @@ class PrayerSchedule {
     return timesOn(local.year, local.month, local.day);
   }
 
+  /// The prayer whose time has started and not yet ended at [now]: the
+  /// latest one begun today, and before Fajr still the night's Isha.
+  Prayer? current(DateTime now) {
+    final times = today(now);
+    if (times.isEmpty) return null;
+    var started = times.last; // before today's Fajr
+    for (final t in times) {
+      if (!t.time.isAfter(now)) started = t;
+    }
+    return started.prayer;
+  }
+
   /// The next prayer after [now]: later today, else tomorrow's Fajr.
   PrayerTime? next(DateTime now) {
     for (final t in today(now)) {
