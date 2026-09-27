@@ -53,7 +53,8 @@ set — `GlassCard`, `GlassRow`, `OptionPills` (the prototype's `.card.glass`,
 `.row`, `.opts`).
 
 Home and today's times use the prototype's per-prayer backgrounds
-(`assets/images/bg_<prayer>.jpg`) for the next prayer.
+(`assets/images/bg_<prayer>.jpg`) for the prayer whose time has started,
+changing when the next prayer's time begins (Isha's stays until Fajr).
 
 ## Layout Patterns
 
@@ -70,7 +71,10 @@ Home and today's times use the prototype's per-prayer backgrounds
 - Voice input: a mic option next to text entry; a "Listening" state with
   "Tap to finish"; the transcript is shown before it is sent.
 - Home: date + location header, next-prayer hero, shortcut tiles, mood card.
-- Bottom navigation between Home, Shama, Tasbih, Journal and Profile.
+- Bottom navigation between Home, Shama, Tasbih, Quran and Profile
+  (icons from `icons/`).
+- Quran: surah list → reader with every verse (Arabic, translation), a
+  Listen button, tap a verse to recite from it, player bar while reciting.
 - Playback: Arabic above translation, source labels ("ARABIC · UTHMANI ·
   FROM QURAN API"), reciter and time remaining.
 - Privacy cues ("Only on this phone") shown where users write.

@@ -147,6 +147,61 @@ void main() {
       expect(utf8.encode(again.arabic), utf8.encode(_arabic));
       expect(again.translation, first.translation);
     });
+
+    // Al-Fatiha as the API shapes it; the text is a labelled stand-in.
+    Map<String, Object?> fatiha(String edition, {int verses = 7}) => {
+      'chapter': [
+        for (var v = 1; v <= verses; v++)
+          {'chapter': 1, 'verse': v, 'text': '$edition 1:$v'},
+      ],
+    };
+
+    test('a whole surah: one request per edition, then offline', () async {
+      final paths = <String>[];
+      var online = true;
+      final repo = QuranRepository(
+        db,
+        QuranTextClient(
+          MockClient((req) async {
+            if (!online) throw const SocketException('offline');
+            paths.add(req.url.path);
+            return _json(fatiha(req.url.pathSegments.reversed.elementAt(1)));
+          }),
+        ),
+      );
+      final verses = await repo.surah(1);
+      expect(paths, hasLength(2));
+      expect(paths, everyElement(endsWith('/1.min.json')));
+      expect(verses, hasLength(7));
+      expect(verses[6].ref, VerseRef(1, 7));
+      expect(verses[6].arabic, 'ara-quranuthmanihaf 1:7');
+      expect(verses[6].translation, 'eng-ummmuhammad 1:7');
+
+      online = false;
+      expect((await repo.surah(1)).map((v) => v.arabic), [
+        for (var v = 1; v <= 7; v++) 'ara-quranuthmanihaf 1:$v',
+      ]);
+      // Single verses of it are cached too (Shama sessions share them).
+      expect(await repo.isCached(VerseRef(1, 3)), isTrue);
+    });
+
+    test('a short or out-of-order surah is rejected, not cached', () async {
+      Future<void> expectRejected(Map<String, Object?> body) async {
+        final repo = QuranRepository(
+          db,
+          QuranTextClient(MockClient((_) async => _json(body))),
+        );
+        await expectLater(repo.surah(1), throwsA(isA<QuranSourceException>()));
+      }
+
+      await expectRejected(fatiha('e', verses: 6));
+      final swapped = fatiha('e');
+      final list = swapped['chapter']! as List;
+      list.insert(0, list.removeAt(1));
+      await expectRejected(swapped);
+      await expectRejected({'chapter': 'nope'});
+      expect(await db.select(db.verseTexts).get(), isEmpty);
+    });
   });
 
   group('RecitationRepository', () {

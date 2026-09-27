@@ -29,7 +29,8 @@
   text/audio caching and playback, session quota, purchases, and the
   on-device safety checks.
 - `app/lib/features/<feature>/` — one folder per feature (onboarding, auth,
-  home, prayer, qibla, shama, tasbih, journal, sources, paywall, profile).
+  home, prayer, qibla, shama, tasbih, quran, journal, sources, paywall,
+  profile).
 - `app/lib/core/` — shared services: storage, API client, auth, Quran/audio
   clients, safety check, theme, routing, localisation, app config.
 - `app/lib/core/config/` — values that will change later, such as the
@@ -54,6 +55,9 @@
 - `app/assets/data/cities.json` — bundled GeoNames city list for manual
   city search and labelling a device position with a city name, offline.
   Built by `tools/cities/build_cities.py`; never edit by hand.
+- `app/assets/data/surahs.json` — surah names and verse counts from the
+  Quran API's info.json, for the Quran tab offline. Built by
+  `tools/quran/build_surahs.py`; never edit by hand.
 - `tools/curation/` — (later) offline AI-assisted candidate search for the
   scholar to review. Runs once before launch; never part of the runtime.
 
@@ -103,6 +107,9 @@
   category + tag (comfort = `comfort`; reminder = `gentle_reminder` +
   `warning`) → load text/audio from cache (fetch once if online) → play
   until the chosen length. A placeholder library never plays.
+- Quran tab → surah → both editions fetched whole once and cached →
+  read offline after; Listen plays per-ayah audio in the chosen reciter
+  verse by verse.
 - Voice → on-device speech-to-text → handled as free text.
 - Free text → on-device safety check → `POST /v1/classify` → `{category,
   risk}` → risk shows support resources; otherwise same as chips.

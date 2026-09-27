@@ -9,6 +9,7 @@ abstract final class Routes {
   static const home = '/home';
   static const shama = '/shama';
   static const tasbih = '/tasbih';
+  static const quran = '/quran';
   static const profile = '/profile';
   static const qibla = '/qibla';
   static const tasbihCounter = '/tasbih/count';
@@ -33,6 +34,9 @@ abstract final class Routes {
   static const account = '/account';
   static const reciterSettings = '/settings/reciter';
   static const privacy = '/privacy';
+
+  /// One surah to read or listen to, e.g. `/quran/2`.
+  static String quranSurah(int surah) => '$quran/$surah';
 
   /// One journal entry, e.g. `/journal/12`.
   static String journalEntry(int id) => '$journal/$id';

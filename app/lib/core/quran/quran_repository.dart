@@ -62,6 +62,48 @@ class QuranRepository {
     return body;
   }
 
+  /// Every verse of [surah], for reading it whole.
+  Future<List<VerseText>> surah(int surah) async {
+    // Future.wait rethrows the first failure as it is.
+    final [arabic, translation] = await Future.wait([
+      _surahText(AppConfig.arabicEdition, surah),
+      _surahText(AppConfig.translationEdition, surah),
+    ]);
+    return [
+      for (var i = 0; i < arabic.length; i++)
+        VerseText(
+          ref: VerseRef(surah, i + 1),
+          arabic: arabic[i],
+          translation: translation[i],
+        ),
+    ];
+  }
+
+  Future<List<String>> _surahText(String edition, int surah) async {
+    final cached =
+        await (_db.select(_db.verseTexts)
+              ..where((t) => t.edition.equals(edition) & t.surah.equals(surah))
+              ..orderBy([(t) => OrderingTerm.asc(t.ayah)]))
+            .get();
+    if (cached.length == ayahCounts[surah - 1]) {
+      return [for (final v in cached) v.body];
+    }
+
+    final bodies = await _client.fetchSurah(edition, surah);
+    await _db.batch(
+      (b) => b.insertAllOnConflictUpdate(_db.verseTexts, [
+        for (final (i, body) in bodies.indexed)
+          VerseTextsCompanion.insert(
+            edition: edition,
+            surah: surah,
+            ayah: i + 1,
+            body: body,
+          ),
+      ]),
+    );
+    return bodies;
+  }
+
   /// Whether both editions of [ref] are cached (usable offline).
   Future<bool> isCached(VerseRef ref) async {
     final count =

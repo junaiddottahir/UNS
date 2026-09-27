@@ -7,6 +7,7 @@ abstract final class AppIcons {
   static const home = 'assets/icons/tab_home.svg';
   static const shama = 'assets/icons/tab_shama.svg';
   static const tasbih = 'assets/icons/tab_tasbih.svg';
+  static const quran = 'assets/icons/tab_quran.svg';
   static const profile = 'assets/icons/tab_profile.svg';
 }
 

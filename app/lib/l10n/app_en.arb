@@ -775,5 +775,46 @@
     }
   },
   "editReflection": "Edit reflection",
-  "reflectionUpdated": "Reflection updated"
+  "reflectionUpdated": "Reflection updated",
+  "tabQuran": "Quran",
+  "quranHeadline": "Read and listen",
+  "verseCount": "{count, plural, =1{1 verse} other{{count} verses}}",
+  "@verseCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "surahNumberLabel": "Surah {number}",
+  "@surahNumberLabel": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "meccan": "Meccan",
+  "medinan": "Medinan",
+  "listen": "Listen",
+  "verseNumber": "Verse {number}",
+  "@verseNumber": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "playFromVerse": "play from verse {number}",
+  "@playFromVerse": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "stopRecitation": "Stop",
+  "surahLoadFailed": "Couldn't load this surah. Check your connection and try again.",
+  "recitationFailed": "Couldn't load the recitation. Check your connection and try again.",
+  "tryAgain": "Try again"
 }

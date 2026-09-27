@@ -487,6 +487,28 @@ change.
 - Tasbih fix (2026-09-24): finishing one dhikr returns to the list with
   a tick (done-today, stored locally, clears at midnight); History with
   "Dhikr complete" only appears once all three are done today.
+- Unit 21 (2026-09-27): Quran tab (read and listen).
+  - Tab bar: Home, Shama, Tasbih, Quran, Profile. Icons from `icons/`:
+    Quran uses `Quran.svg` (Shama's old icon), Shama the new `shama.svg`.
+  - Surah list: all 114 with name, meaning, verse count and Arabic name,
+    from the Quran API's info.json, bundled as `assets/data/surahs.json`
+    by `tools/quran/build_surahs.py` (works offline).
+  - Reader (`/quran/:surah`): every verse, Arabic (`ara-quranuthmanihaf`)
+    and translation (`eng-ummmuhammad`) — the same editions as Shama —
+    fetched whole per surah (one request per edition, checked verse by
+    verse) and cached in `verse_texts`, so it reads offline after. No
+    Bismillah header is added (see open questions).
+  - Listen: from the start or by tapping any verse, in the chosen
+    reciter, verse by verse with the next verse's audio fetched ahead;
+    the recited verse is highlighted and kept in view; player bar with
+    previous / play-pause / next / stop. Its own player, stopped when
+    the surah is closed. Free (no premium or weekly limit).
+  - 9 new unit/widget tests; `integration_test/quran_reader_test.dart`
+    passed on the simulator against the real API and recitation
+    (Al-Ikhlas: text, verse 1 recited, verse 2 followed).
+- Backgrounds (2026-09-27): Home and today's times show the photo of the
+  prayer whose time has started (from its start until the next prayer;
+  Isha until Fajr), not the next prayer's.
 ## In Progress
 
 - None yet.
@@ -522,6 +544,7 @@ Each line is one unit; app and backend units are kept separate.
 19. App: session quota (3/week) + paywall + RevenueCat store purchases +
     restore.
 20. App: Athletics font and RTL pass (English only; Arabic dropped).
+21. App: Quran tab — surah list, reader, verse-by-verse listening.
 
 ## Open Questions
 
@@ -647,6 +670,10 @@ Each line is one unit; app and backend units are kept separate.
   the Quran Complex Uthmanic Hafs font); see "Arabic Quran font choice".
 - "Our sources" says every verse is scholar-approved; true once the real
   library replaces the placeholder (sessions can't run before then).
+
+- Quran reader (2026-09-27): add a Bismillah line above each surah
+  (except 9), and should it be 1:1's text from the API? Scholar's call.
+  Also: search, "continue where I left off", and a Mushaf page view.
 
 ## Architecture Decisions
 

@@ -21,6 +21,7 @@ class TabShell extends StatelessWidget {
       (AppIcons.home, l10n.tabHome),
       (AppIcons.shama, l10n.tabShama),
       (AppIcons.tasbih, l10n.tabTasbih),
+      (AppIcons.quran, l10n.tabQuran),
       (AppIcons.profile, l10n.tabProfile),
     ];
     return Scaffold(

@@ -1221,4 +1221,59 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get reflectionUpdated => 'Reflection updated';
+
+  @override
+  String get tabQuran => 'Quran';
+
+  @override
+  String get quranHeadline => 'Read and listen';
+
+  @override
+  String verseCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count verses',
+      one: '1 verse',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String surahNumberLabel(int number) {
+    return 'Surah $number';
+  }
+
+  @override
+  String get meccan => 'Meccan';
+
+  @override
+  String get medinan => 'Medinan';
+
+  @override
+  String get listen => 'Listen';
+
+  @override
+  String verseNumber(int number) {
+    return 'Verse $number';
+  }
+
+  @override
+  String playFromVerse(int number) {
+    return 'play from verse $number';
+  }
+
+  @override
+  String get stopRecitation => 'Stop';
+
+  @override
+  String get surahLoadFailed =>
+      'Couldn\'t load this surah. Check your connection and try again.';
+
+  @override
+  String get recitationFailed =>
+      'Couldn\'t load the recitation. Check your connection and try again.';
+
+  @override
+  String get tryAgain => 'Try again';
 }

@@ -2229,6 +2229,84 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Reflection updated'**
   String get reflectionUpdated;
+
+  /// No description provided for @tabQuran.
+  ///
+  /// In en, this message translates to:
+  /// **'Quran'**
+  String get tabQuran;
+
+  /// No description provided for @quranHeadline.
+  ///
+  /// In en, this message translates to:
+  /// **'Read and listen'**
+  String get quranHeadline;
+
+  /// No description provided for @verseCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 verse} other{{count} verses}}'**
+  String verseCount(int count);
+
+  /// No description provided for @surahNumberLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Surah {number}'**
+  String surahNumberLabel(int number);
+
+  /// No description provided for @meccan.
+  ///
+  /// In en, this message translates to:
+  /// **'Meccan'**
+  String get meccan;
+
+  /// No description provided for @medinan.
+  ///
+  /// In en, this message translates to:
+  /// **'Medinan'**
+  String get medinan;
+
+  /// No description provided for @listen.
+  ///
+  /// In en, this message translates to:
+  /// **'Listen'**
+  String get listen;
+
+  /// No description provided for @verseNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'Verse {number}'**
+  String verseNumber(int number);
+
+  /// No description provided for @playFromVerse.
+  ///
+  /// In en, this message translates to:
+  /// **'play from verse {number}'**
+  String playFromVerse(int number);
+
+  /// No description provided for @stopRecitation.
+  ///
+  /// In en, this message translates to:
+  /// **'Stop'**
+  String get stopRecitation;
+
+  /// No description provided for @surahLoadFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t load this surah. Check your connection and try again.'**
+  String get surahLoadFailed;
+
+  /// No description provided for @recitationFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t load the recitation. Check your connection and try again.'**
+  String get recitationFailed;
+
+  /// No description provided for @tryAgain.
+  ///
+  /// In en, this message translates to:
+  /// **'Try again'**
+  String get tryAgain;
 }
 
 class _AppLocalizationsDelegate

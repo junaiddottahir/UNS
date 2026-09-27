@@ -33,6 +33,8 @@ import 'package:uns/features/location/location_providers.dart';
 import 'package:uns/features/prayer/prayer_providers.dart';
 import 'package:uns/features/qibla/compass_source.dart';
 import 'package:uns/features/qibla/qibla_providers.dart';
+import 'package:uns/features/quran/surah.dart';
+import 'package:uns/features/quran/surah_recitation.dart';
 import 'package:uns/features/library/verse_library.dart';
 import 'package:uns/features/reciter/reciter_sample.dart';
 import 'package:uns/features/shama/ambient_player.dart';
@@ -282,6 +284,18 @@ class FakeQuran extends QuranRepository {
       arabic: 'arabic $ref',
       translation: 'translation $ref',
     );
+  }
+
+  /// Surahs that fail as if offline and not cached.
+  Set<int> offlineSurahs = {};
+
+  @override
+  Future<List<VerseText>> surah(int surah) async {
+    if (offlineSurahs.contains(surah)) throw Exception('offline');
+    return [
+      for (var a = 1; a <= ayahCounts[surah - 1]; a++)
+        await verse(VerseRef(surah, a)),
+    ];
   }
 }
 
@@ -617,6 +631,7 @@ Future<ProviderContainer> pumpApp(
   SamplePlayer? player,
   RecitationRepository? recitations,
   VersePlayer? versePlayer,
+  VersePlayer? quranPlayer,
   VerseLibrary? library,
   bool noLibrary = false,
   QuranRepository? quran,
@@ -634,7 +649,9 @@ Future<ProviderContainer> pumpApp(
 }) async {
   // Assets load inside each test's fake clock; a load cached by an earlier
   // test would never complete in this one.
-  rootBundle.evict(SafetyCheck.assetPath);
+  rootBundle
+    ..evict(SafetyCheck.assetPath)
+    ..evict(surahsAsset);
 
   // Reduced motion, so the pulsing mood button lets frames settle.
   tester.platformDispatcher.accessibilityFeaturesTestValue =
@@ -670,6 +687,7 @@ Future<ProviderContainer> pumpApp(
         recitations ?? FakeRecitations(),
       ),
       versePlayerProvider.overrideWithValue(versePlayer ?? FakeVersePlayer()),
+      quranPlayerProvider.overrideWithValue(quranPlayer ?? FakeVersePlayer()),
       verseLibraryProvider.overrideWith(
         (ref) async => noLibrary ? null : (library ?? testLibrary()),
       ),

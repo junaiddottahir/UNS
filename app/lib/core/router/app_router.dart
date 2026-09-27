@@ -24,6 +24,8 @@ import '../../features/profile/privacy_screen.dart';
 import '../../features/profile/profile_screen.dart';
 import '../../features/profile/reciter_settings_screen.dart';
 import '../../features/qibla/calibration_screen.dart';
+import '../../features/quran/quran_screen.dart';
+import '../../features/quran/surah_screen.dart';
 import '../../features/qibla/qibla_screen.dart';
 import '../../features/journal/entry_screen.dart';
 import '../../features/journal/journal_screen.dart';
@@ -41,6 +43,7 @@ import '../../features/support/support_screen.dart';
 import '../../features/tasbih/counter_screen.dart';
 import '../../features/tasbih/history_screen.dart';
 import '../../features/tasbih/tasbih_screen.dart';
+import '../quran/verse_ref.dart';
 import '../storage/settings_store.dart';
 import '../widgets/toast.dart';
 import '../widgets/tab_shell.dart';
@@ -82,10 +85,16 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           _branch(Routes.home, (_) => const HomeScreen()),
           _branch(Routes.shama, (_) => const ShamaScreen()),
           _branch(Routes.tasbih, (_) => const TasbihScreen()),
+          _branch(Routes.quran, (_) => const QuranScreen()),
           _branch(Routes.profile, (_) => const ProfileScreen()),
         ],
       ),
       GoRoute(path: Routes.qibla, builder: (_, _) => const QiblaScreen()),
+      GoRoute(
+        path: '${Routes.quran}/:surah',
+        redirect: (_, state) => _surah(state) == null ? Routes.quran : null,
+        builder: (_, state) => SurahScreen(number: _surah(state)!),
+      ),
       GoRoute(path: Routes.sources, builder: (_, _) => const SourcesScreen()),
       GoRoute(
         path: Routes.shamaHelp,
@@ -214,3 +223,9 @@ StatefulShellBranch _branch(String path, Widget Function(BuildContext) page) =>
 
 Emotion? _emotion(GoRouterState state) =>
     Emotion.values.asNameMap()[state.uri.queryParameters['emotion']];
+
+/// The surah number in `/quran/:surah`, if it's a real one.
+int? _surah(GoRouterState state) {
+  final n = int.tryParse(state.pathParameters['surah'] ?? '');
+  return n != null && n >= 1 && n <= ayahCounts.length ? n : null;
+}
