@@ -86,6 +86,9 @@ class _SurahScreenState extends ConsumerState<SurahScreen> {
                     itemBuilder: (context, i) => i == 0
                         ? _Header(
                             surah: surah,
+                            bismillah: opensWithBismillah(n)
+                                ? ref.watch(bismillahProvider).value
+                                : null,
                             onListen: () => recitation.ayah == null
                                 ? reciting.playFrom(1)
                                 : reciting.toggle(),
@@ -129,11 +132,15 @@ class _SurahScreenState extends ConsumerState<SurahScreen> {
 class _Header extends StatelessWidget {
   const _Header({
     required this.surah,
+    required this.bismillah,
     required this.onListen,
     required this.listening,
   });
 
   final Surah? surah;
+
+  /// Shown above the first verse, unless the surah doesn't open with it.
+  final String? bismillah;
   final VoidCallback onListen;
   final bool listening;
 
@@ -178,6 +185,15 @@ class _Header extends StatelessWidget {
             l10n.translationSourceLabel.toUpperCase(),
             style: AppText.sourceTag,
           ),
+          if (bismillah case final text?) ...[
+            const SizedBox(height: 30),
+            Text(
+              text,
+              textDirection: TextDirection.rtl,
+              textAlign: TextAlign.center,
+              style: AppText.arabic,
+            ),
+          ],
         ],
       ),
     );

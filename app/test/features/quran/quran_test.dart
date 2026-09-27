@@ -162,6 +162,27 @@ void main() {
     );
   });
 
+  testWidgets('the Bismillah opens every surah but Al-Fatiha and At-Tawbah', (
+    tester,
+  ) async {
+    final router = await _openQuran(tester);
+    for (final (surah, shown) in [(112, true), (1, false), (9, false)]) {
+      router.push(Routes.quranSurah(surah));
+      await tester.pumpAndSettle();
+      // Al-Fatiha 1:1 from the source; in Al-Fatiha itself only as verse 1.
+      expect(
+        find.text('arabic 1:1'),
+        surah == 1 || shown ? findsOneWidget : findsNothing,
+      );
+      expect(
+        find.text('translation 1:1'),
+        surah == 1 ? findsOneWidget : findsNothing,
+      );
+      router.pop();
+      await tester.pumpAndSettle();
+    }
+  });
+
   testWidgets('a link to a surah that does not exist shows the list', (
     tester,
   ) async {

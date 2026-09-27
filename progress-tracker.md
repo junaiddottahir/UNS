@@ -496,8 +496,10 @@ change.
   - Reader (`/quran/:surah`): every verse, Arabic (`ara-quranuthmanihaf`)
     and translation (`eng-ummmuhammad`) — the same editions as Shama —
     fetched whole per surah (one request per edition, checked verse by
-    verse) and cached in `verse_texts`, so it reads offline after. No
-    Bismillah header is added (see open questions).
+    verse) and cached in `verse_texts`, so it reads offline after.
+  - Bismillah (user, 2026-09-27; scholar to confirm): above every surah
+    except Al-Fatiha (it's verse 1) and At-Tawbah, shown as Al-Fatiha
+    1:1's Arabic exactly as the Quran API gives it.
   - Listen: from the start or by tapping any verse, in the chosen
     reciter, verse by verse with the next verse's audio fetched ahead;
     the recited verse is highlighted and kept in view; player bar with
@@ -671,9 +673,8 @@ Each line is one unit; app and backend units are kept separate.
 - "Our sources" says every verse is scholar-approved; true once the real
   library replaces the placeholder (sessions can't run before then).
 
-- Quran reader (2026-09-27): add a Bismillah line above each surah
-  (except 9), and should it be 1:1's text from the API? Scholar's call.
-  Also: search, "continue where I left off", and a Mushaf page view.
+- Quran reader (2026-09-27): the scholar to confirm the Bismillah line
+  (1:1's text from the API, above all surahs but 1 and 9). Later: search, "continue where I left off", and a Mushaf page view.
 
 ## Architecture Decisions
 

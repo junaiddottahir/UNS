@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/quran/quran_providers.dart';
 import '../../core/quran/quran_repository.dart';
+import '../../core/quran/verse_ref.dart';
 
 /// A surah as the Quran API's info.json names it (bundled in
 /// `assets/data/surahs.json` by `tools/quran/build_surahs.py`).
@@ -54,3 +55,13 @@ final surahTextProvider = FutureProvider.autoDispose
     .family<List<VerseText>, int>(
       (ref, surah) => ref.read(quranRepositoryProvider).surah(surah),
     );
+
+/// The Bismillah shown above a surah: Al-Fatiha 1:1's Arabic exactly as
+/// the Quran API gives it. Al-Fatiha has it as verse 1 already, and
+/// At-Tawbah opens without it.
+final bismillahProvider = FutureProvider.autoDispose<String>(
+  (ref) async =>
+      (await ref.read(quranRepositoryProvider).verse(VerseRef(1, 1))).arabic,
+);
+
+bool opensWithBismillah(int surah) => surah != 1 && surah != 9;
