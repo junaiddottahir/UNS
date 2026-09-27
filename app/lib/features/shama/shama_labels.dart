@@ -28,8 +28,17 @@ extension ShamaLabels on AppLocalizations {
     Emotion.greed => moodGreedy,
   };
 
-  String helpName({required bool comfort}) =>
-      comfort ? helpComfort : helpRemind;
+  /// The app's first words once a feeling is agreed on. Fixed copy.
+  String acknowledge(Emotion e) => switch (e) {
+    Emotion.anxiety => ackAnxiety,
+    Emotion.sadness => ackSadness,
+    Emotion.loneliness => ackLoneliness,
+    Emotion.anger => ackAnger,
+    Emotion.gratitude => ackGratitude,
+    Emotion.hope => ackHope,
+    Emotion.humility => ackHumility,
+    Emotion.arrogance || Emotion.greed => ackHonesty,
+  };
 
   String afterMoodName(AfterMood m) => switch (m) {
     AfterMood.calmer => afterCalmer,

@@ -7,11 +7,13 @@ import '../../core/router/routes.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_theme.dart';
 import '../../core/widgets/ambient_background.dart';
+import '../../core/widgets/glass.dart';
 import '../../l10n/app_localizations.dart';
 import '../library/verse_library.dart';
 import '../paywall/quota.dart';
 import 'mood_chat.dart';
 import 'shama_labels.dart';
+import 'shama_session.dart';
 import 'voice_input.dart';
 
 /// Shama tab: "How are you feeling?" — type it, or pick a chip. Typed words
@@ -38,9 +40,24 @@ class _ShamaScreenState extends ConsumerState<ShamaScreen> {
     super.dispose();
   }
 
-  void _start(Emotion e) {
-    ref.read(moodChatProvider.notifier).reset();
-    context.push('${Routes.shamaHelp}?emotion=${e.name}');
+  /// The length is the last answer: begin the session (free users get a
+  /// few new sessions a week; replays stay free).
+  void _begin(MoodChat chat, int minutes) {
+    final premium = ref.read(premiumProvider).value ?? false;
+    final used = ref.read(sessionsThisWeekProvider).value ?? 0;
+    if (!premium && used >= freeSessionsPerWeek) {
+      context.push(Routes.limit);
+      return;
+    }
+    ref.read(moodChatProvider.notifier).chooseLength(minutes);
+    ref
+        .read(shamaSessionProvider.notifier)
+        .start(
+          emotion: chat.emotion!,
+          comfort: chat.comfort!,
+          minutes: minutes,
+        );
+    context.push(Routes.shamaPlay);
   }
 
   Future<void> _send() async {
@@ -143,6 +160,18 @@ class _ShamaScreenState extends ConsumerState<ShamaScreen> {
                         padding: const EdgeInsets.only(top: 14),
                         child: switch (m) {
                           UserMessage(:final text) => _Bubble(text),
+                          UserChoice() => _Bubble(_choiceText(l10n, m)),
+                          AppMessage(reply: Reply.askLength) => Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(l10n.howMuchTime, style: AppText.say),
+                              const SizedBox(height: 8),
+                              Text(
+                                l10n.timeRecommend(recommendedMinutes),
+                                style: AppText.body,
+                              ),
+                            ],
+                          ),
                           AppMessage(:final reply, :final emotion) => Text(
                             _replyText(l10n, reply, emotion),
                             style: AppText.say,
@@ -163,36 +192,65 @@ class _ShamaScreenState extends ConsumerState<ShamaScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    if (chat.pending case final emotion?)
-                      Wrap(
+                    switch (chat.step) {
+                      ChatStep.confirm => Wrap(
                         spacing: 8,
                         runSpacing: 8,
                         children: [
                           _Chip(
                             label: l10n.yes,
                             selected: true,
-                            onTap: () => _start(emotion),
+                            onTap: ref.read(moodChatProvider.notifier).confirm,
                           ),
                           _Chip(
                             label: l10n.somethingElse,
                             onTap: ref.read(moodChatProvider.notifier).notQuite,
                           ),
                         ],
-                      )
-                    else
+                      ),
+                      ChatStep.help => Column(
+                        children: [
+                          for (final comfort in [true, false]) ...[
+                            if (!comfort) const SizedBox(height: 8),
+                            _HelpOption(
+                              title: comfort ? l10n.comfortMe : l10n.remindMe,
+                              body: comfort
+                                  ? l10n.comfortMeBody
+                                  : l10n.remindMeBody,
+                              onTap: () => ref
+                                  .read(moodChatProvider.notifier)
+                                  .chooseHelp(comfort: comfort),
+                            ),
+                          ],
+                        ],
+                      ),
+                      ChatStep.length => Wrap(
+                        spacing: 8,
+                        runSpacing: 8,
+                        children: [
+                          for (final m in sessionMinutes)
+                            _Chip(
+                              label: l10n.minutesShort(m),
+                              onTap: () => _begin(chat, m),
+                            ),
+                        ],
+                      ),
                       // Sessions always open: duas are there even before the
                       // scholar's verses; offline, the player says so.
-                      Wrap(
+                      ChatStep.feeling => Wrap(
                         spacing: 8,
                         runSpacing: 8,
                         children: [
                           for (final e in moodChips)
                             _Chip(
                               label: l10n.emotionName(e),
-                              onTap: () => _start(e),
+                              onTap: () => ref
+                                  .read(moodChatProvider.notifier)
+                                  .chooseFeeling(e),
                             ),
                         ],
                       ),
+                    },
                     const SizedBox(height: 14),
                     _InputBar(
                       onVoice: voice
@@ -220,7 +278,69 @@ class _ShamaScreenState extends ConsumerState<ShamaScreen> {
       ),
       Reply.tellMore => l10n.replyTellMore,
       Reply.unavailable => l10n.replyUnavailable,
+      Reply.acknowledge => l10n.acknowledge(emotion!),
+      Reply.askHelp => l10n.whatWouldHelp,
+      Reply.askLength => l10n.howMuchTime,
     };
+  }
+
+  String _choiceText(AppLocalizations l10n, UserChoice choice) =>
+      switch (choice) {
+        FeelingChoice(:final emotion) => l10n.emotionName(emotion),
+        ConfirmChoice(:final yes) => yes ? l10n.yes : l10n.somethingElse,
+        HelpChoice(:final comfort) => comfort ? l10n.comfortMe : l10n.remindMe,
+        LengthChoice(:final minutes) => l10n.minutesShort(minutes),
+      };
+}
+
+/// "Comfort me" / "Remind me" with what each brings, as answers in the
+/// conversation.
+class _HelpOption extends StatelessWidget {
+  const _HelpOption({
+    required this.title,
+    required this.body,
+    required this.onTap,
+  });
+
+  final String title;
+  final String body;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return GlassCard(
+      child: InkWell(
+        onTap: onTap,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 12),
+          child: Row(
+            children: [
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      title,
+                      style: const TextStyle(
+                        fontSize: 18,
+                        color: AppColors.textPrimary,
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(body, style: AppText.body.copyWith(fontSize: 14)),
+                  ],
+                ),
+              ),
+              const Icon(
+                Icons.arrow_forward,
+                size: 18,
+                color: AppColors.textPrimary,
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }
 

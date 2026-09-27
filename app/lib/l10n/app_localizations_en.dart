@@ -620,11 +620,6 @@ class AppLocalizationsEn extends AppLocalizations {
       'Connect to the internet once to download your session.';
 
   @override
-  String feelingMood(String mood) {
-    return 'Feeling $mood';
-  }
-
-  @override
   String get whatWouldHelp => 'What would help right now?';
 
   @override
@@ -638,17 +633,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get remindMeBody => 'Gentle reminders to reset';
-
-  @override
-  String get helpComfort => 'Comfort';
-
-  @override
-  String get helpRemind => 'Remind';
-
-  @override
-  String moodAndHelp(String mood, String help) {
-    return '$mood · $help';
-  }
 
   @override
   String get howMuchTime => 'How much time do you have?';
@@ -1276,4 +1260,28 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get tryAgain => 'Try again';
+
+  @override
+  String get ackAnxiety => 'That sounds like a lot to hold.';
+
+  @override
+  String get ackSadness => 'I\'m sorry you\'re carrying this.';
+
+  @override
+  String get ackLoneliness => 'I\'m glad you told me.';
+
+  @override
+  String get ackAnger => 'It\'s okay to feel this. Let\'s slow down together.';
+
+  @override
+  String get ackGratitude => 'That\'s a lovely thing to feel.';
+
+  @override
+  String get ackHope => 'Let\'s hold on to that.';
+
+  @override
+  String get ackHumility => 'That\'s a gentle place to be.';
+
+  @override
+  String get ackHonesty => 'It takes honesty to notice that.';
 }

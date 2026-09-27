@@ -1192,12 +1192,6 @@ abstract class AppLocalizations {
   /// **'Connect to the internet once to download your session.'**
   String get libraryOffline;
 
-  /// No description provided for @feelingMood.
-  ///
-  /// In en, this message translates to:
-  /// **'Feeling {mood}'**
-  String feelingMood(String mood);
-
   /// No description provided for @whatWouldHelp.
   ///
   /// In en, this message translates to:
@@ -1227,24 +1221,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Gentle reminders to reset'**
   String get remindMeBody;
-
-  /// No description provided for @helpComfort.
-  ///
-  /// In en, this message translates to:
-  /// **'Comfort'**
-  String get helpComfort;
-
-  /// No description provided for @helpRemind.
-  ///
-  /// In en, this message translates to:
-  /// **'Remind'**
-  String get helpRemind;
-
-  /// No description provided for @moodAndHelp.
-  ///
-  /// In en, this message translates to:
-  /// **'{mood} · {help}'**
-  String moodAndHelp(String mood, String help);
 
   /// No description provided for @howMuchTime.
   ///
@@ -2307,6 +2283,54 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Try again'**
   String get tryAgain;
+
+  /// No description provided for @ackAnxiety.
+  ///
+  /// In en, this message translates to:
+  /// **'That sounds like a lot to hold.'**
+  String get ackAnxiety;
+
+  /// No description provided for @ackSadness.
+  ///
+  /// In en, this message translates to:
+  /// **'I\'m sorry you\'re carrying this.'**
+  String get ackSadness;
+
+  /// No description provided for @ackLoneliness.
+  ///
+  /// In en, this message translates to:
+  /// **'I\'m glad you told me.'**
+  String get ackLoneliness;
+
+  /// No description provided for @ackAnger.
+  ///
+  /// In en, this message translates to:
+  /// **'It\'s okay to feel this. Let\'s slow down together.'**
+  String get ackAnger;
+
+  /// No description provided for @ackGratitude.
+  ///
+  /// In en, this message translates to:
+  /// **'That\'s a lovely thing to feel.'**
+  String get ackGratitude;
+
+  /// No description provided for @ackHope.
+  ///
+  /// In en, this message translates to:
+  /// **'Let\'s hold on to that.'**
+  String get ackHope;
+
+  /// No description provided for @ackHumility.
+  ///
+  /// In en, this message translates to:
+  /// **'That\'s a gentle place to be.'**
+  String get ackHumility;
+
+  /// No description provided for @ackHonesty.
+  ///
+  /// In en, this message translates to:
+  /// **'It takes honesty to notice that.'**
+  String get ackHonesty;
 }
 
 class _AppLocalizationsDelegate

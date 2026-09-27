@@ -371,32 +371,11 @@
   "moodGreedy": "Wanting more",
   "libraryNotReady": "There's nothing for this feeling yet. Try another.",
   "libraryOffline": "Connect to the internet once to download your session.",
-  "feelingMood": "Feeling {mood}",
-  "@feelingMood": {
-    "placeholders": {
-      "mood": {
-        "type": "String"
-      }
-    }
-  },
   "whatWouldHelp": "What would help right now?",
   "comfortMe": "Comfort me",
   "comfortMeBody": "Verses of mercy and reassurance",
   "remindMe": "Remind me",
   "remindMeBody": "Gentle reminders to reset",
-  "helpComfort": "Comfort",
-  "helpRemind": "Remind",
-  "moodAndHelp": "{mood} · {help}",
-  "@moodAndHelp": {
-    "placeholders": {
-      "mood": {
-        "type": "String"
-      },
-      "help": {
-        "type": "String"
-      }
-    }
-  },
   "howMuchTime": "How much time do you have?",
   "timeRecommend": "We recommend {minutes} minutes, so there's time to slow down.",
   "@timeRecommend": {
@@ -816,5 +795,13 @@
   "stopRecitation": "Stop",
   "surahLoadFailed": "Couldn't load this surah. Check your connection and try again.",
   "recitationFailed": "Couldn't load the recitation. Check your connection and try again.",
-  "tryAgain": "Try again"
+  "tryAgain": "Try again",
+  "ackAnxiety": "That sounds like a lot to hold.",
+  "ackSadness": "I'm sorry you're carrying this.",
+  "ackLoneliness": "I'm glad you told me.",
+  "ackAnger": "It's okay to feel this. Let's slow down together.",
+  "ackGratitude": "That's a lovely thing to feel.",
+  "ackHope": "Let's hold on to that.",
+  "ackHumility": "That's a gentle place to be.",
+  "ackHonesty": "It takes honesty to notice that."
 }

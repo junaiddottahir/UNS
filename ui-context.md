@@ -68,6 +68,12 @@ changing when the next prayer's time begins (Isha's stays until Fajr).
   devices"; signed-in card shows name/email.
 - Profile holds the account card, settings, journal count, premium status,
   restore purchases, privacy, "Our sources", sign out and delete account.
+- Shama is one conversation: the user's words or tapped answers are
+  bubbles on the end side; the app's fixed lines are on the start side
+  (no AI-written replies). It confirms the feeling, says a short line for
+  it, then asks "What would help right now?" (Comfort me / Remind me
+  cards) and "How much time do you have?" (length chips); picking a
+  length begins the session.
 - Voice input: a mic option next to text entry; a "Listening" state with
   "Tap to finish"; the transcript is shown before it is sent.
 - Home: date + location header, next-prayer hero, shortcut tiles, mood card.

@@ -15,8 +15,50 @@ class UserMessage extends ChatMessage {
   final String text;
 }
 
-/// The app's reply, localised when shown.
-enum Reply { feeling, tellMore, unavailable }
+/// An answer the user tapped, shown as their bubble; localised when shown.
+sealed class UserChoice extends ChatMessage {
+  const UserChoice();
+}
+
+class FeelingChoice extends UserChoice {
+  const FeelingChoice(this.emotion);
+  final Emotion emotion;
+}
+
+/// "Yes" or "Something else" to "It sounds like you're feeling…".
+class ConfirmChoice extends UserChoice {
+  const ConfirmChoice({required this.yes});
+  final bool yes;
+}
+
+/// "Comfort me" or "Remind me".
+class HelpChoice extends UserChoice {
+  const HelpChoice({required this.comfort});
+  final bool comfort;
+}
+
+class LengthChoice extends UserChoice {
+  const LengthChoice(this.minutes);
+  final int minutes;
+}
+
+/// The app's reply, localised when shown. The wording is fixed; no AI
+/// writes what the app says (architecture.md invariant 2).
+enum Reply {
+  /// "It sounds like you're feeling…"
+  feeling,
+  tellMore,
+  unavailable,
+
+  /// A short line for the feeling, e.g. "That sounds like a lot to hold."
+  acknowledge,
+
+  /// "What would help right now?"
+  askHelp,
+
+  /// "How much time do you have?"
+  askLength,
+}
 
 class AppMessage extends ChatMessage {
   const AppMessage(this.reply, [this.emotion]);
@@ -29,6 +71,8 @@ class MoodChat {
     this.messages = const [],
     this.pending,
     this.thinking = false,
+    this.emotion,
+    this.comfort,
   });
 
   final List<ChatMessage> messages;
@@ -38,6 +82,34 @@ class MoodChat {
 
   /// Waiting for the classifier.
   final bool thinking;
+
+  /// The feeling agreed on; next "Comfort me" / "Remind me".
+  final Emotion? emotion;
+
+  /// Comfort (true) or a reminder (false); next the session length.
+  final bool? comfort;
+
+  /// What the conversation asks the user now.
+  ChatStep get step => switch (this) {
+    MoodChat(pending: _?) => ChatStep.confirm,
+    MoodChat(emotion: _?, comfort: null) => ChatStep.help,
+    MoodChat(emotion: _?, comfort: _?) => ChatStep.length,
+    _ => ChatStep.feeling,
+  };
+}
+
+enum ChatStep {
+  /// Type, speak, or pick a feeling chip.
+  feeling,
+
+  /// "Yes" / "Something else".
+  confirm,
+
+  /// "Comfort me" / "Remind me".
+  help,
+
+  /// 5, 10, 15 or 30 minutes; picking one begins the session.
+  length,
 }
 
 /// What the screen should do after a message.
@@ -92,11 +164,66 @@ class MoodChatNotifier extends Notifier<MoodChat> {
     return SendOutcome.replied;
   }
 
-  /// "Something else": ask for more, chips stay available.
-  void notQuite() => _reply(const AppMessage(Reply.tellMore));
+  /// "Yes": the feeling is agreed on.
+  void confirm() {
+    final emotion = state.pending;
+    if (emotion == null) return;
+    _agree(const ConfirmChoice(yes: true), emotion);
+  }
 
-  /// Clears the chat (after a session is saved, or a chip is used).
+  /// "Something else": ask for more, chips stay available.
+  void notQuite() {
+    state = MoodChat(
+      messages: [
+        ...state.messages,
+        const ConfirmChoice(yes: false),
+        const AppMessage(Reply.tellMore),
+      ],
+    );
+  }
+
+  /// A feeling chip: decided on the phone, nothing is sent.
+  void chooseFeeling(Emotion emotion) =>
+      _agree(FeelingChoice(emotion), emotion);
+
+  void chooseHelp({required bool comfort}) {
+    final emotion = state.emotion;
+    if (emotion == null) return;
+    state = MoodChat(
+      messages: [
+        ...state.messages,
+        HelpChoice(comfort: comfort),
+        const AppMessage(Reply.askLength),
+      ],
+      emotion: emotion,
+      comfort: comfort,
+    );
+  }
+
+  /// The length that begins the session, shown as the user's answer.
+  void chooseLength(int minutes) {
+    if (state.step != ChatStep.length) return;
+    state = MoodChat(
+      messages: [...state.messages, LengthChoice(minutes)],
+      emotion: state.emotion,
+      comfort: state.comfort,
+    );
+  }
+
+  /// Clears the chat (after a session is saved).
   void reset() => state = const MoodChat();
+
+  void _agree(UserChoice answer, Emotion emotion) {
+    state = MoodChat(
+      messages: [
+        ...state.messages,
+        answer,
+        AppMessage(Reply.acknowledge, emotion),
+        const AppMessage(Reply.askHelp),
+      ],
+      emotion: emotion,
+    );
+  }
 
   void _reply(AppMessage message, {Emotion? pending}) {
     state = MoodChat(messages: [...state.messages, message], pending: pending);

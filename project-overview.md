@@ -35,10 +35,10 @@ Visual reference: `Uns Prototype.html`.
    Profile, never as a gate.
 2. Home: next prayer countdown, today's times, mood check-in card, tasbih and
    qibla shortcuts. Every MVP feature is one tap away.
-3. Shama session: chat or emotion chips → safety check (risk → support
-   resources and helplines) → "comfort me" or "remind me" → session length
-   (5, 10, 15, 30 min, one recommended) → playback → optional reflection →
-   saved to journal.
+3. Shama session: one conversation — chat or emotion chips → safety check
+   (risk → support resources and helplines) → "comfort me" or "remind me" →
+   session length (5, 10, 15, 30 min, one recommended), all asked in the
+   chat → playback → optional reflection → saved to journal.
 4. Tasbih: pick a dhikr → tap to count with haptics → vibration at target →
    next dhikr or finish → saved to daily history.
 5. Journal: chronological list (date, mood before → after, first line) → open

@@ -508,6 +508,15 @@ change.
   - 9 new unit/widget tests; `integration_test/quran_reader_test.dart`
     passed on the simulator against the real API and recitation
     (Al-Ikhlas: text, verse 1 recited, verse 2 followed).
+- Shama conversation (2026-09-27, user): the mood check-in is one
+  chat instead of pages. Chips and answers show as the user's bubbles;
+  after "Yes" (or a feeling chip) the app says a fixed line for the
+  feeling (e.g. anxiety: "That sounds like a lot to hold."), asks "What
+  would help right now?" with Comfort me / Remind me cards, then "How
+  much time do you have?" with 5/10/15/30 chips; a length begins the
+  session (weekly limit checked there). Typing again starts over from
+  the new words. The Help and Length pages and their routes are gone.
+  The per-feeling lines are draft copy for review.
 - Backgrounds (2026-09-27): Home and today's times show the photo of the
   prayer whose time has started (from its start until the next prayer;
   Isha until Fajr), not the next prayer's.

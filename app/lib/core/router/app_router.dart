@@ -31,10 +31,7 @@ import '../../features/journal/entry_screen.dart';
 import '../../features/journal/journal_screen.dart';
 import '../../features/journal/record_screen.dart';
 import '../../features/journal/write_screen.dart';
-import '../../features/library/verse_library.dart';
 import '../../features/shama/after_screen.dart';
-import '../../features/shama/help_screen.dart';
-import '../../features/shama/length_screen.dart';
 import '../../features/shama/player_screen.dart';
 import '../../features/shama/shama_screen.dart';
 import '../../features/shama/voice_screen.dart';
@@ -96,19 +93,6 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         builder: (_, state) => SurahScreen(number: _surah(state)!),
       ),
       GoRoute(path: Routes.sources, builder: (_, _) => const SourcesScreen()),
-      GoRoute(
-        path: Routes.shamaHelp,
-        redirect: (_, state) => _emotion(state) == null ? Routes.shama : null,
-        builder: (_, state) => HelpScreen(emotion: _emotion(state)!),
-      ),
-      GoRoute(
-        path: Routes.shamaLength,
-        redirect: (_, state) => _emotion(state) == null ? Routes.shama : null,
-        builder: (_, state) => LengthScreen(
-          emotion: _emotion(state)!,
-          comfort: state.uri.queryParameters['help'] != 'remind',
-        ),
-      ),
       GoRoute(path: Routes.shamaPlay, builder: (_, _) => const PlayerScreen()),
       GoRoute(path: Routes.shamaVoice, builder: (_, _) => const VoiceScreen()),
       GoRoute(path: Routes.shamaAfter, builder: (_, _) => const AfterScreen()),
@@ -220,9 +204,6 @@ StatefulShellBranch _branch(String path, Widget Function(BuildContext) page) =>
     StatefulShellBranch(
       routes: [GoRoute(path: path, builder: (context, _) => page(context))],
     );
-
-Emotion? _emotion(GoRouterState state) =>
-    Emotion.values.asNameMap()[state.uri.queryParameters['emotion']];
 
 /// The surah number in `/quran/:surah`, if it's a real one.
 int? _surah(GoRouterState state) {

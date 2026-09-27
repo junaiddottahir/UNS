@@ -21,7 +21,7 @@ Future<void> _toAfter(WidgetTester tester) async {
   await tester.pumpAndSettle();
   await tester.tap(find.text('Comfort me'));
   await tester.pumpAndSettle();
-  await tester.tap(find.text('Begin'));
+  await tester.tap(find.text('10 MIN'));
   await tester.pumpAndSettle();
   await tester.tap(find.byTooltip('End session'));
   await tester.pumpAndSettle();

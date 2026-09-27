@@ -30,16 +30,21 @@ void main() {
       matching: find.byType(Material),
     );
     expect(tester.getSize(chip.first).width, lessThan(200));
+    // A chip is the user's answer in the conversation; nothing is sent.
     await tester.tap(find.text('ANXIOUS'));
     await tester.pumpAndSettle();
-    expect(find.text('FEELING ANXIOUS'), findsOneWidget);
+    expect(find.text('Anxious'), findsOneWidget);
+    expect(find.text('That sounds like a lot to hold.'), findsOneWidget);
+    expect(find.text('What would help right now?'), findsOneWidget);
+    expect(find.text('Verses of mercy and reassurance'), findsOneWidget);
+    expect(find.text('How are you feeling?'), findsNothing);
 
     await tester.tap(find.text('Comfort me'));
     await tester.pumpAndSettle();
-    expect(find.text('ANXIOUS · COMFORT'), findsOneWidget);
+    expect(find.text('Comfort me'), findsOneWidget); // now the answer
+    expect(find.text('How much time do you have?'), findsOneWidget);
     expect(find.textContaining('We recommend 10 minutes'), findsOneWidget);
     await tester.tap(find.text('5 MIN'));
-    await tester.tap(find.text('Begin'));
     await tester.pumpAndSettle();
 
     // Arabic above the translation, each with its source.
@@ -87,7 +92,7 @@ void main() {
     await tester.pumpAndSettle();
     await tester.tap(find.text('Comfort me'));
     await tester.pumpAndSettle();
-    await tester.tap(find.text('Begin'));
+    await tester.tap(find.text('10 MIN'));
     await tester.pump();
     await tester.pump();
 
@@ -126,7 +131,7 @@ void main() {
     await tester.pumpAndSettle();
     await tester.tap(find.text('Comfort me'));
     await tester.pumpAndSettle();
-    await tester.tap(find.text('Begin'));
+    await tester.tap(find.text('10 MIN'));
     await tester.pumpAndSettle();
     expect(find.textContaining('Connect to the internet'), findsOneWidget);
   });

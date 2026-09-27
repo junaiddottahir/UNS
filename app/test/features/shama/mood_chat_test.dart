@@ -55,9 +55,45 @@ void main() {
       greaterThan(tester.getTopLeft(find.text(_worried)).dy),
     );
 
+    // The conversation carries on in the chat, no new page.
     await tester.tap(find.text('YES'));
     await tester.pumpAndSettle();
-    expect(find.text('FEELING ANXIOUS'), findsOneWidget);
+    expect(find.text('Yes'), findsOneWidget); // the user's answer
+    expect(find.text('That sounds like a lot to hold.'), findsOneWidget);
+    expect(find.text('What would help right now?'), findsOneWidget);
+
+    await tester.tap(find.text('Remind me'));
+    await tester.pumpAndSettle();
+    expect(find.text('How much time do you have?'), findsOneWidget);
+    expect(find.textContaining('We recommend 10 minutes'), findsOneWidget);
+    // The typed words stay in the conversation, scrolled up above.
+    expect(find.text(_worried, skipOffstage: false), findsOneWidget);
+
+    await tester.tap(find.text('15 MIN'));
+    await tester.pumpAndSettle();
+    expect(find.text('−15:00'), findsOneWidget);
+  });
+
+  testWidgets('typing again mid-conversation starts over from the words', (
+    tester,
+  ) async {
+    final classify = FakeClassify({
+      _worried: const MoodReading(emotion: Emotion.anxiety, risk: false),
+      'actually I feel alone': const MoodReading(
+        emotion: Emotion.loneliness,
+        risk: false,
+      ),
+    });
+    await _openShama(tester, classify);
+    await _say(tester, _worried);
+    await tester.tap(find.text('YES'));
+    await tester.pumpAndSettle();
+    expect(find.text('Comfort me'), findsOneWidget);
+
+    await _say(tester, 'actually I feel alone');
+    expect(find.text("It sounds like you're feeling lonely."), findsOneWidget);
+    expect(find.text('Comfort me'), findsNothing);
+    expect(find.text('SOMETHING ELSE'), findsOneWidget);
   });
 
   testWidgets('"Something else" and unknown ask for more; chips remain', (
@@ -71,6 +107,7 @@ void main() {
     await _say(tester, _worried);
     await tester.tap(find.text('SOMETHING ELSE'));
     await tester.pumpAndSettle();
+    expect(find.text('Something else'), findsOneWidget); // the answer
     expect(
       find.text('Tell me a little more, or pick a feeling below.'),
       findsOneWidget,
@@ -115,7 +152,7 @@ void main() {
     expect(find.textContaining("couldn't read that"), findsOneWidget);
     await tester.tap(find.text('SAD'));
     await tester.pumpAndSettle();
-    expect(find.text('FEELING SAD'), findsOneWidget);
+    expect(find.text("I'm sorry you're carrying this."), findsOneWidget);
   });
 
   testWidgets('a second message right after a reply still works', (

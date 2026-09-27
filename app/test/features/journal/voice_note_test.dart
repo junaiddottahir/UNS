@@ -32,7 +32,7 @@ Future<void> _toRecord(
   await tester.pumpAndSettle();
   await tester.tap(find.text('Comfort me'));
   await tester.pumpAndSettle();
-  await tester.tap(find.text('Begin'));
+  await tester.tap(find.text('10 MIN'));
   await tester.pumpAndSettle();
   await tester.tap(find.byTooltip('End session'));
   await tester.pumpAndSettle();
